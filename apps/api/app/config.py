@@ -1,6 +1,6 @@
-"""Environment-based configuration, read once at startup.
+"""Environment-based configuration, read per call so tests can override it.
 
-Only non-secret settings live here for M1. Secrets (API keys, etc.) are added
+Only non-secret settings live here for now. Secrets (API keys, etc.) are added
 in later milestones and must only ever come from the environment, never code.
 """
 from __future__ import annotations
@@ -17,10 +17,20 @@ load_dotenv()
 class Settings:
     app_env: str
     frontend_origin: str
+    max_upload_bytes: int
+    max_pdf_pages: int
+    max_documents: int
+    chunk_size: int
+    chunk_overlap: int
 
 
 def get_settings() -> Settings:
     return Settings(
         app_env=os.getenv("APP_ENV", "local"),
         frontend_origin=os.getenv("FRONTEND_ORIGIN", "http://localhost:3000"),
+        max_upload_bytes=int(os.getenv("MAX_UPLOAD_BYTES", str(12 * 1024 * 1024))),
+        max_pdf_pages=int(os.getenv("MAX_PDF_PAGES", "150")),
+        max_documents=int(os.getenv("MAX_DOCUMENTS", "12")),
+        chunk_size=int(os.getenv("CHUNK_SIZE", "950")),
+        chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "170")),
     )
