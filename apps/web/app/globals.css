@@ -11,6 +11,8 @@
   --color-muted: #9494ab;
   --color-lavender: #a78bfa;
   --color-lavender-deep: #7c5cf0;
+  /* Lighter lavender for text on lavender-tinted chips: plain lavender is 4.46:1 there, under the 4.5:1 AA minimum. */
+  --color-lavender-soft: #c4b5fd;
   --color-mint: #5fe3c0;
   --color-amber: #f2b45c;
   --color-danger: #f87171;
@@ -27,10 +29,14 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Visible keyboard focus everywhere (blueprint accessibility requirement). */
-:focus-visible {
-  outline: 2px solid var(--color-lavender);
-  outline-offset: 2px;
+/* Visible keyboard focus everywhere (blueprint accessibility requirement).
+   Kept in the base layer so a component can replace it with its own ring
+   (e.g. the question box) using normal Tailwind utilities. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-lavender);
+    outline-offset: 2px;
+  }
 }
 
 /* Motion is decoration only; respect the user's setting. */

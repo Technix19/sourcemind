@@ -12,7 +12,7 @@ export function TopBar() {
   const mode = !loaded ? "Checking…" : apiError ? "API offline" : health?.generation_available ? "AI answers available" : "Retrieval mode";
 
   return (
-    <header className="border-b border-line px-6 py-4">
+    <header className="border-b border-line px-4 py-4 sm:px-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs font-bold tracking-wider text-lavender">WORKSPACE / {current.crumb.toUpperCase()}</p>
@@ -30,7 +30,7 @@ export function TopBar() {
             key={item.href}
             href={item.href}
             aria-current={current.href === item.href ? "page" : undefined}
-            className={`rounded-lg px-3 py-1.5 text-sm font-bold ${current.href === item.href ? "bg-lavender/20 text-lavender" : "text-muted"}`}
+            className={`rounded-lg px-3 py-2.5 text-sm font-bold ${current.href === item.href ? "bg-lavender/20 text-lavender" : "text-muted"}`}
           >
             {item.label}
           </Link>

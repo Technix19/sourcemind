@@ -14,46 +14,51 @@ function Row({ doc }: { doc: DocumentSummary }) {
   const kind = fileKind(doc.name);
 
   return (
-    <li className="flex items-center gap-4 rounded-xl border border-line bg-panel px-4 py-3">
-      <span className={`grid size-11 shrink-0 place-items-center rounded-lg bg-surface text-xs font-black ${BADGE[kind] ?? "text-lavender"}`}>
-        {kind}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-bold">{doc.name}</p>
-        <p className="text-sm text-muted">
-          {formatBytes(doc.size_bytes)} · {plural(doc.page_count, "page")} · {plural(doc.chunk_count, "passage")}
-        </p>
+    <li className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border border-line bg-panel px-4 py-3">
+      {/* On a phone the name gets its own full-width line; status and actions sit below it. */}
+      <div className="flex min-w-0 basis-full items-center gap-4 sm:flex-1 sm:basis-0">
+        <span className={`grid size-11 shrink-0 place-items-center rounded-lg bg-surface text-xs font-black ${BADGE[kind] ?? "text-lavender"}`}>
+          {kind}
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="truncate font-bold">{doc.name}</p>
+          <p className="text-sm text-muted">
+            {formatBytes(doc.size_bytes)} · {plural(doc.page_count, "page")} · {plural(doc.chunk_count, "passage")}
+          </p>
+        </div>
       </div>
-      <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-bold text-mint">
-        {doc.status === "ready" ? "Ready" : doc.status}
-      </span>
-      {confirming ? (
-        <span className="flex gap-2" role="group" aria-label={`Confirm removing ${doc.name}`}>
+      <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-end">
+        <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-bold text-mint">
+          {doc.status === "ready" ? "Ready" : doc.status}
+        </span>
+        {confirming ? (
+          <span className="flex gap-2" role="group" aria-label={`Confirm removing ${doc.name}`}>
+            <button
+              type="button"
+              disabled={removing}
+              onClick={async () => {
+                setRemoving(true);
+                await removeDocument(doc.id);
+              }}
+              className="min-h-10 rounded-lg bg-danger/20 px-3 text-sm font-bold text-danger hover:bg-danger/30 disabled:opacity-50"
+            >
+              {removing ? "Removing…" : "Confirm"}
+            </button>
+            <button type="button" onClick={() => setConfirming(false)} className="min-h-10 rounded-lg px-3 text-sm text-muted hover:text-text">
+              Cancel
+            </button>
+          </span>
+        ) : (
           <button
             type="button"
-            disabled={removing}
-            onClick={async () => {
-              setRemoving(true);
-              await removeDocument(doc.id);
-            }}
-            className="rounded-lg bg-danger/20 px-3 py-1.5 text-sm font-bold text-danger hover:bg-danger/30 disabled:opacity-50"
+            onClick={() => setConfirming(true)}
+            aria-label={`Remove ${doc.name}`}
+            className="min-h-10 rounded-lg px-3 text-sm text-muted hover:bg-surface hover:text-text"
           >
-            {removing ? "Removing…" : "Confirm"}
+            Remove
           </button>
-          <button type="button" onClick={() => setConfirming(false)} className="rounded-lg px-3 py-1.5 text-sm text-muted hover:text-text">
-            Cancel
-          </button>
-        </span>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setConfirming(true)}
-          aria-label={`Remove ${doc.name}`}
-          className="rounded-lg px-3 py-1.5 text-sm text-muted hover:bg-surface hover:text-text"
-        >
-          Remove
-        </button>
-      )}
+        )}
+      </div>
     </li>
   );
 }

@@ -17,7 +17,7 @@ export function QuickStart({ onPick }: { onPick: (question: string) => void }) {
             <button
               type="button"
               onClick={() => onPick(p.question)}
-              className="h-full w-full rounded-xl border border-line bg-panel p-4 text-left transition-colors hover:border-lavender/60"
+              className="flex h-full w-full flex-col items-start justify-start rounded-xl border border-line bg-panel p-4 text-left transition-colors hover:border-lavender/60"
             >
               <span className="block font-bold">{p.title}</span>
               <span className="mt-1 block text-sm text-muted">{p.question}</span>

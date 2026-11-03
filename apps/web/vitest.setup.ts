@@ -1,6 +1,12 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach, vi } from "vitest";
+import { afterEach, beforeEach, vi } from "vitest";
+import { installViewportStubs, setWideScreen } from "./vitest.viewport";
+
+beforeEach(() => {
+  setWideScreen(true); // default: desktop layout
+  installViewportStubs();
+});
 
 afterEach(() => {
   cleanup();

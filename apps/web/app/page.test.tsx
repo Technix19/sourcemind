@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -11,6 +11,7 @@ import * as api from "@/lib/api";
 import { ChatProvider } from "@/components/chat/ChatProvider";
 import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
 import type { DocumentSummary, QueryResponse } from "@/lib/types";
+import { setWideScreen } from "../vitest.viewport";
 import AskPage from "./page";
 
 const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready" };
@@ -68,7 +69,7 @@ describe("Ask page", () => {
     setup();
     await waitFor(() => expect(box()).toBeEnabled());
     await user().type(box(), "hi");
-    expect(screen.getByRole("button", { name: "Send question" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Ask" })).toBeDisabled();
     await user().type(box(), "{Enter}");
     expect(api.askQuestion).not.toHaveBeenCalled();
   });
@@ -131,5 +132,37 @@ describe("Ask page", () => {
     await user().click(screen.getByRole("button", { name: /new conversation/i }));
     expect(screen.queryByText("Evidence only")).toBeNull();
     expect(screen.getByText(/Answers worth/)).toBeInTheDocument();
+  });
+  describe("on a narrow screen", () => {
+    const askAndWait = async () => {
+      vi.mocked(api.askQuestion).mockResolvedValue(
+        response({ answer_mode: "generated", answer: "It uses a forest [2].", model_used: "m1" }),
+      );
+      setup({ generation: true });
+      await waitFor(() => expect(box()).toBeEnabled());
+      await user().click(await screen.findByRole("checkbox"));
+      await user().type(box(), "How does it decide?{Enter}");
+      await screen.findByText("Grounded");
+    };
+
+    it("keeps evidence in a closed drawer until asked", async () => {
+      setWideScreen(false);
+      await askAndWait();
+      expect(screen.queryByRole("dialog")).toBeNull();
+      await user().click(screen.getByRole("button", { name: "Sources (2)" }));
+      const drawer = screen.getByRole("dialog", { name: "Sources" });
+      expect(within(drawer).getAllByRole("article")).toHaveLength(2);
+      await user().click(within(drawer).getByRole("button", { name: "Close" }));
+      expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("opens the drawer on the cited source when a citation is clicked", async () => {
+      setWideScreen(false);
+      await askAndWait();
+      await user().click(screen.getByRole("button", { name: /show source 2/i }));
+      const drawer = await screen.findByRole("dialog", { name: "Sources" });
+      const card = within(drawer).getByRole("article", { name: /source 2/i });
+      await waitFor(() => expect(card).toHaveFocus());
+    });
   });
 });

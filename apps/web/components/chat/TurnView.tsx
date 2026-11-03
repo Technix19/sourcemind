@@ -1,8 +1,10 @@
 "use client";
 
 import { AnswerText } from "./AnswerText";
-import { evidenceDomId } from "./EvidencePanel";
+import { focusEvidenceCard } from "./EvidencePanel";
 import { useChat, type Turn } from "./ChatProvider";
+
+export const XL = "(min-width: 1280px)";
 
 function badgeFor(turn: Turn): { label: string; className: string } | null {
   const r = turn.response;
@@ -13,7 +15,7 @@ function badgeFor(turn: Turn): { label: string; className: string } | null {
 }
 
 function Body({ turn }: { turn: Turn }) {
-  const { selectCitation } = useChat();
+  const { selectCitation, setDrawerOpen } = useChat();
   const r = turn.response;
 
   if (turn.status === "pending") return <p className="text-muted">Searching your documents…</p>;
@@ -23,12 +25,10 @@ function Body({ turn }: { turn: Turn }) {
 
   const onCite = (citationId: string) => {
     selectCitation(turn.id, citationId);
-    // Wait a tick so the panel has switched to this turn before we look for the card.
-    setTimeout(() => {
-      const card = document.getElementById(evidenceDomId(turn.id, citationId));
-      card?.scrollIntoView({ block: "nearest" });
-      card?.focus({ preventScroll: true });
-    }, 0);
+    // Below the xl breakpoint the evidence lives in a drawer, so open it first.
+    if (!window.matchMedia(XL).matches) setDrawerOpen(true);
+    // Wait a tick so the panel has switched to this turn (and the drawer has opened).
+    setTimeout(() => focusEvidenceCard(turn.id, citationId), 50);
   };
 
   return (
@@ -50,23 +50,35 @@ function Body({ turn }: { turn: Turn }) {
 }
 
 export function TurnView({ turn }: { turn: Turn }) {
-  const { selectTurn, activeTurn } = useChat();
+  const { selectTurn, activeTurn, setDrawerOpen } = useChat();
   const badge = badgeFor(turn);
   const active = activeTurn?.id === turn.id;
   return (
     <div className="space-y-3">
-      <div className="ml-auto w-fit max-w-[90%] rounded-2xl bg-surface px-5 py-3 font-bold">{turn.question}</div>
+      <div className="ml-auto w-fit max-w-[90%] break-words rounded-2xl bg-surface px-5 py-3 font-bold">{turn.question}</div>
       <div
         aria-busy={turn.status === "pending"}
         className={`rounded-2xl border bg-panel p-5 ${active ? "border-lavender/50" : "border-line"}`}
       >
-        <div className="mb-3 flex items-center gap-3">
+        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span aria-hidden className="size-3 rounded-full bg-lavender" />
-          <p className="flex-1 font-bold">SourceMind</p>
-          {badge && <span className={`rounded-full px-3 py-1 text-xs font-bold ${badge.className}`}>{badge.label}</span>}
+          <p className="font-bold sm:flex-1">SourceMind</p>
+          {badge && <span className={`rounded-full px-3 py-1 text-xs font-bold whitespace-nowrap ${badge.className}`}>{badge.label}</span>}
           {!active && turn.response && turn.response.evidence.length > 0 && (
-            <button type="button" onClick={() => selectTurn(turn.id)} className="rounded text-sm font-bold text-lavender hover:text-text">
+            <button type="button" onClick={() => selectTurn(turn.id)} className="hidden rounded text-sm font-bold text-lavender hover:text-text xl:inline">
               Show evidence
+            </button>
+          )}
+          {turn.response && turn.response.evidence.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                selectTurn(turn.id);
+                setDrawerOpen(true);
+              }}
+              className="min-h-9 rounded-lg border border-line px-3 text-sm font-bold whitespace-nowrap text-lavender hover:bg-surface xl:hidden"
+            >
+              Sources ({turn.response.evidence.length})
             </button>
           )}
         </div>

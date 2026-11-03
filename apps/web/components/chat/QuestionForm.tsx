@@ -28,7 +28,7 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
 
   return (
     <form onSubmit={submit} className="space-y-2">
-      <div className="flex items-center gap-3 rounded-2xl border border-line bg-panel p-2 pl-4 focus-within:border-lavender">
+      <div className="flex items-center gap-3 rounded-2xl border border-line bg-panel p-2 pl-4 focus-within:border-lavender focus-within:ring-2 focus-within:ring-lavender/40">
         <label htmlFor="question" className="sr-only">
           Ask a question about your documents
         </label>
@@ -41,21 +41,20 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
           disabled={disabled}
           autoComplete="off"
           aria-describedby={hintId}
-          placeholder={noDocs ? "Upload a document first…" : "Ask a question about your documents…"}
-          className="min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-muted disabled:cursor-not-allowed"
+          placeholder={noDocs ? "Upload a document first…" : "Ask about your documents…"}
+          className="min-w-0 flex-1 bg-transparent py-2 outline-none focus-visible:outline-none placeholder:text-muted disabled:cursor-not-allowed"
         />
         {pending ? (
-          <button type="button" onClick={stop} className="rounded-xl border border-line px-4 py-2.5 font-bold hover:bg-surface">
+          <button type="button" onClick={stop} className="min-h-11 rounded-xl border border-line px-4 font-bold hover:bg-surface">
             Stop
           </button>
         ) : (
           <button
             type="submit"
             disabled={disabled || tooShort}
-            aria-label="Send question"
-            className="rounded-xl bg-lavender-deep px-4 py-2.5 font-bold text-white hover:bg-lavender-deep/85 disabled:cursor-not-allowed disabled:opacity-40"
+            className="min-h-11 rounded-xl bg-lavender-deep px-4 font-bold text-white hover:bg-lavender-deep/85 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Ask →
+            Ask <span aria-hidden>→</span>
           </button>
         )}
       </div>

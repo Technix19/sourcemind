@@ -13,9 +13,9 @@ export default function DocumentsPage() {
 
   return (
     <div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-end justify-between gap-4">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-black">Your documents</h1>
+          <h1 className="text-3xl font-black sm:text-4xl">Your documents</h1>
           <p className="mt-1 text-muted">
             {plural(documents.length, "file")} in this workspace · {plural(passages, "searchable passage")}
           </p>
@@ -23,7 +23,7 @@ export default function DocumentsPage() {
         <button
           type="button"
           onClick={() => input.current?.click()}
-          className="rounded-xl bg-lavender-deep px-5 py-2.5 font-bold text-white hover:bg-lavender-deep/85"
+          className="min-h-11 rounded-xl bg-lavender-deep px-5 font-bold text-white hover:bg-lavender-deep/85"
         >
           + Upload documents
         </button>

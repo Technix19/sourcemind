@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useChat } from "@/components/chat/ChatProvider";
+import { EvidenceDrawer } from "@/components/chat/EvidenceDrawer";
 import { EvidencePanel } from "@/components/chat/EvidencePanel";
 import { QuestionForm } from "@/components/chat/QuestionForm";
 import { QuickStart } from "@/components/chat/QuickStart";
@@ -27,7 +28,7 @@ export default function AskPage() {
           <div className="space-y-8">
             <div>
               <p className="text-xs font-bold tracking-wider text-lavender">YOUR RESEARCH WORKSPACE</p>
-              <h1 className="mt-2 text-5xl font-black leading-tight">
+              <h1 className="mt-2 text-4xl font-black leading-tight sm:text-5xl">
                 Answers worth <span className="text-lavender">trusting.</span>
               </h1>
               <p className="mt-3 text-lg text-muted">Upload a document, ask a precise question, and trace each answer back to its source.</p>
@@ -56,10 +57,12 @@ export default function AskPage() {
         </div>
       </section>
 
-      <div className="space-y-6">
+      {/* On small screens evidence moves to the drawer, and the stats only show before the first question. */}
+      <div className={`space-y-6 ${started ? "hidden xl:block" : ""}`}>
         <EvidencePanel />
         <SourceHealth />
       </div>
+      <EvidenceDrawer />
     </div>
   );
 }

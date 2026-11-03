@@ -70,6 +70,6 @@ describe("Ask page error handling", () => {
     await userEvent.type(box(), "slow question{Enter}");
     await userEvent.click(await screen.findByRole("button", { name: "Stop" }));
     expect(await screen.findByText("Stopped.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Send question" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ask" })).toBeInTheDocument();
   });
 });

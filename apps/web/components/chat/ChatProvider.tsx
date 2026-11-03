@@ -24,6 +24,8 @@ type ChatContextValue = {
   ask: (question: string, mode: AnswerMode) => Promise<void>;
   stop: () => void;
   clear: () => void;
+  drawerOpen: boolean;
+  setDrawerOpen: (open: boolean) => void;
   selectCitation: (turnId: number, citationId: string) => void;
   selectTurn: (turnId: number) => void;
 };
@@ -45,6 +47,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   const [turns, setTurns] = useState<Turn[]>([]);
   const [activeId, setActiveId] = useState<number | null>(null);
   const [selection, setSelection] = useState<Selection>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const controller = useRef<AbortController | null>(null);
 
   const pending = turns.some((t) => t.status === "pending");
@@ -87,6 +90,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     setTurns([]);
     setActiveId(null);
     setSelection(null);
+    setDrawerOpen(false);
   }, []);
 
   const selectTurn = useCallback((turnId: number) => {
@@ -110,10 +114,12 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
       ask,
       stop,
       clear,
+      drawerOpen,
+      setDrawerOpen,
       selectCitation,
       selectTurn,
     };
-  }, [turns, activeId, selection, pending, ask, stop, clear, selectCitation, selectTurn]);
+  }, [turns, activeId, selection, pending, drawerOpen, ask, stop, clear, selectCitation, selectTurn]);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 }

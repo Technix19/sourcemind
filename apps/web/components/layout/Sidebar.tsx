@@ -38,7 +38,7 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`block rounded-xl px-3 py-2.5 font-bold transition-colors ${
+                  className={`block min-h-11 rounded-xl px-3 py-2.5 font-bold transition-colors ${
                     active ? "bg-lavender/20 text-lavender" : "text-muted hover:bg-surface hover:text-text"
                   }`}
                 >

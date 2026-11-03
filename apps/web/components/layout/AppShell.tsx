@@ -12,14 +12,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
         {apiError && (
-          <div role="alert" className="flex items-center gap-3 border-b border-danger/30 bg-danger/10 px-6 py-3 text-sm text-danger">
+          <div role="alert" className="flex items-center gap-3 border-b border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger sm:px-6">
             <span className="flex-1">{apiError}</span>
             <button type="button" onClick={() => void refresh()} className="rounded-lg border border-danger/40 px-3 py-1 font-bold hover:bg-danger/10">
               Retry
             </button>
           </div>
         )}
-        <main className="flex-1 px-6 py-8">{children}</main>
+        <main id="main" tabIndex={-1} className="flex-1 px-4 py-6 outline-none sm:px-6 sm:py-8">
+          {children}
+        </main>
       </div>
     </div>
   );
