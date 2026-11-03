@@ -1,4 +1,4 @@
-import type { DocumentSummary, Health } from "./types";
+import type { AnswerMode, DocumentSummary, Health, QueryResponse } from "./types";
 
 // Public on purpose: it is only a URL. No secrets ever belong in the frontend.
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -16,7 +16,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${API_URL}${path}`, init);
-  } catch {
+  } catch (err) {
+    // Let a user-initiated cancel through unchanged so callers can tell it from a failure.
+    if (err instanceof DOMException && err.name === "AbortError") throw err;
     throw new ApiError(0, `Can't reach the API at ${API_URL}. Is it running?`);
   }
   if (response.status === 204) return undefined as T;
@@ -42,3 +44,11 @@ export function uploadDocument(file: File) {
 
 export const deleteDocument = (id: string) =>
   request<void>(`/api/v1/documents/${encodeURIComponent(id)}`, { method: "DELETE" });
+
+export const askQuestion = (question: string, mode: AnswerMode, signal?: AbortSignal) =>
+  request<QueryResponse>("/api/v1/queries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question, mode }),
+    signal,
+  });

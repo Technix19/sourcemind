@@ -1,0 +1,87 @@
+"use client";
+
+import Link from "next/link";
+import { useId, useRef, useState } from "react";
+import { useDocuments } from "@/components/documents/DocumentsProvider";
+import { MAX_QUESTION, MIN_QUESTION, useChat } from "./ChatProvider";
+
+export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (value: string) => void }) {
+  const { documents, health, apiError } = useDocuments();
+  const { ask, stop, pending } = useChat();
+  const [generate, setGenerate] = useState(false);
+  const input = useRef<HTMLInputElement>(null);
+  const hintId = useId();
+
+  const canGenerate = health?.generation_available === true;
+  const noDocs = documents.length === 0;
+  const tooShort = draft.trim().length < MIN_QUESTION;
+  const disabled = noDocs || !!apiError;
+
+  const submit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (disabled || pending || tooShort) return;
+    const question = draft;
+    setDraft("");
+    await ask(question, canGenerate && generate ? "generated" : "sources_only");
+    input.current?.focus();
+  };
+
+  return (
+    <form onSubmit={submit} className="space-y-2">
+      <div className="flex items-center gap-3 rounded-2xl border border-line bg-panel p-2 pl-4 focus-within:border-lavender">
+        <label htmlFor="question" className="sr-only">
+          Ask a question about your documents
+        </label>
+        <input
+          id="question"
+          ref={input}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          maxLength={MAX_QUESTION}
+          disabled={disabled}
+          autoComplete="off"
+          aria-describedby={hintId}
+          placeholder={noDocs ? "Upload a document first…" : "Ask a question about your documents…"}
+          className="min-w-0 flex-1 bg-transparent py-2 outline-none placeholder:text-muted disabled:cursor-not-allowed"
+        />
+        {pending ? (
+          <button type="button" onClick={stop} className="rounded-xl border border-line px-4 py-2.5 font-bold hover:bg-surface">
+            Stop
+          </button>
+        ) : (
+          <button
+            type="submit"
+            disabled={disabled || tooShort}
+            aria-label="Send question"
+            className="rounded-xl bg-lavender-deep px-4 py-2.5 font-bold text-white hover:bg-lavender-deep/85 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Ask →
+          </button>
+        )}
+      </div>
+      <div id={hintId} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-1 text-xs text-muted">
+        <span>
+          {noDocs && !apiError ? (
+            <>
+              <Link href="/documents" className="text-lavender underline">
+                Upload a document
+              </Link>{" "}
+              to start asking.
+            </>
+          ) : (
+            "SourceMind can make mistakes. Always verify important details using the sources."
+          )}
+        </span>
+        {canGenerate && (
+          <label className="flex cursor-pointer items-center gap-2">
+            <input type="checkbox" checked={generate} onChange={(e) => setGenerate(e.target.checked)} className="size-4 accent-lavender" />
+            <span>Generate an answer (sends the question and excerpts to the model provider)</span>
+          </label>
+        )}
+      </div>
+      <p role="status" aria-live="polite" className="sr-only">
+        {pending ? "Searching your documents" : ""}
+      </p>
+    </form>
+  );
+}

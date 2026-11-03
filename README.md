@@ -10,11 +10,11 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M2 Ingestion and chunking (upload, PDF/TXT/MD extraction, page-aware chunks, limits) | Implemented |
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
 | M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
-| M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented. 5b (ask + evidence) and 5c (responsive/accessibility polish) planned |
+| M5 Frontend: 5a shell, upload, document library, evaluation empty state | 5a and 5b implemented (upload, library, ask, evidence cards). 5c (responsive and accessibility polish) planned |
 | M6 Auth, persistence, vectors | Planned |
 | M7 Evaluation and deployment | Planned |
 
-Nothing beyond M4 and the first part of M5 exists yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
+Nothing beyond M4 and the first two parts of M5 exists yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
 
 ## Run the API (local)
 
@@ -76,4 +76,4 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-The API allows browser calls only from `FRONTEND_ORIGIN` (default `http://localhost:3000`), so open the app at `localhost`, not `127.0.0.1`. The API address defaults to `http://localhost:8000`; override it with `NEXT_PUBLIC_API_URL` (a URL only, never a secret). Checks: `npm run lint`, `npm run build`.
+The API allows browser calls only from `FRONTEND_ORIGIN` (default `http://localhost:3000`), so open the app at `localhost`, not `127.0.0.1`. The API address defaults to `http://localhost:8000`; override it with `NEXT_PUBLIC_API_URL` (a URL only, never a secret). Checks: `npm test`, `npm run lint`, `npm run build`.
