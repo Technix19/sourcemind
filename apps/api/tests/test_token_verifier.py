@@ -11,7 +11,13 @@ from app.auth import AuthError, AuthUnavailable, TokenVerifier
 
 ISSUER = "https://proj.example/auth/v1"
 SUB = "00000000-0000-0000-0000-000000000001"
-NOW = int(time.time())  # PyJWT checks `exp` against the REAL clock; the fake clock only drives key caching
+def now() -> int:
+    """PyJWT checks `exp` against the REAL clock, so tests must read it when they RUN, not at import:
+    a slow test ahead of them in the suite would otherwise push 'a few seconds ago' far into the past."""
+    return int(time.time())
+
+
+NOW = now()  # only used to seed the fake key-cache clock, which has nothing to do with token expiry
 
 
 def make_key(kid: str):
@@ -44,7 +50,7 @@ def env():
     def mint(key=private, kid="k1", alg="ES256", **claims):
         payload = {
             "iss": ISSUER, "aud": "authenticated", "role": "authenticated", "sub": SUB,
-            "iat": NOW, "exp": NOW + 3600,
+            "iat": now(), "exp": now() + 3600,
         }
         payload.update(claims)
         payload = {k: v for k, v in payload.items() if v is not None}  # None removes a claim
@@ -66,7 +72,7 @@ def test_the_token_is_never_shown_in_the_user_repr(env):
 @pytest.mark.parametrize(
     "claims",
     [
-        {"exp": NOW - 3600},                             # expired
+        {"exp": now() - 3600},                           # expired
         {"iss": "https://evil.example/auth/v1"},         # wrong issuer
         {"aud": "something-else"},                       # wrong audience
         {"role": "anon"},                                # the public key is a token too
@@ -83,14 +89,14 @@ def test_bad_claims_are_rejected(env, claims):
 
 
 def test_expiry_allows_only_a_few_seconds_of_clock_skew(env):
-    just_expired = env.mint(exp=NOW - 5)                    # inside the 10 s leeway
+    just_expired = env.mint(exp=now() - 5)                  # inside the 10 s leeway
     env.verifier.verify(just_expired)
     with pytest.raises(AuthError):
-        env.verifier.verify(env.mint(exp=NOW - 60))
+        env.verifier.verify(env.mint(exp=now() - 60))
 
 
 def test_unsigned_none_algorithm_token_is_rejected(env):
-    token = jwt.encode({"iss": ISSUER, "aud": "authenticated", "sub": SUB, "role": "authenticated", "exp": NOW + 3600}, None, algorithm="none")
+    token = jwt.encode({"iss": ISSUER, "aud": "authenticated", "sub": SUB, "role": "authenticated", "exp": now() + 3600}, None, algorithm="none")
     with pytest.raises(AuthError, match="algorithm"):
         env.verifier.verify(token)
 
@@ -170,6 +176,6 @@ def test_key_server_outage_is_reported_as_unavailable_not_as_a_bad_token():
 
     verifier = TokenVerifier(issuer=ISSUER, fetch_keys=down)
     private, _ = make_key("k1")
-    token = jwt.encode({"iss": ISSUER, "aud": "authenticated", "sub": SUB, "role": "authenticated", "exp": NOW + 3600}, private, algorithm="ES256", headers={"kid": "k1"})
+    token = jwt.encode({"iss": ISSUER, "aud": "authenticated", "sub": SUB, "role": "authenticated", "exp": now() + 3600}, private, algorithm="ES256", headers={"kid": "k1"})
     with pytest.raises(AuthUnavailable):
         verifier.verify(token)

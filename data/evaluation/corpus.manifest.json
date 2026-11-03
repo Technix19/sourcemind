@@ -1,0 +1,57 @@
+{
+  "corpus_version": "1",
+  "retrieved": "2026-11-03",
+  "license_basis": "US federal government works (17 U.S.C. 105); no restrictive notice found in the text. Not legal advice.",
+  "documents": [
+    {
+      "id": "nist-ai-rmf",
+      "title": "NIST AI Risk Management Framework 1.0 (NIST AI 100-1)",
+      "kind": "technical policy",
+      "publisher": "National Institute of Standards and Technology",
+      "url": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf",
+      "file": "nist-ai-rmf.pdf",
+      "sha256": "7576edb531d9848825814ee88e28b1795d3a84b435b4b797d3670eafdc4a89f1",
+      "bytes": 1946127
+    },
+    {
+      "id": "nist-csf",
+      "title": "The NIST Cybersecurity Framework (CSF) 2.0 (NIST CSWP 29)",
+      "kind": "technical standard",
+      "publisher": "National Institute of Standards and Technology",
+      "url": "https://nvlpubs.nist.gov/nistpubs/CSWP/NIST.CSWP.29.pdf",
+      "file": "nist-csf.pdf",
+      "sha256": "3c31f46fee98cac0c4323453e5109291a213b4de7fef8c058af9bf67f717433c",
+      "bytes": 1518858
+    },
+    {
+      "id": "nhlbi-sleep",
+      "title": "Your Guide to Healthy Sleep (NHLBI)",
+      "kind": "plain-language health",
+      "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+      "url": "https://www.nhlbi.nih.gov/files/docs/public/sleep/healthy_sleep.pdf",
+      "file": "nhlbi-sleep.pdf",
+      "sha256": "11747c5fed332670821a8a60bfd39880ad2f8df2ea576a2d9f49d8ebe2cc6751",
+      "bytes": 2362874
+    },
+    {
+      "id": "fed-explained",
+      "title": "The Fed Explained: What the Central Bank Does",
+      "kind": "economics and institutions",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "url": "https://www.federalreserve.gov/aboutthefed/files/the-fed-explained.pdf",
+      "file": "fed-explained.pdf",
+      "sha256": "8db8fd9e1de63ac25a6f9585d78ded12f45ab56f0c14c52c199b36b368f84d60",
+      "bytes": 4032813
+    },
+    {
+      "id": "us-constitution",
+      "title": "The Constitution of the United States of America, As Amended (House Document 110-50)",
+      "kind": "legal and historical",
+      "publisher": "US Government Publishing Office",
+      "url": "https://www.govinfo.gov/content/pkg/CDOC-110hdoc50/pdf/CDOC-110hdoc50.pdf",
+      "file": "us-constitution.pdf",
+      "sha256": "7f29c4a79e310cc7bcee5f3fd07fb1367e463bd4530fa5d854ebdd4fd4402e57",
+      "bytes": 4020598
+    }
+  ]
+}

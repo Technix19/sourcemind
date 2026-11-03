@@ -1,0 +1,6 @@
+{
+  "dataset_version": "1",
+  "corpus_version": "1",
+  "note": "Written by another AI (ChatGPT), blind: from the documents only, never shown any search result. Author tag: external_llm. See EXTERNAL_QUESTIONS_PROMPT.md.",
+  "questions": []
+}

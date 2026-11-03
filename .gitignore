@@ -6,3 +6,9 @@ __pycache__/
 .DS_Store
 node_modules/
 .next/
+
+# Evaluation corpus PDFs are downloaded by data/evaluation/fetch_corpus.py, not committed.
+data/evaluation/corpus/*.pdf
+
+# Evaluation caches (embeddings) are derived data.
+data/evaluation/.cache/

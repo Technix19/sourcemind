@@ -1,0 +1,552 @@
+{
+  "dataset_version": "1",
+  "corpus_version": "1",
+  "note": "Batch 1 (35 questions) was written by reading the pages only, with no retriever output consulted. Batch 2 (ids x-01..x-10, 'batch': 2) was added later by the same author AFTER the development-split results of batch 1 had been seen, as a substitute for the owner's blind questions; it was also written from page text only and not run on any search first. Both batches share one author, so this evaluation has NO independent-author check. See docs/m7-design.md. Dev/test labels are FROZEN in this file (field 'split'): batch 1 keeps the assignment whose development results had been examined; batch 2 was assigned separately, stratified.",
+  "questions": [
+    {
+      "id": "csf-01",
+      "type": "direct",
+      "author": "assistant",
+      "question": "What are the six Functions of the CSF Core?",
+      "doc": "nist-csf",
+      "answer": "GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND, and RECOVER.",
+      "answer_spans": [
+        "GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND, and RECOVER"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "csf-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Which short beginner guides help a company get started with the framework?",
+      "doc": "nist-csf",
+      "answer": "Quick-Start Guides (QSGs).",
+      "answer_spans": [
+        "Quick-Start Guides (QSGs) are brief documents",
+        "Quick-Start Guides that give actionable guidance on using the CSF"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "csf-03",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+      "doc": "nist-csf",
+      "answer": "Analyze the gaps between the Current and Target Profiles and create an action plan.",
+      "answer_spans": [
+        "Analyze the gaps between the Current and Target Profiles, and create an action plan"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "csf-04",
+      "type": "specific",
+      "author": "assistant",
+      "question": "Which email address can be used to suggest new Informative References for CSF 2.0?",
+      "doc": "nist-csf",
+      "answer": "olir@nist.gov",
+      "answer_spans": [
+        "olir@nist.gov"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "csf-05",
+      "type": "specific",
+      "author": "assistant",
+      "question": "Which Tier describes an organization that adapts its practices using lessons learned and predictive indicators?",
+      "doc": "nist-csf",
+      "answer": "Tier 4: Adaptive.",
+      "answer_spans": [
+        "including lessons learned and predictive indicators"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "csf-06",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "question": "What financial penalties does NIST impose on organizations that fail to adopt the Cybersecurity Framework?",
+      "absent_terms": [
+        "re:\\bpenalt",
+        "re:\\bfines?\\b",
+        "re:\\bsanction"
+      ],
+      "doc": "nist-csf",
+      "split": "dev"
+    },
+    {
+      "id": "rmf-01",
+      "type": "direct",
+      "author": "assistant",
+      "question": "What does the framework say about decommissioning and phasing out AI systems?",
+      "doc": "nist-ai-rmf",
+      "answer": "Processes should exist to decommission and phase out AI systems safely without increasing risk or reducing trustworthiness.",
+      "answer_spans": [
+        "phasing out AI systems safely"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "rmf-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Which people across the creation and use of artificial intelligence are expected to read and apply this document?",
+      "doc": "nist-ai-rmf",
+      "answer": "AI actors across the AI lifecycle.",
+      "answer_spans": [
+        "The AI RMF is intended to be used by AI actors"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "rmf-03",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+      "doc": "nist-ai-rmf",
+      "answer": "Five.",
+      "answer_spans": [
+        "five key socio-technical dimensions"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "rmf-04",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Is an AI system acceptable if it is very hard to hack but treats people unfairly?",
+      "doc": "nist-ai-rmf",
+      "answer": "No: highly secure but unfair systems are undesirable.",
+      "answer_spans": [
+        "Highly secure but unfair systems"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "rmf-05",
+      "type": "specific",
+      "author": "assistant",
+      "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+      "doc": "nist-ai-rmf",
+      "answer": "GOVERN 2.2.",
+      "answer_spans": [
+        "AI risk management training to enable them to perform their"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "rmf-06",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+      "absent_terms": [
+        "re:\\bcertified\\b",
+        "re:\\bcompliant\\b"
+      ],
+      "doc": "nist-ai-rmf",
+      "split": "test"
+    },
+    {
+      "id": "sleep-01",
+      "type": "direct",
+      "author": "assistant",
+      "question": "How many hours a night do healthy adults sleep on average when they have unlimited opportunity to sleep?",
+      "doc": "nhlbi-sleep",
+      "answer": "Between 8 and 8.5 hours.",
+      "answer_spans": [
+        "they sleep on average between 8 and 8.5 hours a night"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "sleep-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+      "doc": "nhlbi-sleep",
+      "answer": "No, it does not completely erase sleep debt.",
+      "answer_spans": [
+        "does not completely erase your sleep debt"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "sleep-03",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How long does each pause in breathing typically last in sleep apnea?",
+      "doc": "nhlbi-sleep",
+      "answer": "10-120 seconds.",
+      "answer_spans": [
+        "typically lasts 10–120 seconds"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "sleep-04",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Can herbal or over-the-counter supplements reliably treat persistent sleeplessness?",
+      "doc": "nhlbi-sleep",
+      "answer": "Little evidence supports melatonin; valerian studies are inconclusive.",
+      "answer_spans": [
+        "Little evidence exists that melatonin can help relieve insomnia"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "sleep-05",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How many hours of sleep do teenagers actually get on average?",
+      "doc": "nhlbi-sleep",
+      "answer": "About 7-7.5 hours a night.",
+      "answer_spans": [
+        "average of only 7–7.5 hours of sleep a night"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "sleep-06",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "question": "What daily melatonin dose does the guide recommend for insomnia?",
+      "absent_terms": [
+        "re:\\bmg\\b",
+        "milligram",
+        "re:recommended dos"
+      ],
+      "doc": "nhlbi-sleep",
+      "split": "test"
+    },
+    {
+      "id": "fed-01",
+      "type": "direct",
+      "author": "assistant",
+      "question": "How long is the term of a member of the Board of Governors?",
+      "doc": "fed-explained",
+      "answer": "14 years.",
+      "answer_spans": [
+        "Board of Governors is appointed for a 14-year term"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "fed-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Which two goals has Congress given the central bank for its interest-rate decisions?",
+      "doc": "fed-explained",
+      "answer": "Maximum employment and stable prices.",
+      "answer_spans": [
+        "maximum employment and stable prices"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "fed-03",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How many voting members does the Federal Open Market Committee have?",
+      "doc": "fed-explained",
+      "answer": "Twelve.",
+      "answer_spans": [
+        "The FOMC consists of 12 voting members"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "fed-04",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Why do the central bank's regional territories cut across state boundaries?",
+      "doc": "fed-explained",
+      "answer": "They were drawn from trade regions that existed in 1913.",
+      "answer_spans": [
+        "District boundaries were based on prevailing trade regions"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "fed-05",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+      "doc": "fed-explained",
+      "answer": "Four years.",
+      "answer_spans": [
+        "serve only four-year terms"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "fed-06",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "question": "Which cryptocurrency has the Federal Reserve endorsed as legal tender?",
+      "absent_terms": [
+        "bitcoin",
+        "re:cryptocurrenc",
+        "ethereum"
+      ],
+      "doc": "fed-explained",
+      "split": "dev"
+    },
+    {
+      "id": "con-01",
+      "type": "direct",
+      "author": "assistant",
+      "question": "How many Senators does each State have?",
+      "doc": "us-constitution",
+      "answer": "Two.",
+      "answer_spans": [
+        "composed of two Senators from each State"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "con-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Which amendment stops Congress from setting up an official state religion?",
+      "doc": "us-constitution",
+      "answer": "The First Amendment.",
+      "answer_spans": [
+        "Congress shall make no law respecting an establishment"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "con-03",
+      "type": "specific",
+      "author": "assistant",
+      "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+      "doc": "us-constitution",
+      "answer": "Eighteen.",
+      "answer_spans": [
+        "who are eighteen years of age or older, to vote shall not be denied"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "con-04",
+      "type": "paraphrase",
+      "author": "assistant",
+      "question": "Does the Constitution protect the right of people to own weapons?",
+      "doc": "us-constitution",
+      "answer": "Yes, the Second Amendment.",
+      "answer_spans": [
+        "the right of the people to keep and bear Arms, shall not be infringed"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "con-05",
+      "type": "specific",
+      "author": "assistant",
+      "question": "How old and how long a resident must a person be to qualify as President?",
+      "doc": "us-constitution",
+      "answer": "Thirty-five years old and fourteen years a resident.",
+      "answer_spans": [
+        "thirty-five years and been fourteen years a resident"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "con-06",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "question": "What did the Supreme Court decide in Marbury v. Madison?",
+      "absent_terms": [
+        "Marbury"
+      ],
+      "doc": "us-constitution",
+      "split": "dev"
+    },
+    {
+      "id": "off-01",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "question": "What is the capital city of Australia?",
+      "absent_terms": [
+        "Canberra"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "off-02",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "question": "How do I bake sourdough bread at home?",
+      "absent_terms": [
+        "sourdough"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "off-03",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "question": "Who won the 2018 FIFA World Cup?",
+      "absent_terms": [
+        "World Cup"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "off-04",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "question": "What is the boiling point of water at sea level in Celsius?",
+      "absent_terms": [
+        "boiling point"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "off-05",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "question": "How many moons does Mars have?",
+      "absent_terms": [
+        "Phobos",
+        "Deimos"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "x-01",
+      "type": "paraphrase",
+      "author": "assistant",
+      "batch": 2,
+      "question": "Does the AI framework tell organizations how much risk they should be willing to accept?",
+      "doc": "nist-ai-rmf",
+      "answer": "No: it does not prescribe risk tolerance.",
+      "answer_spans": [
+        "it does not prescribe risk tolerance"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-02",
+      "type": "paraphrase",
+      "author": "assistant",
+      "batch": 2,
+      "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+      "doc": "nist-ai-rmf",
+      "answer": "Resilience is returning to normal function; security includes resilience and also protocols to avoid, protect against, respond to and recover from attacks.",
+      "answer_spans": [
+        "Security and resilience are related but distinct characteristics"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "x-03",
+      "type": "specific",
+      "author": "assistant",
+      "batch": 2,
+      "question": "What fraction of pregnant women begin snoring for the first time during the second trimester?",
+      "doc": "nhlbi-sleep",
+      "answer": "About one-third.",
+      "answer_spans": [
+        "About one-third of all pregnant women begin snoring for the first time"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-04",
+      "type": "paraphrase",
+      "author": "assistant",
+      "batch": 2,
+      "question": "Which condition makes people abruptly drop off to sleep at moments when they should be awake?",
+      "doc": "nhlbi-sleep",
+      "answer": "Narcolepsy.",
+      "answer_spans": [
+        "People who have narcolepsy often fall asleep at inappropriate times and places"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-05",
+      "type": "unanswerable_related",
+      "author": "assistant",
+      "batch": 2,
+      "question": "Which prescription drug brand does the guide recommend for restless legs syndrome?",
+      "doc": "nhlbi-sleep",
+      "absent_terms": [
+        "re:\\bbrand\\b",
+        "Requip",
+        "Mirapex",
+        "ropinirole",
+        "pramipexole"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-06",
+      "type": "specific",
+      "author": "assistant",
+      "batch": 2,
+      "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+      "doc": "fed-explained",
+      "answer": "Eight.",
+      "answer_spans": [
+        "eight regularly scheduled joint meetings of the Board and FOMC each year"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "x-07",
+      "type": "paraphrase",
+      "author": "assistant",
+      "batch": 2,
+      "question": "How do harvest failures caused by bad weather affect prices and jobs?",
+      "doc": "fed-explained",
+      "answer": "Adverse supply shocks tend to raise prices and reduce output and employment.",
+      "answer_spans": [
+        "these sorts of adverse supply shocks tend to raise prices and reduce output"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-08",
+      "type": "paraphrase",
+      "author": "assistant",
+      "batch": 2,
+      "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+      "doc": "us-constitution",
+      "answer": "No: the Twenty-fourth Amendment bars poll taxes.",
+      "answer_spans": [
+        "by reason of failure to pay any poll tax or other tax"
+      ],
+      "split": "test"
+    },
+    {
+      "id": "x-09",
+      "type": "direct",
+      "author": "assistant",
+      "batch": 2,
+      "question": "At what time on which day in January do the terms of the President and Vice President end?",
+      "doc": "us-constitution",
+      "answer": "Noon on the 20th day of January.",
+      "answer_spans": [
+        "shall end at noon on the 20th day of January"
+      ],
+      "split": "dev"
+    },
+    {
+      "id": "x-10",
+      "type": "unanswerable_offtopic",
+      "author": "assistant",
+      "batch": 2,
+      "question": "What is the tallest mountain in South America?",
+      "absent_terms": [
+        "Aconcagua"
+      ],
+      "split": "dev"
+    }
+  ]
+}

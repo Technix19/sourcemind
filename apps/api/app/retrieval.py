@@ -34,6 +34,31 @@ class Hit:
     score: float
 
 
+class TfidfIndex:
+    """TF-IDF vectors for a set of texts, fitted once and queried many times.
+
+    The product fits one per query (over the user's chunks); the evaluation fits one per corpus.
+    Sharing this class is what keeps the two identical.
+    """
+
+    def __init__(self, texts) -> None:
+        self._vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), sublinear_tf=True)
+        try:
+            self._matrix = self._vectorizer.fit_transform(texts)
+        except ValueError:  # empty vocabulary, e.g. nothing but stop words
+            self._matrix = None
+
+    def scores(self, question: str):
+        """Cosine similarity of the question to every text, or None when nothing can be scored."""
+        if self._matrix is None:
+            return None
+        try:
+            query = self._vectorizer.transform([question])
+        except ValueError:
+            return None
+        return cosine_similarity(query, self._matrix).ravel()
+
+
 def retrieve(
     question: str, chunks: list[SearchChunk], *, top_k: int = 4, min_score: float = 0.05
 ) -> list[Hit]:
@@ -44,13 +69,9 @@ def retrieve(
     """
     if not chunks or not question.strip() or top_k < 1:
         return []
-    vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), sublinear_tf=True)
-    try:
-        matrix = vectorizer.fit_transform(c.text for c in chunks)
-        query = vectorizer.transform([question])
-    except ValueError:  # empty vocabulary, e.g. nothing but stop words
+    scores = TfidfIndex(c.text for c in chunks).scores(question)
+    if scores is None:
         return []
-    scores = cosine_similarity(query, matrix).ravel()
     order = sorted(range(len(chunks)), key=lambda i: -scores[i])  # stable sort
     return [
         Hit(chunks[i], round(float(scores[i]), 4))
