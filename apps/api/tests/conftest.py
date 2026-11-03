@@ -5,6 +5,7 @@ Offline tests never talk to Supabase. A fake verifier maps the tokens "user-a" a
 Security) replaces the database. Integration tests (marker `integration`) opt out
 and use the real thing.
 """
+import dataclasses
 import uuid
 
 import pymupdf
@@ -38,6 +39,7 @@ class InMemoryBackend:
     def __init__(self) -> None:
         self._docs: dict[str, dict[str, Document]] = {}
         self._chunks: dict[str, dict[str, list[PageChunk]]] = {}
+        self.files: dict[tuple[str, str], tuple[bytes, str]] = {}   # (user id, document id) -> (bytes, type)
 
     def repo_for(self, user: AuthUser) -> "InMemoryRepository":
         return InMemoryRepository(self, user.id)
@@ -53,23 +55,34 @@ class InMemoryRepository:
         self._chunks = backend._chunks.setdefault(user_id, {})
 
     def _with_count(self, doc: Document) -> Document:
-        return Document(doc.id, doc.name, doc.size_bytes, doc.page_count, doc.status, len(self._chunks.get(doc.id, [])))
+        return dataclasses.replace(doc, chunk_count=len(self._chunks.get(doc.id, [])))
 
     def count_documents(self) -> int:
         return len(self._docs)
 
     def create_document(self, name, size_bytes, page_count) -> Document:
-        doc = Document(str(uuid.uuid4()), name, size_bytes, page_count, "indexing", 0)
+        doc = Document(str(uuid.uuid4()), name, size_bytes, page_count, "indexing", 0, True)
         self._docs[doc.id] = doc
         self._chunks[doc.id] = []
         return doc
+
+    def put_file(self, document_id, data, content_type) -> None:
+        self._b.files[(self._uid, document_id)] = (data, content_type)
+
+    def signed_url(self, document_id, expires_in=60):
+        doc_id = valid_id(document_id)
+        if (self._uid, doc_id) not in self._b.files:
+            return None
+        return f"https://files.test/{self._uid}/{doc_id}?token=signed&expires={expires_in}"
+
+    def finish_pending_deletions(self) -> int:
+        return 0
 
     def add_chunks(self, document_id, chunks) -> None:
         self._chunks[document_id].extend(chunks)
 
     def mark_ready(self, document_id) -> None:
-        d = self._docs[document_id]
-        self._docs[document_id] = Document(d.id, d.name, d.size_bytes, d.page_count, "ready", 0)
+        self._docs[document_id] = dataclasses.replace(self._docs[document_id], status="ready")
 
     def list_documents(self):
         return [self._with_count(d) for d in self._docs.values()]
@@ -84,6 +97,7 @@ class InMemoryRepository:
             return False
         del self._docs[doc_id]
         self._chunks.pop(doc_id, None)
+        self._b.files.pop((self._uid, doc_id), None)
         return True
 
     def search_chunks(self, document_ids):

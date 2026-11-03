@@ -36,3 +36,11 @@ If the context budget drops chunks, they are also dropped from the response. Tha
 **Decision:** documents, conversation and evidence providers are remounted whenever the user id changes or the user signs out; private pages are never rendered while the session is loading or absent.
 **Why:** clearing state by hand is easy to forget; remounting destroys it by construction, so the next person on a shared computer sees nothing. A token refresh keeps the same id and so keeps the state. The client guard is only a convenience: the API still rejects every unauthenticated call.
 **Also:** sign-out uses `scope: "local"` so it ends only this browser's session, not every device.
+
+## ADR-010: Original files are served by short-lived signed links, not proxied (M6c)
+**Decision:** the API issues a 60-second signed link only after ownership is proven by the user's own token; the browser fetches the file straight from storage.
+**Why:** simple and cheap (no 12 MB through the API) and it matches the blueprint. **Cost:** a signed URL is a bearer credential, so anyone holding it can read the file until it expires. Mitigations: short life, per-click issue, no-store, never logged or stored, new tab cut off from the app. **Measured:** the CDN caches a fetched file for the rest of the link's life, so deleting a document does not revoke a link already used until it expires (60 s); the lifetime is the lever. Streaming through the API is the documented alternative if this ever matters more.
+
+## ADR-011: Storage names are ids, uploads require an owning row, files are immutable (M6c)
+**Decision:** object name `<user id>/<document id>`; the upload policy requires a document row pointing at that name; no update policy and no upsert; the Content-Type is chosen server-side.
+**Why:** no user-controlled path or type reaches storage, no orphan files can be created, and a citation can never change underneath the user.

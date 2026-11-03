@@ -33,6 +33,12 @@ class PageChunk:
     text: str
 
 
+def content_type_for(filename: str) -> str:
+    """The Content-Type WE choose for a stored file. Never taken from the client, so an uploaded
+    file cannot make the storage server serve it as HTML or anything else active."""
+    return "application/pdf" if PurePath(filename).suffix.lower() == ".pdf" else "text/plain"
+
+
 def sanitize_filename(name: str | None) -> str:
     """Display-only name: no directories, no control characters, bounded length."""
     base = PurePath((name or "").replace("\\", "/")).name

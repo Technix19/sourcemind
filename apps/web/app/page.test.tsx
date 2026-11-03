@@ -14,7 +14,7 @@ import type { DocumentSummary, QueryResponse } from "@/lib/types";
 import { setWideScreen } from "../vitest.viewport";
 import AskPage from "./page";
 
-const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready" };
+const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true };
 
 const evidence = (n: number) => ({
   citation_id: String(n), chunk_id: `c${n}`, document_id: "d1", filename: "paper.pdf",

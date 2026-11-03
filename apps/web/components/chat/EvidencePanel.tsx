@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { openDocumentPage, openErrorMessage } from "@/lib/openDocument";
 import { useChat } from "./ChatProvider";
 import { plural } from "@/lib/format";
 import type { Evidence } from "@/lib/types";
@@ -25,7 +26,22 @@ export function focusEvidenceCard(turnId: number, citationId: string) {
 
 function EvidenceCard({ turnId, item, selected }: { turnId: number; item: Evidence; selected: boolean }) {
   const [expanded, setExpanded] = useState(false);
+  const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState<string | null>(null);
   const long = item.excerpt.length > 280;
+
+  const openPage = async () => {
+    if (opening) return;
+    setOpening(true);
+    setOpenError(null);
+    try {
+      await openDocumentPage(item.document_id, item.page_number);
+    } catch (err) {
+      setOpenError(openErrorMessage(err));
+    } finally {
+      setOpening(false);
+    }
+  };
   return (
     <article
       data-evidence-card
@@ -46,16 +62,30 @@ function EvidenceCard({ turnId, item, selected }: { turnId: number; item: Eviden
         </span>
       </p>
       <blockquote className={`mt-3 break-words text-sm leading-relaxed text-text/90 ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
-      {long && (
+      <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1">
+        {long && (
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            className="min-h-9 rounded text-sm font-bold text-lavender hover:text-text"
+          >
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        )}
         <button
           type="button"
-          onClick={() => setExpanded((v) => !v)}
-          aria-expanded={expanded}
-          className="mt-2 rounded text-sm font-bold text-lavender hover:text-text"
+          onClick={() => void openPage()}
+          disabled={opening}
+          aria-label={`Open page ${item.page_number} of ${item.filename} in a new tab`}
+          className="min-h-9 rounded text-sm font-bold text-lavender hover:text-text disabled:opacity-60"
         >
-          {expanded ? "Show less" : "Show more"}
+          {opening ? "Opening…" : "Open page →"}
         </button>
-      )}
+      </div>
+      <p role="alert" className={openError ? "mt-1 text-sm text-danger" : "sr-only"}>
+        {openError}
+      </p>
     </article>
   );
 }

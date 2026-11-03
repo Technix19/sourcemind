@@ -1,11 +1,11 @@
-"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 answers, M6b sign-in + per-user storage."""
+"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 answers, M6b sign-in + per-user storage, M6c private files."""
 import logging
 import uuid
 from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from fastapi import Depends, FastAPI, File, HTTPException, Response, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, StringConstraints
 from starlette.concurrency import run_in_threadpool
@@ -15,12 +15,12 @@ from .answering import (
 )
 from .auth import AuthGate
 from .config import get_settings
-from .ingestion import IngestionError, build_chunks, extract_pages, sanitize_filename
+from .ingestion import IngestionError, build_chunks, content_type_for, extract_pages, sanitize_filename
 from .llm import generation_available, get_llm_client
-from .repository import Repository, RepositoryError, get_repository
+from .repository import SIGNED_URL_SECONDS, Repository, RepositoryError, get_repository
 from .retrieval import Hit, retrieve
 
-API_VERSION = "0.5.0"
+API_VERSION = "0.6.0"
 logger = logging.getLogger("sourcemind")
 
 def check_configuration() -> None:
@@ -71,15 +71,15 @@ def _process(filename: str, raw: bytes) -> tuple[int, list]:
     return len(pages), build_chunks(pages, settings)
 
 
-async def storage_call(fn, *args):
+async def storage_call(fn, *args, failure="Storage is unavailable right now. Try again shortly."):
     """Run a blocking storage call off the event loop and translate its failures safely."""
     try:
         return await run_in_threadpool(fn, *args)
     except RepositoryError as err:
         if err.unauthorized:
             raise HTTPException(401, "Your session has expired. Sign in again.") from None
-        logger.warning("storage error status=%s", err.status)  # status only: never data or tokens
-        raise HTTPException(502, "Storage is unavailable right now. Try again shortly.") from None
+        logger.warning("storage error status=%s", err.status)  # status only: never data, tokens or links
+        raise HTTPException(502, failure) from None
 
 
 @app.post("/api/v1/documents", status_code=201)
@@ -104,20 +104,27 @@ async def upload_document(file: UploadFile = File(...), repo: Repository = Depen
         raise HTTPException(409, f"Document limit reached ({settings.max_documents})")
     doc = await storage_call(repo.create_document, filename, len(raw), page_count)
     try:
+        await storage_call(repo.put_file, doc.id, raw, content_type_for(filename))
         await storage_call(repo.add_chunks, doc.id, chunks)
         await storage_call(repo.mark_ready, doc.id)
     except HTTPException:
-        # Never leave a half-indexed document behind (deleting it cascades to its chunks).
+        # Never leave a half-indexed document or an orphaned file behind: the ordered delete
+        # removes chunks, the stored file and the row.
         try:
             await run_in_threadpool(repo.delete_document, doc.id)
         except Exception:
             logger.warning("cleanup after failed upload also failed")
         raise
-    return {**doc.summary(), "chunk_count": len(chunks), "status": "ready"}
+    return {**doc.summary(), "chunk_count": len(chunks), "status": "ready", "has_file": True}
 
 
 @app.get("/api/v1/documents")
 async def list_documents(repo: Repository = Depends(get_repository)) -> dict:
+    # Finish any deletion that an earlier crash interrupted (runs as the user; no background worker).
+    try:
+        await run_in_threadpool(repo.finish_pending_deletions)
+    except Exception as exc:
+        logger.warning("could not finish pending deletions: %s", type(exc).__name__)
     return {"documents": [doc.summary() for doc in await storage_call(repo.list_documents)]}
 
 
@@ -129,9 +136,37 @@ async def get_document(document_id: str, repo: Repository = Depends(get_reposito
     return doc.summary()
 
 
+@app.get("/api/v1/documents/{document_id}/view")
+async def view_document(
+    document_id: str,
+    response: Response,
+    page: int | None = Query(default=None, ge=1),
+    repo: Repository = Depends(get_repository),
+) -> dict:
+    """A short-lived link to the original file. The link is a bearer credential, so it is
+    issued only for the caller's own document, expires quickly, is never logged and never cached."""
+    doc = await storage_call(repo.get_document, document_id)
+    if doc is None:
+        raise HTTPException(404, "Document not found")
+    if page is not None and page > doc.page_count:
+        raise HTTPException(422, f"This document has {doc.page_count} page(s).")
+    unavailable = "The original file isn't stored for this document. Upload it again to enable this."
+    if not doc.has_file:
+        raise HTTPException(404, unavailable)
+    url = await storage_call(repo.signed_url, document_id)
+    if url is None:
+        raise HTTPException(404, unavailable)
+    response.headers["Cache-Control"] = "no-store"
+    return {"url": url, "expires_in": SIGNED_URL_SECONDS, "page": page, "filename": doc.name}
+
+
 @app.delete("/api/v1/documents/{document_id}", status_code=204)
 async def delete_document(document_id: str, repo: Repository = Depends(get_repository)) -> Response:
-    if not await storage_call(repo.delete_document, document_id):
+    removed = await storage_call(
+        repo.delete_document, document_id,
+        failure="Removal did not finish. The document is hidden and will be cleaned up automatically.",
+    )
+    if not removed:
         raise HTTPException(404, "Document not found")
     return Response(status_code=204)
 

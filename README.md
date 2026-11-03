@@ -11,7 +11,7 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
 | M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
 | M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented (5a upload and library, 5b ask and evidence cards, 5c responsive layout and accessibility polish) |
-| M6 Auth, persistence, vectors | 6a done (schema + Row Level Security, 12 isolation tests). 6b done: the API verifies Supabase tokens and stores documents per user in Postgres; the web app has sign-in, sign-up and sign-out. 6c (private original files, Open page) and 6d (embeddings) planned. See `docs/m6-plan.md`, `docs/m6b-design.md` |
+| M6 Auth, persistence, vectors | 6a done (schema + Row Level Security). 6b done (sign-in, per-user storage). 6c done and verified (34 real-project tests plus a real-browser run): original files in a private bucket, 60-second signed links, **Open page** on citations, resumable deletion; apply the storage migration first (`docs/m6c-apply.md`). 6d (embeddings) planned. See `docs/m6-plan.md` |
 | M7 Evaluation and deployment | Planned |
 
 Every API route except `/api/v1/health` requires a signed-in user, and documents live in Postgres per user. There is no anonymous or local no-login mode. No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.

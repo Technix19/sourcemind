@@ -1,5 +1,5 @@
 import { getAccessToken } from "./supabase";
-import type { AnswerMode, DocumentSummary, Health, QueryResponse } from "./types";
+import type { AnswerMode, DocumentSummary, Health, QueryResponse, ViewLink } from "./types";
 
 // Public on purpose: it is only a URL. No secrets ever belong in the frontend.
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -69,3 +69,6 @@ export const askQuestion = (question: string, mode: AnswerMode, signal?: AbortSi
     body: JSON.stringify({ question, mode }),
     signal,
   });
+
+export const getViewLink = (id: string, page?: number) =>
+  request<ViewLink>(`/api/v1/documents/${encodeURIComponent(id)}/view${page ? `?page=${page}` : ""}`);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useDocuments } from "./DocumentsProvider";
 import { fileKind, formatBytes, plural } from "@/lib/format";
+import { openDocumentPage, openErrorMessage } from "@/lib/openDocument";
 import type { DocumentSummary } from "@/lib/types";
 
 const BADGE: Record<string, string> = { PDF: "text-amber", MD: "text-sky-300", TXT: "text-mint" };
@@ -11,7 +12,22 @@ function Row({ doc }: { doc: DocumentSummary }) {
   const { removeDocument } = useDocuments();
   const [confirming, setConfirming] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [opening, setOpening] = useState(false);
+  const [openError, setOpenError] = useState<string | null>(null);
   const kind = fileKind(doc.name);
+
+  const openFile = async () => {
+    if (opening) return;
+    setOpening(true);
+    setOpenError(null);
+    try {
+      await openDocumentPage(doc.id);
+    } catch (err) {
+      setOpenError(openErrorMessage(err));
+    } finally {
+      setOpening(false);
+    }
+  };
 
   return (
     <li className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border border-line bg-panel px-4 py-3">
@@ -31,6 +47,21 @@ function Row({ doc }: { doc: DocumentSummary }) {
         <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-bold text-mint">
           {doc.status === "ready" ? "Ready" : doc.status}
         </span>
+        {doc.has_file ? (
+          <button
+            type="button"
+            onClick={() => void openFile()}
+            disabled={opening}
+            aria-label={`Open ${doc.name} in a new tab`}
+            className="min-h-10 rounded-lg px-3 text-sm font-bold text-lavender hover:bg-surface disabled:opacity-60"
+          >
+            {opening ? "Opening…" : "Open"}
+          </button>
+        ) : (
+          <span className="text-xs text-muted" title="Uploaded before original files were stored. Upload it again to enable opening.">
+            File not stored
+          </span>
+        )}
         {confirming ? (
           <span className="flex gap-2" role="group" aria-label={`Confirm removing ${doc.name}`}>
             <button
@@ -59,6 +90,9 @@ function Row({ doc }: { doc: DocumentSummary }) {
           </button>
         )}
       </div>
+      <p role="alert" className={openError ? "w-full text-sm text-danger" : "sr-only"}>
+        {openError}
+      </p>
     </li>
   );
 }

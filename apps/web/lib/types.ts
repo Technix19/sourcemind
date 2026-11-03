@@ -6,6 +6,7 @@ export type DocumentSummary = {
   page_count: number;
   chunk_count: number;
   status: string;
+  has_file: boolean; // whether the original file is stored (older documents have none)
 };
 
 export type Health = {
@@ -35,4 +36,11 @@ export type QueryResponse = {
   model_used: string | null;
   request_id: string;
   notice: string | null;
+};
+
+export type ViewLink = {
+  url: string; // a short-lived bearer link: never store or log it
+  expires_in: number;
+  page: number | null;
+  filename: string;
 };
