@@ -6,7 +6,8 @@ in later milestones and must only ever come from the environment, never code.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 
@@ -26,6 +27,14 @@ class Settings:
     chat_model: str
     max_context_chars: int
     max_answer_tokens: int
+    supabase_url: str
+    supabase_anon_key: str = field(repr=False)  # public key, but still kept out of logs
+
+
+def _base_url(raw: str) -> str:
+    """Scheme + host only, so a pasted '.../rest/v1/' still works."""
+    parsed = urlparse(raw.strip())
+    return f"{parsed.scheme}://{parsed.netloc}" if parsed.scheme and parsed.netloc else ""
 
 
 def get_settings() -> Settings:
@@ -43,4 +52,6 @@ def get_settings() -> Settings:
         chat_model=os.getenv("OPENAI_CHAT_MODEL", "").strip(),
         max_context_chars=int(os.getenv("MAX_CONTEXT_CHARS", "8000")),
         max_answer_tokens=int(os.getenv("MAX_ANSWER_TOKENS", "500")),
+        supabase_url=_base_url(os.getenv("SUPABASE_URL", "")),
+        supabase_anon_key=(os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY", "")).strip(),
     )

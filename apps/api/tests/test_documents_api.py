@@ -4,31 +4,30 @@ from fastapi.testclient import TestClient
 
 from app.ingestion import IngestionError, sanitize_filename
 from app.main import app
-from app.store import store
-from conftest import make_pdf
+from conftest import AUTH_A, USER_A, make_pdf
 
-client = TestClient(app)
+client = TestClient(app, headers=AUTH_A)
 
 
 def upload(name: str, data: bytes, mime: str = "application/octet-stream"):
     return client.post("/api/v1/documents", files={"file": (name, data, mime)})
 
 
-def test_two_page_pdf_keeps_true_page_numbers():
+def test_two_page_pdf_keeps_true_page_numbers(fake_backend):
     pdf = make_pdf(["Introduction to extraction", "Random Forest selects difficulty"])
     res = upload("paper.pdf", pdf)
     assert res.status_code == 201, res.text
     body = res.json()
     assert body["status"] == "ready" and body["page_count"] == 2 and body["chunk_count"] == 2
-    chunks = store.get(body["id"]).chunks
+    chunks = fake_backend.chunks_of(USER_A.id, body["id"])
     assert [(c.page_number, c.chunk_index) for c in chunks] == [(1, 0), (2, 0)]
     assert "Random Forest" in chunks[1].text and "Random Forest" not in chunks[0].text
 
 
-def test_blank_middle_page_does_not_shift_numbering():
+def test_blank_middle_page_does_not_shift_numbering(fake_backend):
     res = upload("gap.pdf", make_pdf(["first", "", "third"]))
     assert res.status_code == 201
-    pages = [c.page_number for c in store.get(res.json()["id"]).chunks]
+    pages = [c.page_number for c in fake_backend.chunks_of(USER_A.id, res.json()["id"])]
     assert pages == [1, 3]
 
 

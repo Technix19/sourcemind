@@ -21,6 +21,7 @@ class TextChunk:
 
 def clean_text(text: str) -> str:
     """Normalize spacing but keep paragraph breaks (blank lines)."""
+    text = text.replace("\x00", "")  # Postgres text cannot hold NUL; some PDFs emit it
     text = re.sub(r"[ \t\f\v\r]+", " ", text)
     text = re.sub(r" ?\n ?", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)

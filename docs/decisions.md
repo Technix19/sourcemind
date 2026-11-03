@@ -22,3 +22,12 @@ If the context budget drops chunks, they are also dropped from the response. Tha
 ## ADR-006: Deleting a document is a recoverable, ordered process (M6, proposed)
 **Decision:** mark `deleting`, delete chunks (and embeddings), delete the stored file, then delete the row; a sweep resumes any document stuck in `deleting`.
 **Why:** database and storage deletes cannot be one transaction. Deleting chunks first makes removed content unsearchable immediately, and idempotent steps make crashes safe to retry.
+
+## ADR-007: Authentication is a gate in front of routing, not only a FastAPI dependency (M6b-1)
+**Decision:** a middleware verifies the token before routing; the route dependency only reads the result and also fails closed.
+**Why (measured, not assumed):** with auth as a dependency, the server read the entire 8 MB upload before rejecting an anonymous caller; with the gate it read 0 bytes. A test now repeats that measurement against the real app.
+**Related choices:** verify tokens offline against Supabase's published ES256 key (no secret, no per-request call); accept only ES256; refuse the public key, anonymous users and the service role; cache keys 10 minutes and refetch an unknown key at most every 30 s; a key-server outage is a 503, not a misleading 401.
+
+## ADR-008: No anonymous mode; configuration fails closed (M6b-1)
+**Decision:** the API refuses to start without Supabase settings, and there is no switch that disables login.
+**Why:** a "no-login for local demos" flag is exactly the kind of setting that ends up deployed. Offline tests use explicit fakes instead of a production bypass.

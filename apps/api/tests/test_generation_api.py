@@ -4,9 +4,9 @@ from fastapi.testclient import TestClient
 
 from app.answering import ABSTAIN, SYSTEM_PROMPT
 from app.main import app
-from conftest import make_pdf
+from conftest import AUTH_A, make_pdf
 
-client = TestClient(app)
+client = TestClient(app, headers=AUTH_A)
 
 
 class FakeLLM:

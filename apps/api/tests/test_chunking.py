@@ -59,3 +59,8 @@ def test_deterministic_and_unicode_safe():
 def test_invalid_parameters_rejected(size, overlap):
     with pytest.raises(ValueError):
         chunk_text("text", chunk_size=size, overlap=overlap)
+
+
+def test_nul_characters_are_removed_because_postgres_text_cannot_store_them():
+    assert clean_text("ab\x00cd \x00 ef") == "abcd ef"
+    assert all("\x00" not in c.text for c in chunk_text(clean_text("x\x00y " * 400), chunk_size=100, overlap=10))

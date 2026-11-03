@@ -11,10 +11,10 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
 | M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
 | M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented (5a upload and library, 5b ask and evidence cards, 5c responsive layout and accessibility polish) |
-| M6 Auth, persistence, vectors | 6a done: schema + Row Level Security, verified by 12 two-account isolation tests against a real Supabase project. 6b (auth + persistence), 6c (private files), 6d (embeddings) planned. See `docs/m6-plan.md` |
+| M6 Auth, persistence, vectors | 6a done (schema + Row Level Security, 12 isolation tests). 6b-1 done (the API verifies Supabase tokens, stores documents per user in Postgres, 154 offline + 21 real-project tests). **6b-2 (sign-in screen in the web app) is not built yet, so the web UI cannot talk to the API right now.** 6c (private files) and 6d (embeddings) planned. See `docs/m6-plan.md`, `docs/m6b-design.md` |
 | M7 Evaluation and deployment | Planned |
 
-The running app is still single-user and in-memory: the database schema exists and is tested, but the API and UI do not use it yet (that is 6b). No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
+Every API route except `/api/v1/health` now requires a signed-in user, and documents live in Postgres per user. The web app has no login screen yet (6b-2), so until that lands you can exercise the API only with real tokens (the test suite does). No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
 
 ## Screenshots
 

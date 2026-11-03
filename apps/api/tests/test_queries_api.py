@@ -1,10 +1,9 @@
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.store import store
-from conftest import make_pdf
+from conftest import AUTH_A, USER_A, make_pdf
 
-client = TestClient(app)
+client = TestClient(app, headers=AUTH_A)
 
 
 def upload(name: str, data: bytes) -> dict:
@@ -40,10 +39,10 @@ def test_known_two_page_fixture_returns_page_two_first():
     assert "Random Forest" in top["excerpt"] and 0 < top["score"] <= 1
 
 
-def test_evidence_resolves_to_a_stored_chunk():
+def test_evidence_resolves_to_a_stored_chunk(fake_backend):
     """Single source of truth: every cited chunk id/page exists in the store."""
     doc = two_page_paper()
-    stored = {c.chunk_id: c for c in store.get(doc["id"]).search_chunks()}
+    stored = {c.chunk_id: c for c in fake_backend.repo_for(USER_A).search_chunks([doc["id"]])}
     for ev in ask("classifier difficulty parsing").json()["evidence"]:
         assert stored[ev["chunk_id"]].page_number == ev["page_number"]
         assert stored[ev["chunk_id"]].text == ev["excerpt"]

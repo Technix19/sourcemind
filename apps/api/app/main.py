@@ -1,9 +1,11 @@
-"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 optional answers."""
+"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 answers, M6b sign-in + per-user storage."""
 import logging
+import uuid
+from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from fastapi import FastAPI, File, HTTPException, Response, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, StringConstraints
 from starlette.concurrency import run_in_threadpool
@@ -11,24 +13,44 @@ from starlette.concurrency import run_in_threadpool
 from .answering import (
     SYSTEM_PROMPT, build_user_prompt, check_citations, is_abstention, select_for_context,
 )
+from .auth import AuthGate
 from .config import get_settings
 from .ingestion import IngestionError, build_chunks, extract_pages, sanitize_filename
 from .llm import generation_available, get_llm_client
+from .repository import Repository, RepositoryError, get_repository
 from .retrieval import Hit, retrieve
-from .store import Document, store
 
-API_VERSION = "0.4.0"
+API_VERSION = "0.5.0"
 logger = logging.getLogger("sourcemind")
 
-app = FastAPI(title="SourceMind API", version=API_VERSION, docs_url="/api/docs")
+def check_configuration() -> None:
+    """Fail closed: without Supabase settings nobody can be authenticated, so do not start."""
+    settings = get_settings()
+    if not settings.supabase_url or not settings.supabase_anon_key:
+        raise RuntimeError(
+            "SUPABASE_URL and SUPABASE_ANON_KEY must be set (see apps/api/.env.example). "
+            "The API has no anonymous mode."
+        )
 
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    check_configuration()
+    yield
+
+
+app = FastAPI(title="SourceMind API", version=API_VERSION, docs_url="/api/docs", lifespan=lifespan)
+
+# Middleware order matters: the LAST one added is the OUTERMOST. Auth is added first (inner),
+# CORS last (outer), so even a 401 carries CORS headers and the browser can read it.
+app.add_middleware(AuthGate)
 # Only the configured frontend origin may call the API from a browser. No wildcard,
-# and no cookies/credentials: there is no auth yet (M6).
+# and no cookies: the token travels in the Authorization header.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[get_settings().frontend_origin],
     allow_methods=["GET", "POST", "DELETE"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 
@@ -49,8 +71,19 @@ def _process(filename: str, raw: bytes) -> tuple[int, list]:
     return len(pages), build_chunks(pages, settings)
 
 
+async def storage_call(fn, *args):
+    """Run a blocking storage call off the event loop and translate its failures safely."""
+    try:
+        return await run_in_threadpool(fn, *args)
+    except RepositoryError as err:
+        if err.unauthorized:
+            raise HTTPException(401, "Your session has expired. Sign in again.") from None
+        logger.warning("storage error status=%s", err.status)  # status only: never data or tokens
+        raise HTTPException(502, "Storage is unavailable right now. Try again shortly.") from None
+
+
 @app.post("/api/v1/documents", status_code=201)
-async def upload_document(file: UploadFile = File(...)) -> dict:
+async def upload_document(file: UploadFile = File(...), repo: Repository = Depends(get_repository)) -> dict:
     settings = get_settings()
     try:
         filename = sanitize_filename(file.filename)
@@ -67,31 +100,38 @@ async def upload_document(file: UploadFile = File(...)) -> dict:
     finally:
         await file.close()
 
-    doc = Document(
-        id=uuid4().hex, name=filename, size_bytes=len(raw),
-        page_count=page_count, status="ready", chunks=chunks,
-    )
-    if not store.add(doc, limit=settings.max_documents):
+    if await storage_call(repo.count_documents) >= settings.max_documents:
         raise HTTPException(409, f"Document limit reached ({settings.max_documents})")
-    return doc.summary()
+    doc = await storage_call(repo.create_document, filename, len(raw), page_count)
+    try:
+        await storage_call(repo.add_chunks, doc.id, chunks)
+        await storage_call(repo.mark_ready, doc.id)
+    except HTTPException:
+        # Never leave a half-indexed document behind (deleting it cascades to its chunks).
+        try:
+            await run_in_threadpool(repo.delete_document, doc.id)
+        except Exception:
+            logger.warning("cleanup after failed upload also failed")
+        raise
+    return {**doc.summary(), "chunk_count": len(chunks), "status": "ready"}
 
 
 @app.get("/api/v1/documents")
-def list_documents() -> dict:
-    return {"documents": [doc.summary() for doc in store.list()]}
+async def list_documents(repo: Repository = Depends(get_repository)) -> dict:
+    return {"documents": [doc.summary() for doc in await storage_call(repo.list_documents)]}
 
 
 @app.get("/api/v1/documents/{document_id}")
-def get_document(document_id: str) -> dict:
-    doc = store.get(document_id)
+async def get_document(document_id: str, repo: Repository = Depends(get_repository)) -> dict:
+    doc = await storage_call(repo.get_document, document_id)
     if doc is None:
         raise HTTPException(404, "Document not found")
     return doc.summary()
 
 
 @app.delete("/api/v1/documents/{document_id}", status_code=204)
-def delete_document(document_id: str) -> Response:
-    if not store.delete(document_id):
+async def delete_document(document_id: str, repo: Repository = Depends(get_repository)) -> Response:
+    if not await storage_call(repo.delete_document, document_id):
         raise HTTPException(404, "Document not found")
     return Response(status_code=204)
 
@@ -129,18 +169,17 @@ def _reply(
         "insufficient_evidence": (not hits) if insufficient is None else insufficient,
         "evidence": _evidence(hits),
         "model_used": model,
-        "request_id": uuid4().hex,
+        "request_id": uuid.uuid4().hex,
         "notice": notice,
     }
 
 
 @app.post("/api/v1/queries")
-async def query(body: QueryRequest) -> dict:
+async def query(body: QueryRequest, repo: Repository = Depends(get_repository)) -> dict:
     settings = get_settings()
-    docs = store.select(body.document_ids)
-    if docs is None:
+    chunks = await storage_call(repo.search_chunks, body.document_ids)
+    if chunks is None:
         raise HTTPException(404, "One or more documents were not found")
-    chunks = [chunk for doc in docs for chunk in doc.search_chunks()]
     if not chunks:
         raise HTTPException(409, "Upload at least one document before asking a question")
     hits = await run_in_threadpool(

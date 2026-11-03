@@ -18,5 +18,8 @@ def test_health_reflects_environment(monkeypatch):
     assert client.get("/api/v1/health").json()["environment"] == "test"
 
 
-def test_unknown_route_is_404():
-    assert client.get("/api/v1/nope").status_code == 404
+def test_unknown_route_does_not_reveal_itself_without_a_token():
+    # Unauthenticated callers get 401 for any /api/v1/ path, existing or not.
+    assert client.get("/api/v1/nope").status_code == 401
+    # A signed-in user gets the honest answer.
+    assert client.get("/api/v1/nope", headers={"Authorization": "Bearer user-a"}).status_code == 404
