@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
 import { NAV } from "./nav";
 
 export function TopBar() {
   const pathname = usePathname();
   const { health, apiError, loaded } = useDocuments();
+  const { signOut } = useAuth();
   const current = NAV.find((n) => (n.href === "/" ? pathname === "/" : pathname.startsWith(n.href))) ?? NAV[0];
   const mode = !loaded ? "Checking…" : apiError ? "API offline" : health?.generation_available ? "AI answers available" : "Retrieval mode";
 
@@ -18,19 +20,25 @@ export function TopBar() {
           <p className="text-xs font-bold tracking-wider text-lavender">WORKSPACE / {current.crumb.toUpperCase()}</p>
           <p className="text-sm text-muted">{current.blurb}</p>
         </div>
-        <p className="flex shrink-0 items-center gap-2 text-sm text-muted">
-          <span aria-hidden className={`size-2 rounded-full ${apiError ? "bg-danger" : loaded ? "bg-mint" : "bg-amber"}`} />
-          {mode}
-        </p>
+        <div className="flex shrink-0 flex-col items-end">
+          <p className="flex items-center gap-2 text-sm text-muted">
+            <span aria-hidden className={`size-2 rounded-full ${apiError ? "bg-danger" : loaded ? "bg-mint" : "bg-amber"}`} />
+            {mode}
+          </p>
+          {/* The sidebar (with its sign-out) is hidden on small screens, so sign-out lives here instead. */}
+          <button type="button" onClick={() => void signOut()} className="mt-1 min-h-10 rounded-lg px-2 text-sm text-muted hover:text-text lg:hidden">
+            Sign out
+          </button>
+        </div>
       </div>
       {/* The sidebar is hidden on small screens, so navigation lives here instead. */}
-      <nav aria-label="Main (compact)" className="mt-3 flex gap-2 lg:hidden">
+      <nav aria-label="Main (compact)" className="mt-1 flex gap-1 lg:hidden">
         {NAV.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             aria-current={current.href === item.href ? "page" : undefined}
-            className={`rounded-lg px-3 py-2.5 text-sm font-bold ${current.href === item.href ? "bg-lavender/20 text-lavender" : "text-muted"}`}
+            className={`rounded-lg px-3 py-2.5 text-sm font-bold whitespace-nowrap ${current.href === item.href ? "bg-lavender/20 text-lavender" : "text-muted"}`}
           >
             {item.label}
           </Link>

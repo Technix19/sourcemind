@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
-import { ChatProvider } from "@/components/chat/ChatProvider";
-import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
-import { AppShell } from "@/components/layout/AppShell";
+import { AppGate } from "@/components/auth/AppGate";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import "./globals.css";
 
 const lato = Lato({ variable: "--font-lato", subsets: ["latin"], weight: ["400", "700", "900"] });
@@ -22,11 +21,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to main content
         </a>
-        <DocumentsProvider>
-          <ChatProvider>
-            <AppShell>{children}</AppShell>
-          </ChatProvider>
-        </DocumentsProvider>
+        <AuthProvider>
+          <AppGate>{children}</AppGate>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 # M6b design: sign-in and per-user persistence
 
-Status: **6b-1 (backend) implemented and tested; 6b-2 (frontend) not started.** Builds on `docs/m6-plan.md` (the API acts as the signed-in user; Row Level Security enforces ownership; schema and isolation tests are done in 6a).
+Status: **6b-1 (backend) and 6b-2 (frontend) implemented and tested, including a real-browser run against the dev project.** Builds on `docs/m6-plan.md` (the API acts as the signed-in user; Row Level Security enforces ownership; schema and isolation tests are done in 6a).
 
 ## Facts checked against the real project (not assumed)
 

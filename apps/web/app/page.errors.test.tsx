@@ -2,6 +2,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+// These tests exercise the real lib/api.ts, which needs a session: pretend we are signed in.
+vi.mock("@/lib/supabase", () => ({ getAccessToken: async () => "test-token", supabase: null, isConfigured: true }));
+
 import { ChatProvider } from "@/components/chat/ChatProvider";
 import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
 import AskPage from "./page";

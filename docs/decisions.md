@@ -31,3 +31,8 @@ If the context budget drops chunks, they are also dropped from the response. Tha
 ## ADR-008: No anonymous mode; configuration fails closed (M6b-1)
 **Decision:** the API refuses to start without Supabase settings, and there is no switch that disables login.
 **Why:** a "no-login for local demos" flag is exactly the kind of setting that ends up deployed. Offline tests use explicit fakes instead of a production bypass.
+
+## ADR-009: Per-user state lives under providers keyed by user id (M6b-2)
+**Decision:** documents, conversation and evidence providers are remounted whenever the user id changes or the user signs out; private pages are never rendered while the session is loading or absent.
+**Why:** clearing state by hand is easy to forget; remounting destroys it by construction, so the next person on a shared computer sees nothing. A token refresh keeps the same id and so keeps the state. The client guard is only a convenience: the API still rejects every unauthenticated call.
+**Also:** sign-out uses `scope: "local"` so it ends only this browser's session, not every device.

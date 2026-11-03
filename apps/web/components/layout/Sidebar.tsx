@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
 import { NAV } from "./nav";
 
 export function Sidebar() {
   const pathname = usePathname();
   const { apiError, loaded } = useDocuments();
+  const { state, signOut } = useAuth();
+  const email = state.status === "signedIn" ? state.user.email : "";
   const online = loaded && !apiError;
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-panel px-4 py-5 lg:flex">
+    <aside className="hidden w-64 shrink-0 flex-col self-start overflow-y-auto border-r border-line bg-panel px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-screen">
       <Link href="/" className="mb-8 flex items-center gap-3 rounded-lg px-1">
         <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-lavender text-lg font-black text-ink">
           S
@@ -50,10 +53,22 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <p className="mt-auto flex items-center gap-2 border-t border-line pt-4 text-sm text-muted">
-        <span aria-hidden className={`size-2 rounded-full ${online ? "bg-mint" : "bg-danger"}`} />
-        {online ? "Local workspace" : "API offline"}
-      </p>
+      <div className="mt-auto border-t border-line pt-4 text-sm">
+        <p className="flex items-center gap-2 text-muted">
+          <span aria-hidden className={`size-2 shrink-0 rounded-full ${online ? "bg-mint" : "bg-danger"}`} />
+          {online ? "Signed in" : "API offline"}
+        </p>
+        <p className="mt-1 truncate font-bold" title={email}>
+          {email}
+        </p>
+        <button
+          type="button"
+          onClick={() => void signOut()}
+          className="mt-2 min-h-10 rounded-lg px-3 text-muted hover:bg-surface hover:text-text"
+        >
+          Sign out
+        </button>
+      </div>
     </aside>
   );
 }

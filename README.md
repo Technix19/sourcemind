@@ -11,18 +11,18 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
 | M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
 | M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented (5a upload and library, 5b ask and evidence cards, 5c responsive layout and accessibility polish) |
-| M6 Auth, persistence, vectors | 6a done (schema + Row Level Security, 12 isolation tests). 6b-1 done (the API verifies Supabase tokens, stores documents per user in Postgres, 154 offline + 21 real-project tests). **6b-2 (sign-in screen in the web app) is not built yet, so the web UI cannot talk to the API right now.** 6c (private files) and 6d (embeddings) planned. See `docs/m6-plan.md`, `docs/m6b-design.md` |
+| M6 Auth, persistence, vectors | 6a done (schema + Row Level Security, 12 isolation tests). 6b done: the API verifies Supabase tokens and stores documents per user in Postgres; the web app has sign-in, sign-up and sign-out. 6c (private original files, Open page) and 6d (embeddings) planned. See `docs/m6-plan.md`, `docs/m6b-design.md` |
 | M7 Evaluation and deployment | Planned |
 
-Every API route except `/api/v1/health` now requires a signed-in user, and documents live in Postgres per user. The web app has no login screen yet (6b-2), so until that lands you can exercise the API only with real tokens (the test suite does). No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
+Every API route except `/api/v1/health` requires a signed-in user, and documents live in Postgres per user. There is no anonymous or local no-login mode. No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
 
 ## Screenshots
 
-Taken from the running app with a synthetic sample document (`data/sample/`). Retrieval-only mode, no model key.
+Taken from the running app with a synthetic sample document (`data/sample/`). Retrieval-only mode, no model key. The answer and drawer shots predate sign-in; the layout is unchanged apart from a sign-out control.
 
-| Desktop, answer with evidence | Phone, sources drawer |
-|---|---|
-| ![Desktop answer with evidence](docs/screenshots/desktop-answer.png) | ![Phone sources drawer](docs/screenshots/mobile-sources-drawer.png) |
+| Sign in | Desktop, answer with evidence | Phone, sources drawer |
+|---|---|---|
+| ![Sign in](docs/screenshots/login.png) | ![Desktop answer with evidence](docs/screenshots/desktop-answer.png) | ![Phone sources drawer](docs/screenshots/mobile-sources-drawer.png) |
 
 ## Run the API (local)
 
@@ -80,9 +80,12 @@ Start the API first (above), then in a second terminal:
 
 ```bash
 cd apps/web
+cp .env.example .env.local      # then fill in your Supabase URL and PUBLISHABLE key (never the service-role key)
 npm install
 npm run dev          # http://localhost:3000
 ```
+
+You sign in with a Supabase account (the sign-in page can also create one). The API needs `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `apps/api/.env` and refuses to start without them.
 
 The API allows browser calls only from `FRONTEND_ORIGIN` (default `http://localhost:3000`), so open the app at `localhost`, not `127.0.0.1`. The API address defaults to `http://localhost:8000`; override it with `NEXT_PUBLIC_API_URL` (a URL only, never a secret). Checks: `npm test`, `npm run lint`, `npm run build`.
 
