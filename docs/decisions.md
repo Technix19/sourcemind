@@ -13,3 +13,12 @@ Default mode is `sources_only`; generation needs a key AND a model name (no gues
 
 ## ADR-004: Evidence returned equals evidence sent (M4)
 If the context budget drops chunks, they are also dropped from the response. That way every citation number the user sees maps to exactly what the model saw.
+
+## ADR-005: The API acts as the signed-in user, so the database enforces isolation (M6, proposed)
+**Decision:** the backend forwards the user's token to Supabase and relies on Row Level Security; the service-role key is not used in request handling. Python-side filters remain as a second layer.
+**Why:** with a service key, one forgotten filter leaks every user's data; with RLS the database refuses regardless. It also makes isolation testable as a property of the database (two-account tests).
+**Cost:** slightly more setup, and tests need a real Supabase project. Details and threat model: `docs/m6-plan.md`.
+
+## ADR-006: Deleting a document is a recoverable, ordered process (M6, proposed)
+**Decision:** mark `deleting`, delete chunks (and embeddings), delete the stored file, then delete the row; a sweep resumes any document stuck in `deleting`.
+**Why:** database and storage deletes cannot be one transaction. Deleting chunks first makes removed content unsearchable immediately, and idempotent steps make crashes safe to retry.

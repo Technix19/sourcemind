@@ -11,10 +11,10 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
 | M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
 | M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented (5a upload and library, 5b ask and evidence cards, 5c responsive layout and accessibility polish) |
-| M6 Auth, persistence, vectors | Planned |
+| M6 Auth, persistence, vectors | 6a done: schema + Row Level Security, verified by 12 two-account isolation tests against a real Supabase project. 6b (auth + persistence), 6c (private files), 6d (embeddings) planned. See `docs/m6-plan.md` |
 | M7 Evaluation and deployment | Planned |
 
-Nothing beyond M5 exists yet (no accounts, persistence, vector search or evaluation results). There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
+The running app is still single-user and in-memory: the database schema exists and is tested, but the API and UI do not use it yet (that is 6b). No vector search or evaluation results yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
 
 ## Screenshots
 
