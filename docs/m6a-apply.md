@@ -44,3 +44,22 @@ Expected: 12 tests pass. **Any failure means isolation is not proven**: send me 
 They prove, through real user sessions: anonymous callers get nothing; a user cannot read, update, delete or create rows belonging to another user; ownership cannot be forged or reassigned; chunks cannot be attached to someone else's document (composite foreign key); chunks are immutable; deleting a document removes its chunks; a tampered token is rejected.
 
 They do not yet cover: expired tokens (needs the signing key), signed file links (6c), vector search (6d), or the API's own token verification (6b).
+
+## 6. Mutation check (do this whenever the policies change)
+
+A passing test only means something if it can fail. The check: deliberately break one protection, confirm the tests notice, then restore it.
+
+```sql
+alter table public.documents disable row level security;   -- break it
+-- run: python -m pytest -m integration -v   -> some tests must FAIL
+alter table public.documents enable row level security;    -- restore it
+-- run the tests again                        -> all 12 must pass
+```
+
+Record of runs:
+
+| Date | Break | Result | Restored and re-verified |
+|---|---|---|---|
+| 2026-11-03 | RLS disabled on `public.documents` (run by the project owner) | Tests failed, as they should. Which tests failed was not recorded. | Yes: all 12 passed again afterwards |
+
+Only done on the dev project, with throw-away data. Never do this on a project holding real user data.
