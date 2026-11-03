@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from threading import RLock
 
 from .ingestion import PageChunk
+from .retrieval import SearchChunk
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,20 @@ class Document:
             "chunk_count": len(self.chunks),
             "status": self.status,
         }
+
+    def search_chunks(self) -> list[SearchChunk]:
+        # The chunk id is derived from where the text lives, so it is stable
+        # and cannot point at a page that doesn't exist.
+        return [
+            SearchChunk(
+                chunk_id=f"{self.id}-p{c.page_number}-c{c.chunk_index}",
+                document_id=self.id,
+                filename=self.name,
+                page_number=c.page_number,
+                text=c.text,
+            )
+            for c in self.chunks
+        ]
 
 
 class DocumentStore:
@@ -52,6 +67,19 @@ class DocumentStore:
     def list(self) -> list[Document]:
         with self._lock:
             return list(self._docs.values())
+
+    def delete(self, doc_id: str) -> bool:
+        """Remove a document and its chunks. There is no separate index to go stale."""
+        with self._lock:
+            return self._docs.pop(doc_id, None) is not None
+
+    def select(self, doc_ids: list[str] | None) -> list[Document] | None:
+        """Documents to search (all if `doc_ids` is None); None if any id is unknown."""
+        with self._lock:
+            if doc_ids is None:
+                return list(self._docs.values())
+            docs = [self._docs.get(i) for i in dict.fromkeys(doc_ids)]
+            return None if any(d is None for d in docs) else docs  # type: ignore[return-value]
 
     def clear(self) -> None:
         with self._lock:

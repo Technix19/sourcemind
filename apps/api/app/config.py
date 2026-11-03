@@ -22,6 +22,7 @@ class Settings:
     max_documents: int
     chunk_size: int
     chunk_overlap: int
+    min_relevance_score: float
 
 
 def get_settings() -> Settings:
@@ -33,4 +34,6 @@ def get_settings() -> Settings:
         max_documents=int(os.getenv("MAX_DOCUMENTS", "12")),
         chunk_size=int(os.getenv("CHUNK_SIZE", "950")),
         chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "170")),
+        # Initial heuristic, NOT tuned on labeled data yet (that is M7).
+        min_relevance_score=float(os.getenv("MIN_RELEVANCE_SCORE", "0.05")),
     )

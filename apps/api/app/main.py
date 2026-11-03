@@ -1,14 +1,17 @@
-"""SourceMind API. M1: health check. M2: document upload and chunking."""
+"""SourceMind API. M1: health. M2: upload and chunking. M3: retrieval and delete."""
+from typing import Annotated, Literal
 from uuid import uuid4
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, Response, UploadFile
+from pydantic import BaseModel, Field, StringConstraints
 from starlette.concurrency import run_in_threadpool
 
 from .config import get_settings
 from .ingestion import IngestionError, build_chunks, extract_pages, sanitize_filename
+from .retrieval import retrieve
 from .store import Document, store
 
-API_VERSION = "0.2.0"
+API_VERSION = "0.3.0"
 
 app = FastAPI(title="SourceMind API", version=API_VERSION, docs_url="/api/docs")
 
@@ -67,3 +70,50 @@ def get_document(document_id: str) -> dict:
     if doc is None:
         raise HTTPException(404, "Document not found")
     return doc.summary()
+
+
+@app.delete("/api/v1/documents/{document_id}", status_code=204)
+def delete_document(document_id: str) -> Response:
+    if not store.delete(document_id):
+        raise HTTPException(404, "Document not found")
+    return Response(status_code=204)
+
+
+class QueryRequest(BaseModel):
+    question: Annotated[str, StringConstraints(strip_whitespace=True, min_length=3, max_length=550)]
+    document_ids: list[str] | None = Field(default=None, max_length=50)
+    top_k: int = Field(default=4, ge=1, le=10)
+    mode: Literal["sources_only"] = "sources_only"  # "generated" arrives in M4
+
+
+@app.post("/api/v1/queries")
+async def query(body: QueryRequest) -> dict:
+    docs = store.select(body.document_ids)
+    if docs is None:
+        raise HTTPException(404, "One or more documents were not found")
+    chunks = [chunk for doc in docs for chunk in doc.search_chunks()]
+    if not chunks:
+        raise HTTPException(409, "Upload at least one document before asking a question")
+    hits = await run_in_threadpool(
+        lambda: retrieve(
+            body.question, chunks, top_k=body.top_k,
+            min_score=get_settings().min_relevance_score,
+        )
+    )
+    return {
+        "answer_mode": "sources_only",
+        "answer": None,
+        "insufficient_evidence": not hits,
+        "evidence": [
+            {
+                "citation_id": str(rank),
+                "chunk_id": hit.chunk.chunk_id,
+                "document_id": hit.chunk.document_id,
+                "filename": hit.chunk.filename,
+                "page_number": hit.chunk.page_number,
+                "excerpt": hit.chunk.text,
+                "score": hit.score,
+            }
+            for rank, hit in enumerate(hits, start=1)
+        ],
+    }
