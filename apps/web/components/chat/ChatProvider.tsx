@@ -2,12 +2,13 @@
 
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { ApiError, askQuestion } from "@/lib/api";
-import type { AnswerMode, QueryResponse } from "@/lib/types";
+import type { AnswerMode, QueryResponse, Retrieval } from "@/lib/types";
 
 export type Turn = {
   id: number;
   question: string;
   mode: AnswerMode;
+  retrieval: Retrieval;
   status: "pending" | "done" | "error" | "stopped";
   response?: QueryResponse;
   error?: string;
@@ -21,7 +22,7 @@ type ChatContextValue = {
   selection: Selection;
   pending: boolean;
   lastQuestion: string | null;
-  ask: (question: string, mode: AnswerMode) => Promise<void>;
+  ask: (question: string, mode: AnswerMode, retrieval: Retrieval) => Promise<void>;
   stop: () => void;
   clear: () => void;
   drawerOpen: boolean;
@@ -57,18 +58,18 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const ask = useCallback(
-    async (rawQuestion: string, mode: AnswerMode) => {
+    async (rawQuestion: string, mode: AnswerMode, retrieval: Retrieval) => {
       const question = rawQuestion.trim();
       if (question.length < MIN_QUESTION || question.length > MAX_QUESTION || controller.current) return;
 
       const id = ++turnCounter;
       const abort = new AbortController();
       controller.current = abort;
-      setTurns((all) => [...all, { id, question, mode, status: "pending" }]);
+      setTurns((all) => [...all, { id, question, mode, retrieval, status: "pending" }]);
       setActiveId(id);
       setSelection(null);
       try {
-        const response = await askQuestion(question, mode, abort.signal);
+        const response = await askQuestion(question, mode, retrieval, abort.signal);
         patch(id, { status: "done", response });
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") {

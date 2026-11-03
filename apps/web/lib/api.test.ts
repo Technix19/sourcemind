@@ -27,7 +27,7 @@ describe("api client authentication", () => {
   it("sends the current access token on every protected call", async () => {
     await listDocuments();
     await deleteDocument("abc");
-    await askQuestion("what is this?", "sources_only");
+    await askQuestion("what is this?", "sources_only", "tfidf");
     await uploadDocument(new File(["x"], "a.txt"));
     for (let i = 0; i < 4; i++) expect(headersOfCall(i).get("Authorization")).toBe("Bearer jwt-123");
   });
@@ -52,7 +52,7 @@ describe("api client authentication", () => {
   });
 
   it("keeps the JSON content type for questions and lets uploads set their own", async () => {
-    await askQuestion("what is this?", "sources_only");
+    await askQuestion("what is this?", "sources_only", "tfidf");
     expect(headersOfCall(0).get("Content-Type")).toBe("application/json");
     await uploadDocument(new File(["x"], "a.txt"));
     expect(headersOfCall(1).get("Content-Type")).toBeNull(); // the browser adds the multipart boundary

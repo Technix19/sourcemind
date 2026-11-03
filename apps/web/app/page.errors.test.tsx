@@ -13,8 +13,8 @@ import AskPage from "./page";
 const json = (status: number, body: unknown) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
 
-const DOC = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true };
-const HEALTH = { status: "ok", version: "t", environment: "test", generation_available: false };
+const DOC = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true };
+const HEALTH = { status: "ok", version: "t", environment: "test", generation_available: false, meaning_search_available: false };
 
 function mountWith(queryHandler: (init: RequestInit) => Promise<Response>) {
   vi.stubGlobal(

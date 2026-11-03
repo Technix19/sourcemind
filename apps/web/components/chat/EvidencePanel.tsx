@@ -4,7 +4,7 @@ import { useState } from "react";
 import { openDocumentPage, openErrorMessage } from "@/lib/openDocument";
 import { useChat } from "./ChatProvider";
 import { plural } from "@/lib/format";
-import type { Evidence } from "@/lib/types";
+import type { Evidence, Retrieval } from "@/lib/types";
 
 export type PanelVariant = "rail" | "drawer";
 
@@ -24,7 +24,7 @@ export function focusEvidenceCard(turnId: number, citationId: string) {
   target?.focus({ preventScroll: true });
 }
 
-function EvidenceCard({ turnId, item, selected }: { turnId: number; item: Evidence; selected: boolean }) {
+function EvidenceCard({ turnId, item, selected, retrieval }: { turnId: number; item: Evidence; selected: boolean; retrieval: Retrieval }) {
   const [expanded, setExpanded] = useState(false);
   const [opening, setOpening] = useState(false);
   const [openError, setOpenError] = useState<string | null>(null);
@@ -57,9 +57,15 @@ function EvidenceCard({ turnId, item, selected }: { turnId: number; item: Eviden
       </div>
       <p className="mt-1 text-xs text-mint">
         Page {item.page_number} · Rank {item.citation_id} ·{" "}
-        <span title="Lexical (keyword) similarity to your question. It is not a probability that this passage answers it.">
-          match {item.score.toFixed(2)}
-        </span>
+        {retrieval === "embedding" ? (
+          <span title="Cosine similarity between the meaning of your question and this passage. Not a probability that it answers the question, and not comparable with keyword scores.">
+            similarity {item.score.toFixed(2)}
+          </span>
+        ) : (
+          <span title="Lexical (keyword) similarity to your question. It is not a probability that this passage answers it.">
+            match {item.score.toFixed(2)}
+          </span>
+        )}
       </p>
       <blockquote className={`mt-3 break-words text-sm leading-relaxed text-text/90 ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
       <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1">
@@ -112,13 +118,14 @@ export function EvidencePanel({ variant = "rail" }: { variant?: PanelVariant }) 
             key={item.chunk_id}
             turnId={activeTurn.id}
             item={item}
+            retrieval={activeTurn.response?.retrieval ?? "tfidf"}
             selected={selection?.turnId === activeTurn.id && selection.citationId === item.citation_id}
           />
         ))}
       </div>
       {evidence.length > 0 && (
         <p className="mt-4 text-xs text-muted">
-          {plural(evidence.length, "passage")} retrieved by keyword matching. Read the passages before relying on any answer.
+          {plural(evidence.length, "passage")} retrieved by {activeTurn.response?.retrieval === "embedding" ? "meaning search" : "keyword matching"}. Read the passages before relying on any answer.
         </p>
       )}
     </section>

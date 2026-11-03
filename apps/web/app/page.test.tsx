@@ -14,7 +14,7 @@ import type { DocumentSummary, QueryResponse } from "@/lib/types";
 import { setWideScreen } from "../vitest.viewport";
 import AskPage from "./page";
 
-const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true };
+const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true };
 
 const evidence = (n: number) => ({
   citation_id: String(n), chunk_id: `c${n}`, document_id: "d1", filename: "paper.pdf",
@@ -23,12 +23,12 @@ const evidence = (n: number) => ({
 
 const response = (over: Partial<QueryResponse> = {}): QueryResponse => ({
   answer_mode: "sources_only", answer: null, insufficient_evidence: false,
-  evidence: [evidence(1), evidence(2)], model_used: null, request_id: "r", notice: null, ...over,
+  evidence: [evidence(1), evidence(2)], model_used: null, retrieval: "tfidf", request_id: "r", notice: null, ...over,
 });
 
 function setup({ docs = [DOC], generation = false } = {}) {
   vi.mocked(api.listDocuments).mockResolvedValue(docs);
-  vi.mocked(api.getHealth).mockResolvedValue({ status: "ok", version: "t", environment: "test", generation_available: generation });
+  vi.mocked(api.getHealth).mockResolvedValue({ status: "ok", version: "t", environment: "test", generation_available: generation, meaning_search_available: false });
   render(
     <DocumentsProvider>
       <ChatProvider>
@@ -61,7 +61,7 @@ describe("Ask page", () => {
     expect(screen.getByText("Evidence only")).toBeInTheDocument();
     expect(screen.getByRole("article", { name: "Source 2: paper.pdf, page 3" })).toBeInTheDocument();
     expect(screen.getByText(/Excerpt number 1/)).toBeInTheDocument();
-    expect(api.askQuestion).toHaveBeenCalledWith("Which classifier?", "sources_only", expect.any(AbortSignal));
+    expect(api.askQuestion).toHaveBeenCalledWith("Which classifier?", "sources_only", "tfidf", expect.any(AbortSignal));
     expect(box()).toHaveValue(""); // cleared after sending
   });
 
@@ -89,7 +89,7 @@ describe("Ask page", () => {
     await user().click(await screen.findByRole("checkbox"));
     await user().type(box(), "How does it decide?{Enter}");
 
-    expect(api.askQuestion).toHaveBeenCalledWith("How does it decide?", "generated", expect.any(AbortSignal));
+    expect(api.askQuestion).toHaveBeenCalledWith("How does it decide?", "generated", "tfidf", expect.any(AbortSignal));
     expect(await screen.findByText("Grounded")).toBeInTheDocument();
     await user().click(screen.getByRole("button", { name: /show source 2/i }));
     const card = screen.getByRole("article", { name: /source 2/i });

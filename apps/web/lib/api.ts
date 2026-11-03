@@ -1,5 +1,5 @@
 import { getAccessToken } from "./supabase";
-import type { AnswerMode, DocumentSummary, Health, QueryResponse, ViewLink } from "./types";
+import type { AnswerMode, DocumentSummary, Health, QueryResponse, Retrieval, ViewLink } from "./types";
 
 // Public on purpose: it is only a URL. No secrets ever belong in the frontend.
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -62,11 +62,11 @@ export function uploadDocument(file: File) {
 export const deleteDocument = (id: string) =>
   request<void>(`/api/v1/documents/${encodeURIComponent(id)}`, { method: "DELETE" });
 
-export const askQuestion = (question: string, mode: AnswerMode, signal?: AbortSignal) =>
+export const askQuestion = (question: string, mode: AnswerMode, retrieval: Retrieval, signal?: AbortSignal) =>
   request<QueryResponse>("/api/v1/queries", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question, mode }),
+    body: JSON.stringify({ question, mode, retrieval }),
     signal,
   });
 

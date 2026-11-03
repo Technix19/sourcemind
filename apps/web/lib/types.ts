@@ -7,6 +7,7 @@ export type DocumentSummary = {
   chunk_count: number;
   status: string;
   has_file: boolean; // whether the original file is stored (older documents have none)
+  semantic: boolean; // whether meaning search covers this document
 };
 
 export type Health = {
@@ -14,9 +15,11 @@ export type Health = {
   version: string;
   environment: string;
   generation_available: boolean;
+  meaning_search_available: boolean;
 };
 
 export type AnswerMode = "sources_only" | "generated";
+export type Retrieval = "tfidf" | "embedding"; // keyword matching or meaning search
 
 export type Evidence = {
   citation_id: string; // "1", "2", ... the same numbers the answer's [n] markers use
@@ -34,6 +37,7 @@ export type QueryResponse = {
   insufficient_evidence: boolean;
   evidence: Evidence[];
   model_used: string | null;
+  retrieval: Retrieval; // which method found the evidence: scores are not comparable across methods
   request_id: string;
   notice: string | null;
 };

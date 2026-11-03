@@ -212,7 +212,7 @@ describe("AuthProvider actions", () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ detail: "Not authenticated" }), { status: 401 })));
     // A real API call that comes back 401 must make the provider sign this browser out.
     await act(async () => {
-      await askQuestion("anything here", "sources_only").catch(() => {});
+      await askQuestion("anything here", "sources_only", "tfidf").catch(() => {});
     });
     expect(fake.signOut).toHaveBeenCalledWith({ scope: "local" });
     expect(screen.getByText("notice:Your session expired. Please sign in again.")).toBeInTheDocument();

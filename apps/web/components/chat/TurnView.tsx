@@ -62,7 +62,13 @@ export function TurnView({ turn }: { turn: Turn }) {
       >
         <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span aria-hidden className="size-3 rounded-full bg-lavender" />
-          <p className="font-bold sm:flex-1">SourceMind</p>
+          <p className="font-bold">SourceMind</p>
+          {turn.response && (
+            <span className="text-xs text-muted sm:flex-1">
+              {turn.response.retrieval === "embedding" ? "Meaning search" : "Keyword search"}
+            </span>
+          )}
+          {!turn.response && <span className="sm:flex-1" />}
           {badge && <span className={`rounded-full px-3 py-1 text-xs font-bold whitespace-nowrap ${badge.className}`}>{badge.label}</span>}
           {!active && turn.response && turn.response.evidence.length > 0 && (
             <button type="button" onClick={() => selectTurn(turn.id)} className="hidden rounded text-sm font-bold text-lavender hover:text-text xl:inline">

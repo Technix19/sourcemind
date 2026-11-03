@@ -19,6 +19,7 @@ from fastapi import Depends
 
 from .auth import AuthUser, current_user
 from .config import get_settings
+from .embeddings import vector_literal
 from .ingestion import PageChunk
 from .retrieval import SearchChunk
 
@@ -26,7 +27,8 @@ logger = logging.getLogger("sourcemind.repository")
 
 PAGE_SIZE = 1000     # rows per read request (the server may cap lower; we follow Content-Range)
 INSERT_BATCH = 200   # chunk rows per insert request
-DOC_COLUMNS = "id,name,size_bytes,page_count,status,storage_key,chunks(count)"
+EMBED_BATCH = 100    # vector rows per insert request (each row is a few KB)
+DOC_COLUMNS = "id,name,size_bytes,page_count,status,storage_key,embedding_model,chunks(count)"
 BUCKET = "documents"
 SIGNED_URL_SECONDS = 60  # a signed link is a bearer credential: keep its life short
 
@@ -40,13 +42,14 @@ class Document:
     status: str
     chunk_count: int
     has_file: bool = False  # whether the original file is stored (older documents have none)
+    semantic: bool = False  # whether meaning search covers this document (indexed with the current model)
 
     def summary(self) -> dict:
         # The storage key is internal and never exposed; clients only learn whether a file exists.
         return {
             "id": self.id, "name": self.name, "size_bytes": self.size_bytes,
             "page_count": self.page_count, "chunk_count": self.chunk_count, "status": self.status,
-            "has_file": self.has_file,
+            "has_file": self.has_file, "semantic": self.semantic,
         }
 
 
@@ -73,11 +76,15 @@ def valid_id(value: str) -> str | None:
 class Repository(Protocol):
     def count_documents(self) -> int: ...
     def create_document(self, name: str, size_bytes: int, page_count: int) -> Document: ...
-    def add_chunks(self, document_id: str, chunks: list[PageChunk]) -> None: ...
+    def add_chunks(self, document_id: str, chunks: list[PageChunk]) -> list[str]: ...
+    def add_embeddings(self, document_id: str, chunk_ids: list[str], vectors: list[list[float]], model_id: str) -> None: ...
+    def match_chunks(
+        self, vector: list[float], document_ids: list[str] | None, top_k: int, model_id: str
+    ) -> tuple[list[tuple[SearchChunk, float]], int, int] | None: ...
     def put_file(self, document_id: str, data: bytes, content_type: str) -> None: ...
     def signed_url(self, document_id: str, expires_in: int = SIGNED_URL_SECONDS) -> str | None: ...
     def finish_pending_deletions(self) -> int: ...
-    def mark_ready(self, document_id: str) -> None: ...
+    def mark_ready(self, document_id: str, embedding_model: str | None = None) -> None: ...
     def list_documents(self) -> list[Document]: ...
     def get_document(self, document_id: str) -> Document | None: ...
     def delete_document(self, document_id: str) -> bool: ...
@@ -97,17 +104,20 @@ def shared_http() -> httpx.Client:
         return _http
 
 
-def _document(row: dict) -> Document:
+def _document(row: dict, current_model: str | None = None) -> Document:
     counted = row.get("chunks") or [{"count": 0}]
     return Document(
         id=row["id"], name=row["name"], size_bytes=row["size_bytes"],
         page_count=row["page_count"], status=row["status"], chunk_count=counted[0]["count"],
         has_file=bool(row.get("storage_key")),
+        semantic=bool(current_model) and row.get("embedding_model") == current_model,
     )
 
 
 class SupabaseRepository:
-    def __init__(self, user: AuthUser, *, base_url: str, api_key: str, http: httpx.Client | None = None) -> None:
+    def __init__(self, user: AuthUser, *, base_url: str, api_key: str, http: httpx.Client | None = None,
+                 embedding_model: str | None = None) -> None:
+        self._embedding_model = embedding_model  # the model meaning search currently uses (None = off)
         self._token = user.token
         self._user_id = user.id
         self._root = base_url
@@ -205,30 +215,47 @@ class SupabaseRepository:
         url = f"{self._root}{path}"
         return url if url.startswith(f"{self._root}/storage/v1/object/sign/{BUCKET}/") else None
 
-    def add_chunks(self, document_id: str, chunks: list[PageChunk]) -> None:
+    def add_chunks(self, document_id: str, chunks: list[PageChunk]) -> list[str]:
+        """Store chunks and return their ids (chosen here, so vectors can reference them without a read-back)."""
+        ids = [str(uuid.uuid4()) for _ in chunks]
         rows = [
             {
-                "document_id": document_id, "page_number": c.page_number, "chunk_index": c.chunk_index,
-                "start_offset": c.start, "end_offset": c.end, "text": c.text,
+                "id": chunk_id, "document_id": document_id, "page_number": c.page_number,
+                "chunk_index": c.chunk_index, "start_offset": c.start, "end_offset": c.end, "text": c.text,
             }
-            for c in chunks
+            for chunk_id, c in zip(ids, chunks)
         ]
         for i in range(0, len(rows), INSERT_BATCH):
             self._request("POST", "chunks", json=rows[i : i + INSERT_BATCH], prefer="return=minimal")
+        return ids
 
-    def mark_ready(self, document_id: str) -> None:
-        self._request("PATCH", "documents", params={"id": f"eq.{document_id}"}, json={"status": "ready"}, prefer="return=minimal")
+    def add_embeddings(self, document_id: str, chunk_ids: list[str], vectors: list[list[float]], model_id: str) -> None:
+        """Store one vector per chunk. The owner is never sent: the database fills it from the token."""
+        if len(chunk_ids) != len(vectors):
+            raise RepositoryError(None)
+        rows = [
+            {"chunk_id": cid, "model_id": model_id, "embedding": vector_literal(vec)}
+            for cid, vec in zip(chunk_ids, vectors)
+        ]
+        for i in range(0, len(rows), EMBED_BATCH):
+            self._request("POST", "embeddings", json=rows[i : i + EMBED_BATCH], prefer="return=minimal")
+
+    def mark_ready(self, document_id: str, embedding_model: str | None = None) -> None:
+        body = {"status": "ready"}
+        if embedding_model:
+            body["embedding_model"] = embedding_model
+        self._request("PATCH", "documents", params={"id": f"eq.{document_id}"}, json=body, prefer="return=minimal")
 
     def list_documents(self) -> list[Document]:
         rows = self._read_all("documents", {"select": DOC_COLUMNS, "status": "neq.deleting", "order": "created_at.asc"})
-        return [_document(r) for r in rows]
+        return [_document(r, self._embedding_model) for r in rows]
 
     def get_document(self, document_id: str) -> Document | None:
         doc_id = valid_id(document_id)
         if doc_id is None:
             return None
         rows = self._request("GET", "documents", params={"select": DOC_COLUMNS, "id": f"eq.{doc_id}", "status": "neq.deleting"}).json()
-        return _document(rows[0]) if rows else None
+        return _document(rows[0], self._embedding_model) if rows else None
 
     def delete_document(self, document_id: str) -> bool:
         """Remove a document in an order that is safe to retry after a crash (see docs/m6-plan.md).
@@ -296,6 +323,53 @@ class SupabaseRepository:
             for r in rows
         ]
 
+    def match_chunks(
+        self, vector: list[float], document_ids: list[str] | None, top_k: int, model_id: str
+    ) -> tuple[list[tuple[SearchChunk, float]], int, int] | None:
+        """Meaning search: the caller's most similar chunks, with cosine similarity.
+
+        Returns (hits, documents_not_indexed_for_meaning_search, documents_considered), or None if
+        any requested document is not the caller's. The similarity search itself runs in the database
+        as the caller (SECURITY INVOKER), so Row Level Security applies.
+        """
+        wanted: list[str] | None = None
+        if document_ids is not None:
+            canonical = [valid_id(i) for i in dict.fromkeys(document_ids)]
+            if any(c is None for c in canonical):
+                return None
+            wanted = [c for c in canonical if c is not None]
+        params = {"select": "id,name,embedding_model", "status": "eq.ready", "order": "created_at.asc"}
+        if wanted is not None:
+            params["id"] = f"in.({','.join(wanted)})"
+        docs = self._read_all("documents", params)
+        if wanted is not None and len(docs) != len(wanted):
+            return None
+        embedded = [d for d in docs if d.get("embedding_model") == model_id]
+        not_indexed = len(docs) - len(embedded)
+        if not embedded:
+            return [], not_indexed, len(docs)
+        names = {d["id"]: d["name"] for d in embedded}
+        rows = self._request(
+            "POST", "rpc/match_chunks",
+            json={
+                "p_query_embedding": vector_literal(vector), "p_match_count": top_k,
+                "p_document_ids": list(names), "p_model_id": model_id,
+            },
+        ).json()
+        hits = [
+            (
+                SearchChunk(
+                    chunk_id=f"{r['document_id']}-p{r['page_number']}-c{r['chunk_index']}",
+                    document_id=r["document_id"], filename=names.get(r["document_id"], ""),
+                    page_number=r["page_number"], text=r["text"],
+                ),
+                float(r["similarity"]),
+            )
+            for r in rows
+            if r["document_id"] in names
+        ]
+        return hits, not_indexed, len(docs)
+
 
 def _storage_missing(response: httpx.Response) -> bool:
     """Supabase Storage reports a missing object as HTTP 404, or HTTP 400 with statusCode '404' in the body."""
@@ -316,4 +390,7 @@ def _total_rows(response: httpx.Response) -> int | None:
 def get_repository(user: AuthUser = Depends(current_user)) -> Repository:
     """A NEW repository for every request, bound to that request's user."""
     settings = get_settings()
-    return SupabaseRepository(user, base_url=settings.supabase_url, api_key=settings.supabase_anon_key)
+    return SupabaseRepository(
+        user, base_url=settings.supabase_url, api_key=settings.supabase_anon_key,
+        embedding_model=settings.embedding_model if settings.embeddings_enabled else None,
+    )

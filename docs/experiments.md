@@ -26,3 +26,20 @@ Setup: one synthetic 3-page document (written by me for this check), chunked wit
 
 ### Next
 Build the labeled evaluation set (M7) and re-check items 2 and 3 with measured numbers.
+
+## M6d pre-decision experiment: local embeddings on the same toy document (2026-11-03)
+
+Run before choosing a provider. Same synthetic 3-page text and the same four questions as the TF-IDF experiment above. Model: `BAAI/bge-small-en-v1.5` (384 dimensions, ONNX via `fastembed`, run locally on an Apple M2), with the model's recommended query instruction. Cosine similarity. **One toy document and four questions: an illustration, not a benchmark, and nothing was tuned.**
+
+| Question (correct page) | TF-IDF (from above) | Embeddings (page : cosine) | Top hit correct? |
+|---|---|---|---|
+| How does the platform decide the next question difficulty? (p2) | p1 0.235, p2 0.093 | p1 0.692, **p2 0.687**, p3 0.498 | No, but a near tie (gap 0.005) |
+| What are the limitations of the study? (p3) | p3 0.420 | **p3 0.807**, p1 0.564, p2 0.516 | Yes |
+| Which inputs does the model use? (p1) | nothing (0.0 everywhere) | p2 0.613, **p1 0.592**, p3 0.464 | No, but p1 is now ranked 2nd instead of invisible |
+| galaxies and nebulae (nothing relevant) | nothing (correct abstention) | p2 0.477, p3 0.470, p1 0.448 | n/a |
+
+### What this shows
+1. **Vocabulary mismatch is partly fixed.** "inputs/model" now reaches the right page (rank 2), where TF-IDF returned nothing. With top-k > 1 the evidence is at least retrieved.
+2. **Embeddings did not fix the ranking error on question 1.** Both pages are about the same topic, and the model cannot tell "mentions the topic" from "answers the question" (0.692 vs 0.687).
+3. **Embeddings never return zero, so abstention gets harder.** An irrelevant question still scores 0.45-0.48, close to a relevant page's 0.59. A relevance threshold (and probably a lexical sanity check) must be tuned on labeled questions (M7); a naive "return the top k" would never say "not enough evidence".
+4. **Cost and size:** model files about 64 MB on disk (the library uses a quantized ONNX build; an earlier version of this note said 200 MB because the measuring script double-counted symlinked files); first load about 6 s; about 39 chunks/s on this machine (a 400-chunk PDF in about 10 s); one query embedding about 2 ms; no network call and no document text leaves the machine.

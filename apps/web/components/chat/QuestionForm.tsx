@@ -3,16 +3,24 @@
 import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
+import type { Retrieval } from "@/lib/types";
 import { MAX_QUESTION, MIN_QUESTION, useChat } from "./ChatProvider";
+
+const METHODS: { value: Retrieval; label: string; hint: string }[] = [
+  { value: "tfidf", label: "Keyword", hint: "Matches the words you type. Transparent, but misses rephrased wording." },
+  { value: "embedding", label: "Meaning", hint: "Also finds passages that say it differently. Scores are not comparable with keyword scores." },
+];
 
 export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (value: string) => void }) {
   const { documents, health, apiError } = useDocuments();
   const { ask, stop, pending } = useChat();
   const [generate, setGenerate] = useState(false);
+  const [retrieval, setRetrieval] = useState<Retrieval>("tfidf");
   const input = useRef<HTMLInputElement>(null);
   const hintId = useId();
 
   const canGenerate = health?.generation_available === true;
+  const canSearchByMeaning = health?.meaning_search_available === true;
   const noDocs = documents.length === 0;
   const tooShort = draft.trim().length < MIN_QUESTION;
   const disabled = noDocs || !!apiError;
@@ -22,7 +30,7 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
     if (disabled || pending || tooShort) return;
     const question = draft;
     setDraft("");
-    await ask(question, canGenerate && generate ? "generated" : "sources_only");
+    await ask(question, canGenerate && generate ? "generated" : "sources_only", canSearchByMeaning ? retrieval : "tfidf");
     input.current?.focus();
   };
 
@@ -71,6 +79,25 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
             "SourceMind can make mistakes. Always verify important details using the sources."
           )}
         </span>
+        {canSearchByMeaning && (
+          <fieldset className="flex items-center gap-1">
+            <legend className="sr-only">Search method</legend>
+            <span aria-hidden>Search by</span>
+            {METHODS.map((m) => (
+              <label key={m.value} title={m.hint} className="flex min-h-8 cursor-pointer items-center gap-1.5 rounded px-2">
+                <input
+                  type="radio"
+                  name="retrieval"
+                  value={m.value}
+                  checked={retrieval === m.value}
+                  onChange={() => setRetrieval(m.value)}
+                  className="size-4 accent-lavender"
+                />
+                <span>{m.label}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
         {canGenerate && (
           <label className="flex cursor-pointer items-center gap-2">
             <input type="checkbox" checked={generate} onChange={(e) => setGenerate(e.target.checked)} className="size-4 accent-lavender" />

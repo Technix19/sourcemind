@@ -44,3 +44,9 @@ If the context budget drops chunks, they are also dropped from the response. Tha
 ## ADR-011: Storage names are ids, uploads require an owning row, files are immutable (M6c)
 **Decision:** object name `<user id>/<document id>`; the upload policy requires a document row pointing at that name; no update policy and no upsert; the Content-Type is chosen server-side.
 **Why:** no user-controlled path or type reaches storage, no orphan files can be created, and a citation can never change underneath the user.
+
+## ADR-012: Meaning search is local, separate from keyword search, and never the silent default (M6d)
+**Decision:** a local ONNX model (`bge-small-en-v1.5`, 384 dimensions) produces vectors stored in pgvector; keyword (TF-IDF) stays the default; the user chooses the method, and every answer says which one found its evidence.
+**Why:** a measured toy experiment showed embeddings help vocabulary mismatch but do not fix every ranking error and never score zero, so "better" is unproven until M7. Local means no cost, no key and no document text leaving the machine.
+**Safety choices:** the search function is `SECURITY INVOKER` (a `SECURITY DEFINER` one would bypass Row Level Security), filters on the caller's id as well, and has execute revoked from `anon`; vectors are immutable and tied to their chunk's owner by a composite foreign key; no ANN index yet (exact scan per user is simpler and cannot silently return fewer rows).
+**Known limits:** the relevance threshold for meaning search (0.5) is provisional and untuned; documents uploaded before this step have no vectors and are reported, not silently skipped; indexing adds roughly 10 s per 400 chunks on an M2.

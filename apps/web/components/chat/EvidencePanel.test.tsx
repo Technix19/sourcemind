@@ -13,7 +13,7 @@ vi.mock("./ChatProvider", () => ({
     activeTurn: {
       id: 1, question: "q", mode: "sources_only", status: "done",
       response: {
-        answer_mode: "sources_only", answer: null, insufficient_evidence: false, model_used: null, request_id: "r", notice: null,
+        answer_mode: "sources_only", answer: null, insufficient_evidence: false, model_used: null, retrieval: "tfidf", request_id: "r", notice: null,
         evidence: [{ citation_id: "1", chunk_id: "c1", document_id: "doc-9", filename: "paper.pdf", page_number: 3, excerpt: "text", score: 0.4 }],
       },
     },

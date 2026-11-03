@@ -31,6 +31,13 @@ def upload(user, name="notes.txt", data=TEXT):
 
 
 @pytest.fixture(autouse=True)
+def without_embeddings(monkeypatch):
+    """These tests are about persistence and files, not vectors. Skipping the embedding step keeps them fast
+    (indexing runs at about 40 chunks/s); test_meaning_search_real.py covers vectors with the real model."""
+    monkeypatch.setenv("EMBEDDINGS_ENABLED", "false")
+
+
+@pytest.fixture(autouse=True)
 def clean_up(user_a, user_b):
     yield
     for user in (user_a, user_b):   # remove whatever a test left behind

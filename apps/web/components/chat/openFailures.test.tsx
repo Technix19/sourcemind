@@ -11,13 +11,13 @@ vi.mock("./ChatProvider", () => ({
     activeTurn: {
       id: 1, question: "q", mode: "sources_only", status: "done",
       response: {
-        answer_mode: "sources_only", answer: null, insufficient_evidence: false, model_used: null, request_id: "r", notice: null,
+        answer_mode: "sources_only", answer: null, insufficient_evidence: false, model_used: null, retrieval: "tfidf", request_id: "r", notice: null,
         evidence: [{ citation_id: "1", chunk_id: "c1", document_id: "doc-9", filename: "paper.pdf", page_number: 3, excerpt: "text", score: 0.4 }],
       },
     },
   }),
 }));
-const documents = [{ id: "d1", name: "stored.pdf", size_bytes: 10, page_count: 2, chunk_count: 2, status: "ready", has_file: true }];
+const documents = [{ id: "d1", name: "stored.pdf", size_bytes: 10, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true }];
 vi.mock("@/components/documents/DocumentsProvider", () => ({
   useDocuments: () => ({ documents, loaded: true, apiError: null, uploads: [], removeDocument: vi.fn(), dismissUpload: vi.fn() }),
 }));

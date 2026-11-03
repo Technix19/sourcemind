@@ -1,4 +1,4 @@
-"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 answers, M6b sign-in + per-user storage, M6c private files."""
+"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 answers, M6b sign-in + per-user storage, M6c private files, M6d meaning search."""
 import logging
 import uuid
 from contextlib import asynccontextmanager
@@ -15,12 +15,14 @@ from .answering import (
 )
 from .auth import AuthGate
 from .config import get_settings
+from .embeddings import EmbeddingError, get_embedder, warm_up
 from .ingestion import IngestionError, build_chunks, content_type_for, extract_pages, sanitize_filename
 from .llm import generation_available, get_llm_client
 from .repository import SIGNED_URL_SECONDS, Repository, RepositoryError, get_repository
-from .retrieval import Hit, retrieve
+from .retrieval import Hit
+from .retrievers import EmbeddingRetriever, TfidfRetriever
 
-API_VERSION = "0.6.0"
+API_VERSION = "0.7.0"
 logger = logging.getLogger("sourcemind")
 
 def check_configuration() -> None:
@@ -36,6 +38,7 @@ def check_configuration() -> None:
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     check_configuration()
+    warm_up()  # load the embedding model in the background (never fatal)
     yield
 
 
@@ -62,6 +65,7 @@ def health() -> dict:
         "version": API_VERSION,
         "environment": get_settings().app_env,
         "generation_available": generation_available(),  # a boolean, never the key
+        "meaning_search_available": get_embedder() is not None,  # switched on (not necessarily loaded yet)
     }
 
 
@@ -80,6 +84,21 @@ async def storage_call(fn, *args, failure="Storage is unavailable right now. Try
             raise HTTPException(401, "Your session has expired. Sign in again.") from None
         logger.warning("storage error status=%s", err.status)  # status only: never data, tokens or links
         raise HTTPException(502, failure) from None
+
+
+async def _embed_chunks(repo: Repository, document_id: str, chunk_ids: list[str], chunks: list) -> str | None:
+    """Vectors for meaning search. If the model is off or fails, the document is still indexed for
+    keyword search (returns None); a storage failure is real and propagates so the upload is rolled back."""
+    embedder = get_embedder()
+    if embedder is None:
+        return None
+    try:
+        vectors = await run_in_threadpool(embedder.embed_passages, [c.text for c in chunks])
+    except EmbeddingError as exc:
+        logger.warning("meaning-search indexing skipped: %s", exc)
+        return None
+    await storage_call(repo.add_embeddings, document_id, chunk_ids, vectors, embedder.model_id)
+    return embedder.model_id
 
 
 @app.post("/api/v1/documents", status_code=201)
@@ -105,8 +124,9 @@ async def upload_document(file: UploadFile = File(...), repo: Repository = Depen
     doc = await storage_call(repo.create_document, filename, len(raw), page_count)
     try:
         await storage_call(repo.put_file, doc.id, raw, content_type_for(filename))
-        await storage_call(repo.add_chunks, doc.id, chunks)
-        await storage_call(repo.mark_ready, doc.id)
+        chunk_ids = await storage_call(repo.add_chunks, doc.id, chunks)
+        embedding_model = await _embed_chunks(repo, doc.id, chunk_ids, chunks)
+        await storage_call(repo.mark_ready, doc.id, embedding_model)
     except HTTPException:
         # Never leave a half-indexed document or an orphaned file behind: the ordered delete
         # removes chunks, the stored file and the row.
@@ -115,7 +135,10 @@ async def upload_document(file: UploadFile = File(...), repo: Repository = Depen
         except Exception:
             logger.warning("cleanup after failed upload also failed")
         raise
-    return {**doc.summary(), "chunk_count": len(chunks), "status": "ready", "has_file": True}
+    return {
+        **doc.summary(), "chunk_count": len(chunks), "status": "ready", "has_file": True,
+        "semantic": embedding_model is not None,
+    }
 
 
 @app.get("/api/v1/documents")
@@ -176,6 +199,7 @@ class QueryRequest(BaseModel):
     document_ids: list[str] | None = Field(default=None, max_length=50)
     top_k: int = Field(default=4, ge=1, le=10)
     mode: Literal["sources_only", "generated"] = "sources_only"  # generation is opt-in
+    retrieval: Literal["tfidf", "embedding"] = "tfidf"            # keyword (default until M7 measures) or meaning
 
 
 def _evidence(hits: list[Hit]) -> list[dict]:
@@ -195,7 +219,8 @@ def _evidence(hits: list[Hit]) -> list[dict]:
 
 
 def _reply(
-    mode: str, hits: list[Hit], *, answer: str | None = None, insufficient: bool | None = None,
+    mode: str, hits: list[Hit], *, retrieval: str, search_notice: str | None = None,
+    answer: str | None = None, insufficient: bool | None = None,
     model: str | None = None, notice: str | None = None,
 ) -> dict:
     return {
@@ -205,29 +230,41 @@ def _reply(
         "evidence": _evidence(hits),
         "model_used": model,
         "request_id": uuid.uuid4().hex,
-        "notice": notice,
+        "retrieval": retrieval,  # which method found the evidence: scores are not comparable across methods
+        "notice": " ".join(n for n in (search_notice, notice) if n) or None,
     }
 
 
 @app.post("/api/v1/queries")
 async def query(body: QueryRequest, repo: Repository = Depends(get_repository)) -> dict:
     settings = get_settings()
-    chunks = await storage_call(repo.search_chunks, body.document_ids)
-    if chunks is None:
+    if body.retrieval == "embedding":
+        embedder = get_embedder()
+        if embedder is None:
+            raise HTTPException(503, "Meaning search is turned off on this server. Use keyword search.")
+        retriever, min_score = EmbeddingRetriever(embedder), settings.min_embedding_score
+    else:
+        retriever, min_score = TfidfRetriever(), settings.min_relevance_score
+    try:
+        outcome = await storage_call(retriever.search, body.question, repo, body.document_ids, body.top_k, min_score)
+    except EmbeddingError as exc:
+        logger.warning("meaning search failed: %s", exc)
+        raise HTTPException(503, "Meaning search is unavailable right now. Use keyword search.") from None
+    if outcome is None:
         raise HTTPException(404, "One or more documents were not found")
-    if not chunks:
+    if outcome.empty:
         raise HTTPException(409, "Upload at least one document before asking a question")
-    hits = await run_in_threadpool(
-        lambda: retrieve(
-            body.question, chunks, top_k=body.top_k, min_score=settings.min_relevance_score
-        )
-    )
+
+    def reply(mode: str, hits: list[Hit], **kwargs) -> dict:
+        return _reply(mode, hits, retrieval=retriever.name, search_notice=outcome.notice, **kwargs)
+
+    hits = outcome.hits
     if body.mode == "sources_only" or not hits:
-        return _reply("sources_only", hits)  # nothing to ground an answer on: no model call
+        return reply("sources_only", hits)  # nothing to ground an answer on: no model call
 
     client = get_llm_client()
     if client is None:
-        return _reply("sources_only", hits, notice="Answer generation is not configured; showing retrieved evidence.")
+        return reply("sources_only", hits, notice="Answer generation is not configured; showing retrieved evidence.")
 
     # Only what fits the budget is sent AND returned, so every [n] resolves to evidence.
     sent = select_for_context(hits, settings.max_context_chars)
@@ -236,12 +273,12 @@ async def query(body: QueryRequest, repo: Repository = Depends(get_repository)) 
     except Exception as exc:
         # Log only the error type: messages can contain request details.
         logger.warning("LLM request failed: %s", type(exc).__name__)
-        return _reply("sources_only", sent, notice="Answer generation is unavailable right now; showing retrieved evidence.")
+        return reply("sources_only", sent, notice="Answer generation is unavailable right now; showing retrieved evidence.")
 
     if is_abstention(raw):
-        return _reply("generated", sent, answer=raw.strip(), insufficient=True, model=client.model)
+        return reply("generated", sent, answer=raw.strip(), insufficient=True, model=client.model)
     checked = check_citations(raw, len(sent))
     if not checked.cited:
         # An answer with no resolvable citation can't be verified, so don't show it.
-        return _reply("sources_only", sent, notice="The generated answer cited no evidence, so it was withheld. Showing retrieved evidence instead.")
-    return _reply("generated", sent, answer=checked.text, insufficient=False, model=client.model)
+        return reply("sources_only", sent, notice="The generated answer cited no evidence, so it was withheld. Showing retrieved evidence instead.")
+    return reply("generated", sent, answer=checked.text, insufficient=False, model=client.model)

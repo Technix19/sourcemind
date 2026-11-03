@@ -9,8 +9,8 @@ vi.mock("@/lib/openDocument", async () => {
 });
 
 const documents = [
-  { id: "d1", name: "stored.pdf", size_bytes: 10, page_count: 2, chunk_count: 2, status: "ready", has_file: true },
-  { id: "d2", name: "legacy.pdf", size_bytes: 10, page_count: 1, chunk_count: 1, status: "ready", has_file: false },
+  { id: "d1", name: "stored.pdf", size_bytes: 10, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true },
+  { id: "d2", name: "legacy.pdf", size_bytes: 10, page_count: 1, chunk_count: 1, status: "ready", has_file: false, semantic: false },
 ];
 vi.mock("./DocumentsProvider", () => ({
   useDocuments: () => ({ documents, loaded: true, apiError: null, uploads: [], removeDocument: vi.fn(), dismissUpload: vi.fn() }),
@@ -19,6 +19,14 @@ vi.mock("./DocumentsProvider", () => ({
 import { DocumentList } from "./DocumentList";
 
 beforeEach(() => openDocumentPage.mockReset().mockResolvedValue(undefined));
+
+describe("Meaning-search coverage", () => {
+  it("flags documents that only support keyword search", () => {
+    render(<DocumentList />);
+    expect(screen.getAllByText("Keyword only")).toHaveLength(1);              // legacy.pdf only
+    expect(screen.getByText("Keyword only")).toHaveAttribute("title", expect.stringContaining("Upload it again"));
+  });
+});
 
 describe("Open a stored document", () => {
   it("offers Open only for documents whose original file is stored", () => {

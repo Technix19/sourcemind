@@ -47,6 +47,11 @@ function Row({ doc }: { doc: DocumentSummary }) {
         <span className="rounded-full bg-mint/15 px-3 py-1 text-xs font-bold text-mint">
           {doc.status === "ready" ? "Ready" : doc.status}
         </span>
+        {!doc.semantic && (
+          <span className="text-xs text-muted" title="Not indexed for meaning search. Upload it again to enable it.">
+            Keyword only
+          </span>
+        )}
         {doc.has_file ? (
           <button
             type="button"
