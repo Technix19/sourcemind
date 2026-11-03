@@ -90,7 +90,7 @@ def test_request_validation():
     assert ask("   ").status_code == 422           # whitespace only
     assert ask("valid question", top_k=0).status_code == 422
     assert ask("valid question", top_k=11).status_code == 422
-    assert ask("valid question", mode="generated").status_code == 422  # not until M4
+    assert ask("valid question", mode="bogus").status_code == 422
 
 
 def test_delete_removes_document_and_its_evidence():

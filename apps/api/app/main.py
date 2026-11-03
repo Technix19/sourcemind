@@ -1,28 +1,45 @@
-"""SourceMind API. M1: health. M2: upload and chunking. M3: retrieval and delete."""
+"""SourceMind API. M1 health, M2 upload/chunking, M3 retrieval/delete, M4 optional answers."""
+import logging
 from typing import Annotated, Literal
 from uuid import uuid4
 
 from fastapi import FastAPI, File, HTTPException, Response, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, StringConstraints
 from starlette.concurrency import run_in_threadpool
 
+from .answering import (
+    SYSTEM_PROMPT, build_user_prompt, check_citations, is_abstention, select_for_context,
+)
 from .config import get_settings
 from .ingestion import IngestionError, build_chunks, extract_pages, sanitize_filename
-from .retrieval import retrieve
+from .llm import generation_available, get_llm_client
+from .retrieval import Hit, retrieve
 from .store import Document, store
 
-API_VERSION = "0.3.0"
+API_VERSION = "0.4.0"
+logger = logging.getLogger("sourcemind")
 
 app = FastAPI(title="SourceMind API", version=API_VERSION, docs_url="/api/docs")
 
+# Only the configured frontend origin may call the API from a browser. No wildcard,
+# and no cookies/credentials: there is no auth yet (M6).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[get_settings().frontend_origin],
+    allow_methods=["GET", "POST", "DELETE"],
+    allow_headers=["Content-Type"],
+)
+
 
 @app.get("/api/v1/health")
-def health() -> dict[str, str]:
+def health() -> dict:
     """Readiness probe. Must never expose secrets or sensitive config."""
     return {
         "status": "ok",
         "version": API_VERSION,
         "environment": get_settings().app_env,
+        "generation_available": generation_available(),  # a boolean, never the key
     }
 
 
@@ -83,11 +100,43 @@ class QueryRequest(BaseModel):
     question: Annotated[str, StringConstraints(strip_whitespace=True, min_length=3, max_length=550)]
     document_ids: list[str] | None = Field(default=None, max_length=50)
     top_k: int = Field(default=4, ge=1, le=10)
-    mode: Literal["sources_only"] = "sources_only"  # "generated" arrives in M4
+    mode: Literal["sources_only", "generated"] = "sources_only"  # generation is opt-in
+
+
+def _evidence(hits: list[Hit]) -> list[dict]:
+    # citation_id is the 1-based position: the same number the model was shown.
+    return [
+        {
+            "citation_id": str(rank),
+            "chunk_id": hit.chunk.chunk_id,
+            "document_id": hit.chunk.document_id,
+            "filename": hit.chunk.filename,
+            "page_number": hit.chunk.page_number,
+            "excerpt": hit.chunk.text,
+            "score": hit.score,
+        }
+        for rank, hit in enumerate(hits, start=1)
+    ]
+
+
+def _reply(
+    mode: str, hits: list[Hit], *, answer: str | None = None, insufficient: bool | None = None,
+    model: str | None = None, notice: str | None = None,
+) -> dict:
+    return {
+        "answer_mode": mode,
+        "answer": answer,
+        "insufficient_evidence": (not hits) if insufficient is None else insufficient,
+        "evidence": _evidence(hits),
+        "model_used": model,
+        "request_id": uuid4().hex,
+        "notice": notice,
+    }
 
 
 @app.post("/api/v1/queries")
 async def query(body: QueryRequest) -> dict:
+    settings = get_settings()
     docs = store.select(body.document_ids)
     if docs is None:
         raise HTTPException(404, "One or more documents were not found")
@@ -96,24 +145,29 @@ async def query(body: QueryRequest) -> dict:
         raise HTTPException(409, "Upload at least one document before asking a question")
     hits = await run_in_threadpool(
         lambda: retrieve(
-            body.question, chunks, top_k=body.top_k,
-            min_score=get_settings().min_relevance_score,
+            body.question, chunks, top_k=body.top_k, min_score=settings.min_relevance_score
         )
     )
-    return {
-        "answer_mode": "sources_only",
-        "answer": None,
-        "insufficient_evidence": not hits,
-        "evidence": [
-            {
-                "citation_id": str(rank),
-                "chunk_id": hit.chunk.chunk_id,
-                "document_id": hit.chunk.document_id,
-                "filename": hit.chunk.filename,
-                "page_number": hit.chunk.page_number,
-                "excerpt": hit.chunk.text,
-                "score": hit.score,
-            }
-            for rank, hit in enumerate(hits, start=1)
-        ],
-    }
+    if body.mode == "sources_only" or not hits:
+        return _reply("sources_only", hits)  # nothing to ground an answer on: no model call
+
+    client = get_llm_client()
+    if client is None:
+        return _reply("sources_only", hits, notice="Answer generation is not configured; showing retrieved evidence.")
+
+    # Only what fits the budget is sent AND returned, so every [n] resolves to evidence.
+    sent = select_for_context(hits, settings.max_context_chars)
+    try:
+        raw = await run_in_threadpool(client.complete, SYSTEM_PROMPT, build_user_prompt(body.question, sent))
+    except Exception as exc:
+        # Log only the error type: messages can contain request details.
+        logger.warning("LLM request failed: %s", type(exc).__name__)
+        return _reply("sources_only", sent, notice="Answer generation is unavailable right now; showing retrieved evidence.")
+
+    if is_abstention(raw):
+        return _reply("generated", sent, answer=raw.strip(), insufficient=True, model=client.model)
+    checked = check_citations(raw, len(sent))
+    if not checked.cited:
+        # An answer with no resolvable citation can't be verified, so don't show it.
+        return _reply("sources_only", sent, notice="The generated answer cited no evidence, so it was withheld. Showing retrieved evidence instead.")
+    return _reply("generated", sent, answer=checked.text, insufficient=False, model=client.model)

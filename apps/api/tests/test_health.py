@@ -10,7 +10,7 @@ def test_health_returns_ok():
     assert response.status_code == 200
     body = response.json()
     assert body["status"] == "ok"
-    assert set(body) == {"status", "version", "environment"}
+    assert set(body) == {"status", "version", "environment", "generation_available"}
 
 
 def test_health_reflects_environment(monkeypatch):

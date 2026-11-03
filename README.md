@@ -9,12 +9,12 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M1 Backend foundation (health endpoint, tests, config) | Implemented |
 | M2 Ingestion and chunking (upload, PDF/TXT/MD extraction, page-aware chunks, limits) | Implemented |
 | M3 TF-IDF retrieval (sources-only queries, delete) | Implemented |
-| M4 Grounded generation | Planned |
-| M5 Frontend | Planned |
+| M4 Optional grounded answers (citation validation, fallbacks) | Implemented; verified with a mocked model only, not yet run against a real provider |
+| M5 Frontend: 5a shell, upload, document library, evaluation empty state | Implemented. 5b (ask + evidence) and 5c (responsive/accessibility polish) planned |
 | M6 Auth, persistence, vectors | Planned |
 | M7 Evaluation and deployment | Planned |
 
-Nothing beyond M3 exists yet. There are no generated answers, UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
+Nothing beyond M4 and the first part of M5 exists yet. There is no UI or measured evaluation results. Retrieval is a lexical baseline with known failure modes (see `docs/experiments.md`). Documents live in process memory only and are lost on restart. There is no authentication, so run it locally and do not upload confidential files.
 
 ## Run the API (local)
 
@@ -55,4 +55,25 @@ Query example:
 curl -X POST http://127.0.0.1:8000/api/v1/queries -H 'Content-Type: application/json' \
   -d '{"question": "What are the limitations?", "top_k": 4}'
 ```
-Optional: `document_ids` to restrict the search. `mode` only accepts `sources_only` until M4. Tuning knob: `MIN_RELEVANCE_SCORE` (untuned heuristic).
+Optional: `document_ids` to restrict the search. `mode` is `sources_only` (default) or `generated`. Tuning knob: `MIN_RELEVANCE_SCORE` (untuned heuristic).
+
+## Optional answer generation
+
+Off by default. Set both `OPENAI_API_KEY` and `OPENAI_CHAT_MODEL` (a model your account supports) in `apps/api/.env` and send `"mode": "generated"`. `GET /api/v1/health` reports `generation_available` (a boolean, never the key).
+
+- The model sees only the retrieved excerpts, numbered `[1]`, `[2]`, ... and is told to treat them as untrusted data.
+- Code, not the prompt, enforces grounding: citations the model invents are stripped, an answer with no valid citation is withheld, and a model failure or missing key falls back to `sources_only` with a `notice`.
+- With generation enabled, retrieved excerpts and the question are sent to the model provider. Don't enable it for confidential documents.
+- Cost controls: `MAX_CONTEXT_CHARS` and `MAX_ANSWER_TOKENS`. No per-user or daily limits yet (needed before any public deployment).
+
+## Run the web app (local)
+
+Start the API first (above), then in a second terminal:
+
+```bash
+cd apps/web
+npm install
+npm run dev          # http://localhost:3000
+```
+
+The API allows browser calls only from `FRONTEND_ORIGIN` (default `http://localhost:3000`), so open the app at `localhost`, not `127.0.0.1`. The API address defaults to `http://localhost:8000`; override it with `NEXT_PUBLIC_API_URL` (a URL only, never a secret). Checks: `npm run lint`, `npm run build`.

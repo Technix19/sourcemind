@@ -23,6 +23,9 @@ class Settings:
     chunk_size: int
     chunk_overlap: int
     min_relevance_score: float
+    chat_model: str
+    max_context_chars: int
+    max_answer_tokens: int
 
 
 def get_settings() -> Settings:
@@ -36,4 +39,8 @@ def get_settings() -> Settings:
         chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "170")),
         # Initial heuristic, NOT tuned on labeled data yet (that is M7).
         min_relevance_score=float(os.getenv("MIN_RELEVANCE_SCORE", "0.05")),
+        # No default model on purpose: the user picks one their account supports.
+        chat_model=os.getenv("OPENAI_CHAT_MODEL", "").strip(),
+        max_context_chars=int(os.getenv("MAX_CONTEXT_CHARS", "8000")),
+        max_answer_tokens=int(os.getenv("MAX_ANSWER_TOKENS", "500")),
     )

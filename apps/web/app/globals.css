@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* Design tokens taken from the blueprint mockups: dark ink surfaces,
+   lavender for actions/active state, mint for "grounded"/ready status. */
+@theme {
+  --color-ink: #0f0f17;
+  --color-panel: #151520;
+  --color-surface: #1b1b2a;
+  --color-line: #2a2a3d;
+  --color-text: #f2f2f8;
+  --color-muted: #9494ab;
+  --color-lavender: #a78bfa;
+  --color-lavender-deep: #7c5cf0;
+  --color-mint: #5fe3c0;
+  --color-amber: #f2b45c;
+  --color-danger: #f87171;
+  --font-sans: var(--font-lato), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+/* Visible keyboard focus everywhere (blueprint accessibility requirement). */
+:focus-visible {
+  outline: 2px solid var(--color-lavender);
+  outline-offset: 2px;
+}
+
+/* Motion is decoration only; respect the user's setting. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
