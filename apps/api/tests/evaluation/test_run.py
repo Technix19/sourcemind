@@ -121,6 +121,25 @@ def tiny_world(monkeypatch, tmp_path):
     monkeypatch.setattr(run_module, "DATA_DIR", tmp_path)
 
 
+def test_tuned_thresholds_are_reported_next_to_the_current_defaults_when_available(tiny_world):
+    none = run_module.run("all", ["tfidf", "embedding"], 950, 170, None, quiet=True, tuned_thresholds=None)
+    assert all(a["operating_point_tuned"] is None for a in none["arms"].values())
+    tuned = {"tfidf": 0.2, "embedding": 0.6}
+    both = run_module.run("all", ["tfidf", "embedding", "hybrid"], 950, 170, None, quiet=True, tuned_thresholds=tuned)
+    assert both["config"]["tuned_thresholds"] == tuned
+    assert both["arms"]["tfidf"]["operating_point_tuned"]["thresholds"] == {"tfidf": 0.2}
+    assert both["arms"]["embedding"]["operating_point_tuned"]["thresholds"] == {"embedding": 0.6}
+    assert both["arms"]["hybrid"]["operating_point_tuned"]["thresholds"] == tuned     # hybrid uses both tuned thresholds
+    assert both["arms"]["tfidf"]["operating_point_at_current_defaults"] is not None  # the current defaults are still shown
+
+
+def test_tuned_thresholds_load_from_the_frozen_dev_file(tmp_path):
+    path = tmp_path / "tuning.json"
+    assert run_module.load_tuned(path) is None
+    path.write_text(json.dumps({"thresholds": {"tfidf": {"chosen": 0.25}, "embedding": {"chosen": 0.7}}}))
+    assert run_module.load_tuned(path) == {"tfidf": 0.25, "embedding": 0.7}
+
+
 def test_a_full_run_on_a_tiny_corpus_produces_a_complete_serialisable_report(tiny_world, tmp_path):
     out = tmp_path / "report.json"
     report = run_module.run("all", ["tfidf", "embedding", "hybrid"], 950, 170, out, quiet=True)

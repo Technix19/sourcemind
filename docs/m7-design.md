@@ -50,6 +50,16 @@ Every question carries a `split` label (`dev` or `test`). While adding batch 2 I
 - **Three arms:** keyword, meaning, and an experimental *hybrid* (reciprocal-rank fusion) that exists only in the harness. It joins the product only if the numbers justify it and the owner agrees.
 - **Experiments:** chunk size (500 / 950 / 1500) and `top_k`, reported as measured, not as advice.
 
+## Pre-registered analysis plan (written 2026-11-04, BEFORE any tuning and BEFORE the test split was scored)
+
+These rules were fixed in advance so the results cannot be steered by what the numbers turn out to be.
+
+1. **Thresholds.** Tuned per method on the **dev** split only. Objective: **balanced accuracy** = the mean of (correct-abstention rate on unanswerable questions) and (1 - false-abstention rate on answerable questions), i.e. wrongly answering and wrongly refusing are weighted equally. Grid: keyword 0.00-0.40 and meaning 0.40-0.90, both in steps of 0.01. If several values tie, the **median** of the tied values is used (the middle of a plateau, not its edge). The hybrid method is not tuned separately: it uses the two tuned thresholds and answers if either clears its own.
+2. **Chunk size.** Candidates 500, 950 (current) and 1500 characters, overlap about 18%. Evaluated on dev only. **950 is kept unless another size beats it on both Recall@3 and MRR by at least 0.10.** Thresholds are tuned after the chunk size is fixed.
+3. **Default search method in the product** stays *keyword*. It would only be **recommended** for change if, on the **test** split, meaning (or hybrid) has higher point estimates for both Recall@3 and MRR, and its balanced accuracy at the tuned threshold is not lower. Because the intervals will overlap at this sample size, a change would be a recommendation for the owner to decide, never an automatic switch.
+4. **Reporting.** The test split is scored **once**, after thresholds and chunk size are frozen. Every number carries a 95% bootstrap interval; two methods are described as different only when their intervals do not overlap. Dev results are shown separately and labeled as dev.
+5. **After the test run**: no change to retrieval code, thresholds, labels or questions. The failure analysis is descriptive only.
+
 ## The harness
 A separate `evaluation` package (not part of the API) runs the exact same chunker, the same TF-IDF code and the same embedder against the corpus in memory, so it needs no accounts or database and anyone can reproduce it with one command. To make sure it measures what ships, an opt-in **parity test** uploads part of the corpus to the real project and checks that the production API returns the same top results as the harness. Output: a versioned JSON (dataset version, date, git commit, config, metrics, intervals, per-question results) plus a Markdown report; the Evaluation page renders the JSON and nothing else.
 

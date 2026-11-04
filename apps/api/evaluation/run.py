@@ -32,9 +32,21 @@ GRIDS = {
 }
 
 
+TUNING_FILE = DATA_DIR / "results" / "tuning-dev.json"
+
+
 def provisional_thresholds() -> dict[str, float]:
+    """The product's CURRENT defaults (provisional guesses at the time of writing)."""
     s = get_settings()
     return {"tfidf": s.min_relevance_score, "embedding": s.min_embedding_score}
+
+
+def load_tuned(path: Path = TUNING_FILE) -> dict[str, float] | None:
+    """Thresholds frozen by evaluation.tune on the DEV split (None when tuning has not been run)."""
+    if not path.exists():
+        return None
+    chosen = json.loads(path.read_text())["thresholds"]
+    return {arm: chosen[arm]["chosen"] for arm in ("tfidf", "embedding")}
 
 
 # ------------------------------------------------------------------------------ per question
@@ -117,7 +129,7 @@ def sweep(records: list[dict], arm_name: str) -> list[dict]:
 
 # --------------------------------------------------------------------------------- aggregate
 
-def report_arm(arm_name: str, records: list[dict], thr: dict[str, float]) -> dict:
+def report_arm(arm_name: str, records: list[dict], thr: dict[str, float], tuned: dict[str, float] | None = None) -> dict:
     answerable = [r for r in records if r["answerable"]]
     ranking = {f"recall@{k}": summarize([r[f"recall@{k}"] for r in answerable]) for k in KS}
     ranking["mrr"] = summarize([r["rr"] for r in answerable])
@@ -134,6 +146,7 @@ def report_arm(arm_name: str, records: list[dict], thr: dict[str, float]) -> dic
     return {
         "ranking": ranking, "ranking_by_type": by_type, "ranking_by_author": by_author,
         "operating_point_at_current_defaults": operating_point(records, arm_name, thr),
+        "operating_point_tuned": operating_point(records, arm_name, tuned) if tuned else None,
         "threshold_sweep": sweep(records, arm_name),
         "latency_ms": {"median": percentile(latencies, 50), "p95": percentile(latencies, 95)},
         "per_question": records,
@@ -161,7 +174,8 @@ def git_info() -> dict:
     return {"commit": run("rev-parse", "--short", "HEAD") or None, "dirty": bool(run("status", "--porcelain"))}
 
 
-def run(split_name: str, arms: list[str], chunk_size: int, overlap: int, out: Path | None, quiet: bool = False) -> dict:
+def run(split_name: str, arms: list[str], chunk_size: int, overlap: int, out: Path | None, quiet: bool = False,
+        tuned_thresholds: dict[str, float] | None | str = "auto") -> dict:
     pages = load_pages()
     questions = load_questions(*QUESTION_FILES)
     issues = validate(questions, pages)
@@ -189,12 +203,13 @@ def run(split_name: str, arms: list[str], chunk_size: int, overlap: int, out: Pa
         built["hybrid"] = HybridArm(built["tfidf"], built["embedding"])
 
     thr = provisional_thresholds()
+    tuned = load_tuned() if tuned_thresholds == "auto" else tuned_thresholds
     report = {
         "schema": 1, "date": datetime.date.today().isoformat(), "split": split_name,
         "dataset_version": "1", "corpus_version": load_manifest()["corpus_version"],
         "git": git_info(),
         "config": {"chunk_size": chunk_size, "overlap": overlap, "chunks": len(chunks), "pool": POOL,
-                   "embedding_model": get_settings().embedding_model, "provisional_thresholds": thr},
+                   "embedding_model": get_settings().embedding_model, "provisional_thresholds": thr, "tuned_thresholds": tuned},
         "questions": {"total": len(chosen), "answerable": sum(q.answerable for q in chosen),
                       "unanswerable": sum(not q.answerable for q in chosen),
                       "by_author": {a: sum(q.author == a for q in chosen) for a in sorted({q.author for q in chosen})}},
@@ -202,9 +217,9 @@ def run(split_name: str, arms: list[str], chunk_size: int, overlap: int, out: Pa
         "arms": {},
     }
     for name in arms:
-        arm_thr = {"tfidf": thr["tfidf"], "embedding": thr["embedding"]} if name == "hybrid" else {name: thr[name]}
+        pick = lambda t: ({"tfidf": t["tfidf"], "embedding": t["embedding"]} if name == "hybrid" else {name: t[name]}) if t else None
         records = [evaluate_question(built[name], q, norm) for q in chosen]
-        report["arms"][name] = report_arm(name, records, arm_thr)
+        report["arms"][name] = report_arm(name, records, pick(thr), pick(tuned))
     if out:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(report, indent=2) + "\n")
@@ -227,11 +242,14 @@ def print_summary(report: dict) -> None:
     for name, a in report["arms"].items():
         r = a["ranking"]
         print(f"{name:10} {fmt(r['recall@1']):18} {fmt(r['recall@3']):18} {fmt(r['recall@5']):18} {fmt(r['mrr']):18} {a['latency_ms']['median']:7.1f}")
-    print("\nAt the current (provisional) thresholds:")
-    for name, a in report["arms"].items():
-        o = a["operating_point_at_current_defaults"]
-        print(f"  {name:10} correct abstention {fmt(o['abstention_accuracy_on_unanswerable'])}   "
-              f"false abstention {fmt(o['false_abstain_rate_on_answerable'])}   end-to-end Recall@3 {fmt(o['end_to_end_recall@3'])}")
+    for label, key in (("the product's CURRENT defaults", "operating_point_at_current_defaults"), ("the TUNED thresholds (frozen from dev)", "operating_point_tuned")):
+        if any(a[key] for a in report["arms"].values()):
+            print(f"\nAt {label}:")
+            for name, a in report["arms"].items():
+                o = a[key]
+                if o:
+                    print(f"  {name:10} correct abstention {fmt(o['abstention_accuracy_on_unanswerable'])}   "
+                          f"false abstention {fmt(o['false_abstain_rate_on_answerable'])}   end-to-end Recall@3 {fmt(o['end_to_end_recall@3'])}")
     print("\nRecall@3 by question type:")
     types = sorted({t for a in report["arms"].values() for t in a["ranking_by_type"]})
     for t in types:
