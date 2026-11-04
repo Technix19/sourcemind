@@ -1,5 +1,5 @@
 import { getAccessToken } from "./supabase";
-import type { AnswerMode, DocumentSummary, Health, QueryResponse, Retrieval, ViewLink } from "./types";
+import type { AnswerMode, DocumentSummary, EvaluationResults, Health, QueryResponse, Retrieval, ViewLink } from "./types";
 
 // Public on purpose: it is only a URL. No secrets ever belong in the frontend.
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
@@ -72,3 +72,5 @@ export const askQuestion = (question: string, mode: AnswerMode, retrieval: Retri
 
 export const getViewLink = (id: string, page?: number) =>
   request<ViewLink>(`/api/v1/documents/${encodeURIComponent(id)}/view${page ? `?page=${page}` : ""}`);
+
+export const getEvaluation = () => request<EvaluationResults>("/api/v1/evaluation/latest");

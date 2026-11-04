@@ -1,6 +1,6 @@
 # M7 design: measured evaluation, then release hardening
 
-Status: **7a implemented (corpus, 45 questions, harness, tools); 7b-7d not started.** Decisions made with the owner: use the five documents; deployment planned from the start (with explicit confirmation before anything is created or made public). The owner chose to have the assistant write the extra ten questions instead of writing blind questions, so the dataset currently has **a single author** (see "Authorship" below). M7 is the milestone that replaces "it seems to work" and my provisional thresholds with measured, reproducible evidence, and states honestly where retrieval fails.
+Status: **7a and 7b implemented (corpus, 45 questions, harness, one scored test run, failure analysis, results page); 7c-7d not started.** Decisions made with the owner: use the five documents; deployment planned from the start (with explicit confirmation before anything is created or made public). The owner chose to have the assistant write the extra ten questions instead of writing blind questions, so the dataset currently has **a single author** (see "Authorship" below). M7 is the milestone that replaces "it seems to work" and my provisional thresholds with measured, reproducible evidence, and states honestly where retrieval fails.
 
 ## Sub-steps
 | Step | Delivers |

@@ -43,3 +43,10 @@ Run before choosing a provider. Same synthetic 3-page text and the same four que
 2. **Embeddings did not fix the ranking error on question 1.** Both pages are about the same topic, and the model cannot tell "mentions the topic" from "answers the question" (0.692 vs 0.687).
 3. **Embeddings never return zero, so abstention gets harder.** An irrelevant question still scores 0.45-0.48, close to a relevant page's 0.59. A relevance threshold (and probably a lexical sanity check) must be tuned on labeled questions (M7); a naive "return the top k" would never say "not enough evidence".
 4. **Cost and size:** model files about 64 MB on disk (the library uses a quantized ONNX build; an earlier version of this note said 200 MB because the measuring script double-counted symlinked files); first load about 6 s; about 39 chunks/s on this machine (a 400-chunk PDF in about 10 s); one query embedding about 2 ms; no network call and no document text leaves the machine.
+
+## M7b: held-out evaluation (2026-11-04)
+Scored once on the 19-question test split (15 answerable, 4 unanswerable) after thresholds and chunk size were frozen on the dev split. Full tables, intervals and the failure analysis: `data/evaluation/results/REPORT.md` (also shown on the app's Evaluation page).
+- Recall@3: keyword 0.60 (0.33 to 0.80), meaning 0.87 (0.67 to 1.00), hybrid 0.93 (0.80 to 1.00). Intervals overlap, so no difference is demonstrated.
+- Paraphrase questions are where keyword search struggled most (Recall@3 0.43 on 7), as the toy experiment above suggested. That is a pattern on 7 questions, not a proven effect.
+- Abstention rests on 4 unanswerable questions; treat it as unmeasured.
+- One author wrote all questions, and 5 US government documents is a narrow corpus.

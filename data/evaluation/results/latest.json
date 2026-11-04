@@ -1,0 +1,3225 @@
+{
+  "schema": 1,
+  "run": {
+    "split": "test",
+    "date": "2026-11-04",
+    "git": {
+      "commit": "0db61d1",
+      "dirty": false
+    },
+    "dataset_version": "1",
+    "corpus_version": "1",
+    "questions": {
+      "total": 19,
+      "answerable": 15,
+      "unanswerable": 4,
+      "by_author": {
+        "assistant": 19
+      }
+    },
+    "chunks": 1345,
+    "chunk_size": 950,
+    "overlap": 170,
+    "embedding_model": "BAAI/bge-small-en-v1.5"
+  },
+  "thresholds": {
+    "tuned": {
+      "tfidf": 0.25,
+      "embedding": 0.7
+    },
+    "product_defaults": {
+      "tfidf": 0.05,
+      "embedding": 0.5
+    },
+    "tuned_on": "dev split",
+    "tuning": {
+      "tfidf": {
+        "tied_range": [
+          0.24,
+          0.26
+        ],
+        "dev_balanced_accuracy": 0.7222
+      },
+      "embedding": {
+        "tied_range": [
+          0.69,
+          0.71
+        ],
+        "dev_balanced_accuracy": 0.875
+      }
+    }
+  },
+  "caveats": [
+    "Small sample: 15 answerable and 4 unanswerable test questions. Every figure has a wide 95% interval; overlapping intervals mean no demonstrated difference.",
+    "A single author wrote all questions (the project assistant); there is no independent-author check, and wording bias toward keyword search cannot be ruled out.",
+    "Five public-domain US government documents; the results may not transfer to other kinds of documents.",
+    "The test split was scored once, after the thresholds and chunk size were frozen on the development split (see the pre-registered plan).",
+    "An interval such as 1.00 (1.00-1.00) is NOT certainty: a percentile bootstrap collapses to a point whenever every question agrees, which with only a handful of questions says little. The true uncertainty is larger (this is most visible in the abstention rows, which rest on 4 questions).",
+    "Retrieval only: this measures whether the right page is found, not whether generated answers are correct."
+  ],
+  "methods": {
+    "tfidf": {
+      "label": "Keyword (TF-IDF)",
+      "ranking": {
+        "recall@1": {
+          "value": 0.4,
+          "ci": [
+            0.2,
+            0.6667
+          ],
+          "n": 15
+        },
+        "recall@3": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8
+          ],
+          "n": 15
+        },
+        "recall@5": {
+          "value": 0.7333,
+          "ci": [
+            0.4667,
+            0.9333
+          ],
+          "n": 15
+        },
+        "mrr": {
+          "value": 0.534,
+          "ci": [
+            0.3457,
+            0.7313
+          ],
+          "n": 15
+        },
+        "precision@3": {
+          "value": 0.2667,
+          "ci": [
+            0.1333,
+            0.4
+          ],
+          "n": 15
+        }
+      },
+      "ranking_by_type": {
+        "direct": {
+          "n": 2,
+          "recall@3": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "mrr": {
+            "value": 0.75,
+            "ci": [
+              0.5,
+              1.0
+            ],
+            "n": 2
+          }
+        },
+        "paraphrase": {
+          "n": 7,
+          "recall@3": {
+            "value": 0.4286,
+            "ci": [
+              0.1429,
+              0.8571
+            ],
+            "n": 7
+          },
+          "mrr": {
+            "value": 0.3024,
+            "ci": [
+              0.131,
+              0.5452
+            ],
+            "n": 7
+          }
+        },
+        "specific": {
+          "n": 6,
+          "recall@3": {
+            "value": 0.6667,
+            "ci": [
+              0.3333,
+              1.0
+            ],
+            "n": 6
+          },
+          "mrr": {
+            "value": 0.7321,
+            "ci": [
+              0.4464,
+              1.0
+            ],
+            "n": 6
+          }
+        }
+      },
+      "ranking_by_author": {
+        "assistant": {
+          "n": 15,
+          "recall@3": {
+            "value": 0.6,
+            "ci": [
+              0.3333,
+              0.8
+            ],
+            "n": 15
+          },
+          "mrr": {
+            "value": 0.534,
+            "ci": [
+              0.3457,
+              0.7313
+            ],
+            "n": 15
+          }
+        }
+      },
+      "operating_point_tuned": {
+        "thresholds": {
+          "tfidf": 0.25
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 1.0,
+          "ci": [
+            1.0,
+            1.0
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.6667,
+          "ci": [
+            0.4,
+            0.8667
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.2667,
+          "ci": [
+            0.0667,
+            0.5333
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.3333,
+          "ci": [
+            0.1333,
+            0.6
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.3333,
+          "ci": [
+            0.1333,
+            0.6
+          ],
+          "n": 15
+        }
+      },
+      "operating_point_at_product_defaults": {
+        "thresholds": {
+          "tfidf": 0.05
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.4,
+          "ci": [
+            0.2,
+            0.6667
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.7333,
+          "ci": [
+            0.4667,
+            0.9333
+          ],
+          "n": 15
+        }
+      },
+      "balanced_accuracy_tuned": 0.6666,
+      "threshold_sweep": [
+        {
+          "threshold": 0.0,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.6
+        },
+        {
+          "threshold": 0.02,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.6
+        },
+        {
+          "threshold": 0.05,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.6
+        },
+        {
+          "threshold": 0.08,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.6
+        },
+        {
+          "threshold": 0.1,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0667,
+          "end_to_end_recall@3": 0.5333
+        },
+        {
+          "threshold": 0.15,
+          "correct_abstain": 0.25,
+          "false_abstain": 0.4,
+          "end_to_end_recall@3": 0.4
+        },
+        {
+          "threshold": 0.2,
+          "correct_abstain": 1.0,
+          "false_abstain": 0.4667,
+          "end_to_end_recall@3": 0.4
+        },
+        {
+          "threshold": 0.3,
+          "correct_abstain": 1.0,
+          "false_abstain": 0.8,
+          "end_to_end_recall@3": 0.1333
+        }
+      ],
+      "latency_ms": {
+        "median": 1.142,
+        "p95": 1.78
+      },
+      "per_question": [
+        {
+          "id": "con-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "How many Senators does each State have?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1424
+          },
+          "top": [
+            [
+              "us-constitution",
+              75,
+              0.1424
+            ],
+            [
+              "us-constitution",
+              52,
+              0.1294
+            ],
+            [
+              "us-constitution",
+              66,
+              0.1234
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "us-constitution",
+              8
+            ],
+            [
+              "us-constitution",
+              75
+            ]
+          ]
+        },
+        {
+          "id": "con-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1252
+          },
+          "top": [
+            [
+              "us-constitution",
+              61,
+              0.1252
+            ],
+            [
+              "us-constitution",
+              61,
+              0.1164
+            ],
+            [
+              "us-constitution",
+              47,
+              0.1053
+            ]
+          ],
+          "rank": 7,
+          "relevant": [
+            [
+              "us-constitution",
+              32
+            ]
+          ]
+        },
+        {
+          "id": "con-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does the Constitution protect the right of people to own weapons?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1609
+          },
+          "top": [
+            [
+              "us-constitution",
+              75,
+              0.1609
+            ],
+            [
+              "us-constitution",
+              75,
+              0.1592
+            ],
+            [
+              "us-constitution",
+              19,
+              0.1478
+            ]
+          ],
+          "rank": 3,
+          "relevant": [
+            [
+              "us-constitution",
+              19
+            ]
+          ]
+        },
+        {
+          "id": "csf-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "What are the six Functions of the CSF Core?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3026
+          },
+          "top": [
+            [
+              "nist-csf",
+              20,
+              0.3026
+            ],
+            [
+              "nist-csf",
+              31,
+              0.2541
+            ],
+            [
+              "nist-csf",
+              8,
+              0.2475
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "nist-csf",
+              8
+            ],
+            [
+              "nist-csf",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "csf-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Which short beginner guides help a company get started with the framework?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1304
+          },
+          "top": [
+            [
+              "fed-explained",
+              15,
+              0.1304
+            ],
+            [
+              "nhlbi-sleep",
+              52,
+              0.1053
+            ],
+            [
+              "nist-csf",
+              14,
+              0.0872
+            ]
+          ],
+          "rank": 3,
+          "relevant": [
+            [
+              "nist-csf",
+              6
+            ],
+            [
+              "nist-csf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "csf-03",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2012
+          },
+          "top": [
+            [
+              "nist-csf",
+              6,
+              0.2012
+            ],
+            [
+              "nist-csf",
+              6,
+              0.1504
+            ],
+            [
+              "nist-csf",
+              16,
+              0.1376
+            ]
+          ],
+          "rank": 15,
+          "relevant": [
+            [
+              "nist-csf",
+              12
+            ]
+          ]
+        },
+        {
+          "id": "fed-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Why do the central bank's regional territories cut across state boundaries?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1487
+          },
+          "top": [
+            [
+              "fed-explained",
+              1,
+              0.1487
+            ],
+            [
+              "fed-explained",
+              3,
+              0.1487
+            ],
+            [
+              "fed-explained",
+              10,
+              0.0996
+            ]
+          ],
+          "rank": 12,
+          "relevant": [
+            [
+              "fed-explained",
+              11
+            ]
+          ]
+        },
+        {
+          "id": "fed-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2871
+          },
+          "top": [
+            [
+              "fed-explained",
+              16,
+              0.2871
+            ],
+            [
+              "fed-explained",
+              21,
+              0.1652
+            ],
+            [
+              "fed-explained",
+              17,
+              0.1486
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "fed-explained",
+              16
+            ]
+          ]
+        },
+        {
+          "id": "off-03",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "Who won the 2018 FIFA World Cup?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1128
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              23,
+              0.1128
+            ],
+            [
+              "nhlbi-sleep",
+              33,
+              0.0802
+            ],
+            [
+              "nist-ai-rmf",
+              9,
+              0.0735
+            ]
+          ]
+        },
+        {
+          "id": "off-05",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "How many moons does Mars have?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1854
+          },
+          "top": [
+            [
+              "fed-explained",
+              1,
+              0.1854
+            ],
+            [
+              "fed-explained",
+              3,
+              0.1854
+            ],
+            [
+              "fed-explained",
+              48,
+              0.0858
+            ]
+          ]
+        },
+        {
+          "id": "rmf-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3463
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              14,
+              0.3463
+            ],
+            [
+              "nist-ai-rmf",
+              15,
+              0.2048
+            ],
+            [
+              "nist-ai-rmf",
+              5,
+              0.1612
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "rmf-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.236
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              28,
+              0.236
+            ],
+            [
+              "nist-ai-rmf",
+              38,
+              0.1144
+            ],
+            [
+              "nist-ai-rmf",
+              1,
+              0.1076
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              28
+            ]
+          ]
+        },
+        {
+          "id": "rmf-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1884
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              1,
+              0.1884
+            ],
+            [
+              "nist-ai-rmf",
+              26,
+              0.1213
+            ],
+            [
+              "nist-ai-rmf",
+              24,
+              0.1185
+            ]
+          ]
+        },
+        {
+          "id": "sleep-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3136
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              27,
+              0.3136
+            ],
+            [
+              "nhlbi-sleep",
+              27,
+              0.1409
+            ],
+            [
+              "nhlbi-sleep",
+              29,
+              0.1313
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              27
+            ]
+          ]
+        },
+        {
+          "id": "sleep-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long does each pause in breathing typically last in sleep apnea?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2629
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              44,
+              0.2629
+            ],
+            [
+              "nhlbi-sleep",
+              44,
+              0.2587
+            ],
+            [
+              "nhlbi-sleep",
+              36,
+              0.1701
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              44
+            ]
+          ]
+        },
+        {
+          "id": "sleep-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "What daily melatonin dose does the guide recommend for insomnia?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1833
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              44,
+              0.1833
+            ],
+            [
+              "nhlbi-sleep",
+              17,
+              0.1097
+            ],
+            [
+              "nhlbi-sleep",
+              41,
+              0.0821
+            ]
+          ]
+        },
+        {
+          "id": "x-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.0808
+          },
+          "top": [
+            [
+              "nist-csf",
+              9,
+              0.0808
+            ],
+            [
+              "nist-csf",
+              25,
+              0.0765
+            ],
+            [
+              "nist-csf",
+              26,
+              0.0638
+            ]
+          ],
+          "rank": 10,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              20
+            ]
+          ]
+        },
+        {
+          "id": "x-06",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2481
+          },
+          "top": [
+            [
+              "fed-explained",
+              20,
+              0.2481
+            ],
+            [
+              "fed-explained",
+              14,
+              0.2379
+            ],
+            [
+              "fed-explained",
+              20,
+              0.1744
+            ]
+          ],
+          "rank": 4,
+          "relevant": [
+            [
+              "fed-explained",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "x-08",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1227
+          },
+          "top": [
+            [
+              "us-constitution",
+              66,
+              0.1227
+            ],
+            [
+              "us-constitution",
+              76,
+              0.1069
+            ],
+            [
+              "us-constitution",
+              25,
+              0.0969
+            ]
+          ],
+          "rank": 5,
+          "relevant": [
+            [
+              "us-constitution",
+              30
+            ],
+            [
+              "us-constitution",
+              52
+            ],
+            [
+              "us-constitution",
+              69
+            ],
+            [
+              "us-constitution",
+              84
+            ]
+          ]
+        }
+      ]
+    },
+    "embedding": {
+      "label": "Meaning (embeddings)",
+      "ranking": {
+        "recall@1": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8667
+          ],
+          "n": 15
+        },
+        "recall@3": {
+          "value": 0.8667,
+          "ci": [
+            0.6667,
+            1.0
+          ],
+          "n": 15
+        },
+        "recall@5": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        },
+        "mrr": {
+          "value": 0.7463,
+          "ci": [
+            0.5741,
+            0.9
+          ],
+          "n": 15
+        },
+        "precision@3": {
+          "value": 0.4222,
+          "ci": [
+            0.3111,
+            0.5333
+          ],
+          "n": 15
+        }
+      },
+      "ranking_by_type": {
+        "direct": {
+          "n": 2,
+          "recall@3": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "mrr": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          }
+        },
+        "paraphrase": {
+          "n": 7,
+          "recall@3": {
+            "value": 0.8571,
+            "ci": [
+              0.5714,
+              1.0
+            ],
+            "n": 7
+          },
+          "mrr": {
+            "value": 0.6349,
+            "ci": [
+              0.381,
+              0.873
+            ],
+            "n": 7
+          }
+        },
+        "specific": {
+          "n": 6,
+          "recall@3": {
+            "value": 0.8333,
+            "ci": [
+              0.5,
+              1.0
+            ],
+            "n": 6
+          },
+          "mrr": {
+            "value": 0.7917,
+            "ci": [
+              0.5417,
+              1.0
+            ],
+            "n": 6
+          }
+        }
+      },
+      "ranking_by_author": {
+        "assistant": {
+          "n": 15,
+          "recall@3": {
+            "value": 0.8667,
+            "ci": [
+              0.6667,
+              1.0
+            ],
+            "n": 15
+          },
+          "mrr": {
+            "value": 0.7463,
+            "ci": [
+              0.5741,
+              0.9
+            ],
+            "n": 15
+          }
+        }
+      },
+      "operating_point_tuned": {
+        "thresholds": {
+          "embedding": 0.7
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 0.5,
+          "ci": [
+            0.0,
+            1.0
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.1333,
+          "ci": [
+            0.0,
+            0.3333
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.4667,
+          "ci": [
+            0.2,
+            0.7333
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.6667,
+          "ci": [
+            0.4,
+            0.8667
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.6667,
+          "ci": [
+            0.4,
+            0.8667
+          ],
+          "n": 15
+        }
+      },
+      "operating_point_at_product_defaults": {
+        "thresholds": {
+          "embedding": 0.5
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 0.25,
+          "ci": [
+            0.0,
+            0.75
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 0.5,
+            "ci": [
+              0.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8667
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.8667,
+          "ci": [
+            0.6667,
+            1.0
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        }
+      },
+      "balanced_accuracy_tuned": 0.6834,
+      "threshold_sweep": [
+        {
+          "threshold": 0.3,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.4,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.45,
+          "correct_abstain": 0.0,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.5,
+          "correct_abstain": 0.25,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.55,
+          "correct_abstain": 0.5,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.6,
+          "correct_abstain": 0.5,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.65,
+          "correct_abstain": 0.5,
+          "false_abstain": 0.0,
+          "end_to_end_recall@3": 0.8667
+        },
+        {
+          "threshold": 0.7,
+          "correct_abstain": 0.5,
+          "false_abstain": 0.1333,
+          "end_to_end_recall@3": 0.6667
+        },
+        {
+          "threshold": 0.75,
+          "correct_abstain": 1.0,
+          "false_abstain": 0.5333,
+          "end_to_end_recall@3": 0.4
+        }
+      ],
+      "latency_ms": {
+        "median": 5.076,
+        "p95": 516.64
+      },
+      "per_question": [
+        {
+          "id": "con-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "How many Senators does each State have?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7451
+          },
+          "top": [
+            [
+              "us-constitution",
+              8,
+              0.7451
+            ],
+            [
+              "us-constitution",
+              75,
+              0.7442
+            ],
+            [
+              "us-constitution",
+              52,
+              0.7147
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "us-constitution",
+              8
+            ],
+            [
+              "us-constitution",
+              75
+            ]
+          ]
+        },
+        {
+          "id": "con-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7919
+          },
+          "top": [
+            [
+              "us-constitution",
+              43,
+              0.7919
+            ],
+            [
+              "us-constitution",
+              32,
+              0.767
+            ],
+            [
+              "us-constitution",
+              40,
+              0.7586
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "us-constitution",
+              32
+            ]
+          ]
+        },
+        {
+          "id": "con-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does the Constitution protect the right of people to own weapons?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.8084
+          },
+          "top": [
+            [
+              "us-constitution",
+              75,
+              0.8084
+            ],
+            [
+              "us-constitution",
+              54,
+              0.7306
+            ],
+            [
+              "us-constitution",
+              13,
+              0.7271
+            ]
+          ],
+          "rank": 9,
+          "relevant": [
+            [
+              "us-constitution",
+              19
+            ]
+          ]
+        },
+        {
+          "id": "csf-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "What are the six Functions of the CSF Core?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7902
+          },
+          "top": [
+            [
+              "nist-csf",
+              31,
+              0.7902
+            ],
+            [
+              "nist-csf",
+              8,
+              0.7706
+            ],
+            [
+              "nist-csf",
+              7,
+              0.7692
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-csf",
+              8
+            ],
+            [
+              "nist-csf",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "csf-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Which short beginner guides help a company get started with the framework?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.6796
+          },
+          "top": [
+            [
+              "nist-csf",
+              14,
+              0.6796
+            ],
+            [
+              "nist-csf",
+              14,
+              0.6549
+            ],
+            [
+              "nist-csf",
+              5,
+              0.6466
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-csf",
+              6
+            ],
+            [
+              "nist-csf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "csf-03",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7435
+          },
+          "top": [
+            [
+              "nist-csf",
+              30,
+              0.7435
+            ],
+            [
+              "nist-csf",
+              29,
+              0.7267
+            ],
+            [
+              "nist-csf",
+              12,
+              0.7258
+            ]
+          ],
+          "rank": 3,
+          "relevant": [
+            [
+              "nist-csf",
+              12
+            ]
+          ]
+        },
+        {
+          "id": "fed-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Why do the central bank's regional territories cut across state boundaries?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7255
+          },
+          "top": [
+            [
+              "fed-explained",
+              11,
+              0.7255
+            ],
+            [
+              "fed-explained",
+              64,
+              0.7119
+            ],
+            [
+              "fed-explained",
+              79,
+              0.7119
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "fed-explained",
+              11
+            ]
+          ]
+        },
+        {
+          "id": "fed-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.8522
+          },
+          "top": [
+            [
+              "fed-explained",
+              16,
+              0.8522
+            ],
+            [
+              "fed-explained",
+              17,
+              0.7293
+            ],
+            [
+              "fed-explained",
+              16,
+              0.7222
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "fed-explained",
+              16
+            ]
+          ]
+        },
+        {
+          "id": "off-03",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "Who won the 2018 FIFA World Cup?",
+          "answerable": false,
+          "gate": {
+            "embedding": 0.5266
+          },
+          "top": [
+            [
+              "fed-explained",
+              64,
+              0.5266
+            ],
+            [
+              "fed-explained",
+              64,
+              0.517
+            ],
+            [
+              "fed-explained",
+              38,
+              0.4964
+            ]
+          ]
+        },
+        {
+          "id": "off-05",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "How many moons does Mars have?",
+          "answerable": false,
+          "gate": {
+            "embedding": 0.4906
+          },
+          "top": [
+            [
+              "us-constitution",
+              44,
+              0.4906
+            ],
+            [
+              "us-constitution",
+              21,
+              0.4778
+            ],
+            [
+              "us-constitution",
+              30,
+              0.4778
+            ]
+          ]
+        },
+        {
+          "id": "rmf-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.863
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              14,
+              0.863
+            ],
+            [
+              "nist-ai-rmf",
+              15,
+              0.8255
+            ],
+            [
+              "nist-ai-rmf",
+              5,
+              0.7841
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "rmf-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7378
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              28,
+              0.7378
+            ],
+            [
+              "nist-ai-rmf",
+              45,
+              0.7147
+            ],
+            [
+              "nist-ai-rmf",
+              29,
+              0.7106
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              28
+            ]
+          ]
+        },
+        {
+          "id": "rmf-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+          "answerable": false,
+          "gate": {
+            "embedding": 0.7386
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              3,
+              0.7386
+            ],
+            [
+              "nist-ai-rmf",
+              7,
+              0.7245
+            ],
+            [
+              "nist-ai-rmf",
+              47,
+              0.7158
+            ]
+          ]
+        },
+        {
+          "id": "sleep-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.8463
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              29,
+              0.8463
+            ],
+            [
+              "nhlbi-sleep",
+              27,
+              0.8462
+            ],
+            [
+              "nhlbi-sleep",
+              29,
+              0.7575
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              27
+            ]
+          ]
+        },
+        {
+          "id": "sleep-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long does each pause in breathing typically last in sleep apnea?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.8839
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              44,
+              0.8839
+            ],
+            [
+              "nhlbi-sleep",
+              44,
+              0.7615
+            ],
+            [
+              "nhlbi-sleep",
+              46,
+              0.731
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              44
+            ]
+          ]
+        },
+        {
+          "id": "sleep-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "What daily melatonin dose does the guide recommend for insomnia?",
+          "answerable": false,
+          "gate": {
+            "embedding": 0.7443
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              17,
+              0.7443
+            ],
+            [
+              "nhlbi-sleep",
+              44,
+              0.7373
+            ],
+            [
+              "nhlbi-sleep",
+              43,
+              0.7148
+            ]
+          ]
+        },
+        {
+          "id": "x-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7138
+          },
+          "top": [
+            [
+              "nist-csf",
+              9,
+              0.7138
+            ],
+            [
+              "nist-ai-rmf",
+              20,
+              0.6825
+            ],
+            [
+              "nist-ai-rmf",
+              11,
+              0.6568
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              20
+            ]
+          ]
+        },
+        {
+          "id": "x-06",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.7392
+          },
+          "top": [
+            [
+              "fed-explained",
+              20,
+              0.7392
+            ],
+            [
+              "fed-explained",
+              21,
+              0.7116
+            ],
+            [
+              "fed-explained",
+              21,
+              0.6956
+            ]
+          ],
+          "rank": 4,
+          "relevant": [
+            [
+              "fed-explained",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "x-08",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+          "answerable": true,
+          "gate": {
+            "embedding": 0.6836
+          },
+          "top": [
+            [
+              "us-constitution",
+              30,
+              0.6836
+            ],
+            [
+              "us-constitution",
+              80,
+              0.6811
+            ],
+            [
+              "us-constitution",
+              52,
+              0.6719
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "us-constitution",
+              30
+            ],
+            [
+              "us-constitution",
+              52
+            ],
+            [
+              "us-constitution",
+              69
+            ],
+            [
+              "us-constitution",
+              84
+            ]
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "label": "Hybrid (experimental)",
+      "ranking": {
+        "recall@1": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8
+          ],
+          "n": 15
+        },
+        "recall@3": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        },
+        "recall@5": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        },
+        "mrr": {
+          "value": 0.7639,
+          "ci": [
+            0.6,
+            0.9
+          ],
+          "n": 15
+        },
+        "precision@3": {
+          "value": 0.4444,
+          "ci": [
+            0.3333,
+            0.5556
+          ],
+          "n": 15
+        }
+      },
+      "ranking_by_type": {
+        "direct": {
+          "n": 2,
+          "recall@3": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "mrr": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          }
+        },
+        "paraphrase": {
+          "n": 7,
+          "recall@3": {
+            "value": 0.8571,
+            "ci": [
+              0.5714,
+              1.0
+            ],
+            "n": 7
+          },
+          "mrr": {
+            "value": 0.5655,
+            "ci": [
+              0.3631,
+              0.7857
+            ],
+            "n": 7
+          }
+        },
+        "specific": {
+          "n": 6,
+          "recall@3": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 6
+          },
+          "mrr": {
+            "value": 0.9167,
+            "ci": [
+              0.75,
+              1.0
+            ],
+            "n": 6
+          }
+        }
+      },
+      "ranking_by_author": {
+        "assistant": {
+          "n": 15,
+          "recall@3": {
+            "value": 0.9333,
+            "ci": [
+              0.8,
+              1.0
+            ],
+            "n": 15
+          },
+          "mrr": {
+            "value": 0.7639,
+            "ci": [
+              0.6,
+              0.9
+            ],
+            "n": 15
+          }
+        }
+      },
+      "operating_point_tuned": {
+        "thresholds": {
+          "tfidf": 0.25,
+          "embedding": 0.7
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 0.5,
+          "ci": [
+            0.0,
+            1.0
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.1333,
+          "ci": [
+            0.0,
+            0.3333
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 1.0,
+            "ci": [
+              1.0,
+              1.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.5333,
+          "ci": [
+            0.2667,
+            0.8
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.8,
+          "ci": [
+            0.6,
+            1.0
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.8,
+          "ci": [
+            0.6,
+            1.0
+          ],
+          "n": 15
+        }
+      },
+      "operating_point_at_product_defaults": {
+        "thresholds": {
+          "tfidf": 0.05,
+          "embedding": 0.5
+        },
+        "abstention_accuracy_on_unanswerable": {
+          "value": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "n": 4
+        },
+        "false_abstain_rate_on_answerable": {
+          "value": 0.0,
+          "ci": [
+            0.0,
+            0.0
+          ],
+          "n": 15
+        },
+        "abstention_by_unanswerable_type": {
+          "unanswerable_offtopic": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          },
+          "unanswerable_related": {
+            "value": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "n": 2
+          }
+        },
+        "end_to_end_recall@1": {
+          "value": 0.6,
+          "ci": [
+            0.3333,
+            0.8
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@3": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        },
+        "end_to_end_recall@5": {
+          "value": 0.9333,
+          "ci": [
+            0.8,
+            1.0
+          ],
+          "n": 15
+        }
+      },
+      "balanced_accuracy_tuned": 0.6834,
+      "threshold_sweep": [],
+      "latency_ms": {
+        "median": 5.49,
+        "p95": 6.43
+      },
+      "per_question": [
+        {
+          "id": "con-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "How many Senators does each State have?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1424,
+            "embedding": 0.7451
+          },
+          "top": [
+            [
+              "us-constitution",
+              75,
+              0.0325
+            ],
+            [
+              "us-constitution",
+              52,
+              0.032
+            ],
+            [
+              "us-constitution",
+              8,
+              0.0303
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "us-constitution",
+              8
+            ],
+            [
+              "us-constitution",
+              75
+            ]
+          ]
+        },
+        {
+          "id": "con-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1252,
+            "embedding": 0.7919
+          },
+          "top": [
+            [
+              "us-constitution",
+              32,
+              0.0311
+            ],
+            [
+              "us-constitution",
+              40,
+              0.0302
+            ],
+            [
+              "us-constitution",
+              43,
+              0.0301
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "us-constitution",
+              32
+            ]
+          ]
+        },
+        {
+          "id": "con-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does the Constitution protect the right of people to own weapons?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1609,
+            "embedding": 0.8084
+          },
+          "top": [
+            [
+              "us-constitution",
+              75,
+              0.0328
+            ],
+            [
+              "us-constitution",
+              54,
+              0.0308
+            ],
+            [
+              "us-constitution",
+              19,
+              0.0304
+            ]
+          ],
+          "rank": 3,
+          "relevant": [
+            [
+              "us-constitution",
+              19
+            ]
+          ]
+        },
+        {
+          "id": "csf-01",
+          "type": "direct",
+          "author": "assistant",
+          "question": "What are the six Functions of the CSF Core?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3026,
+            "embedding": 0.7902
+          },
+          "top": [
+            [
+              "nist-csf",
+              31,
+              0.0325
+            ],
+            [
+              "nist-csf",
+              8,
+              0.032
+            ],
+            [
+              "nist-csf",
+              20,
+              0.0318
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-csf",
+              8
+            ],
+            [
+              "nist-csf",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "csf-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Which short beginner guides help a company get started with the framework?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1304,
+            "embedding": 0.6796
+          },
+          "top": [
+            [
+              "nist-csf",
+              14,
+              0.0323
+            ],
+            [
+              "nist-csf",
+              14,
+              0.0313
+            ],
+            [
+              "nist-csf",
+              2,
+              0.031
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-csf",
+              6
+            ],
+            [
+              "nist-csf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "csf-03",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2012,
+            "embedding": 0.7435
+          },
+          "top": [
+            [
+              "nist-csf",
+              6,
+              0.0318
+            ],
+            [
+              "nist-csf",
+              6,
+              0.0309
+            ],
+            [
+              "nist-csf",
+              29,
+              0.03
+            ]
+          ],
+          "rank": 8,
+          "relevant": [
+            [
+              "nist-csf",
+              12
+            ]
+          ]
+        },
+        {
+          "id": "fed-04",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Why do the central bank's regional territories cut across state boundaries?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1487,
+            "embedding": 0.7255
+          },
+          "top": [
+            [
+              "fed-explained",
+              76,
+              0.0306
+            ],
+            [
+              "fed-explained",
+              11,
+              0.0303
+            ],
+            [
+              "fed-explained",
+              10,
+              0.0296
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "fed-explained",
+              11
+            ]
+          ]
+        },
+        {
+          "id": "fed-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2871,
+            "embedding": 0.8522
+          },
+          "top": [
+            [
+              "fed-explained",
+              16,
+              0.0328
+            ],
+            [
+              "fed-explained",
+              17,
+              0.032
+            ],
+            [
+              "fed-explained",
+              21,
+              0.0315
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "fed-explained",
+              16
+            ]
+          ]
+        },
+        {
+          "id": "off-03",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "Who won the 2018 FIFA World Cup?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1128,
+            "embedding": 0.5266
+          },
+          "top": [
+            [
+              "fed-explained",
+              64,
+              0.0313
+            ],
+            [
+              "fed-explained",
+              64,
+              0.0286
+            ],
+            [
+              "fed-explained",
+              63,
+              0.0269
+            ]
+          ]
+        },
+        {
+          "id": "off-05",
+          "type": "unanswerable_offtopic",
+          "author": "assistant",
+          "question": "How many moons does Mars have?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1854,
+            "embedding": 0.4906
+          },
+          "top": [
+            [
+              "fed-explained",
+              1,
+              0.0164
+            ],
+            [
+              "us-constitution",
+              44,
+              0.0164
+            ],
+            [
+              "fed-explained",
+              3,
+              0.0161
+            ]
+          ]
+        },
+        {
+          "id": "rmf-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3463,
+            "embedding": 0.863
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              14,
+              0.0328
+            ],
+            [
+              "nist-ai-rmf",
+              15,
+              0.0323
+            ],
+            [
+              "nist-ai-rmf",
+              5,
+              0.0317
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              14
+            ]
+          ]
+        },
+        {
+          "id": "rmf-05",
+          "type": "specific",
+          "author": "assistant",
+          "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.236,
+            "embedding": 0.7378
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              28,
+              0.0328
+            ],
+            [
+              "nist-ai-rmf",
+              1,
+              0.0313
+            ],
+            [
+              "nist-ai-rmf",
+              45,
+              0.0308
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              28
+            ]
+          ]
+        },
+        {
+          "id": "rmf-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1884,
+            "embedding": 0.7386
+          },
+          "top": [
+            [
+              "nist-ai-rmf",
+              47,
+              0.0312
+            ],
+            [
+              "nist-ai-rmf",
+              24,
+              0.0296
+            ],
+            [
+              "nist-ai-rmf",
+              1,
+              0.0292
+            ]
+          ]
+        },
+        {
+          "id": "sleep-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.3136,
+            "embedding": 0.8463
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              27,
+              0.0325
+            ],
+            [
+              "nhlbi-sleep",
+              29,
+              0.0323
+            ],
+            [
+              "nhlbi-sleep",
+              27,
+              0.0318
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              27
+            ]
+          ]
+        },
+        {
+          "id": "sleep-03",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How long does each pause in breathing typically last in sleep apnea?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2629,
+            "embedding": 0.8839
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              44,
+              0.0328
+            ],
+            [
+              "nhlbi-sleep",
+              44,
+              0.0323
+            ],
+            [
+              "nhlbi-sleep",
+              46,
+              0.0312
+            ]
+          ],
+          "rank": 1,
+          "relevant": [
+            [
+              "nhlbi-sleep",
+              44
+            ]
+          ]
+        },
+        {
+          "id": "sleep-06",
+          "type": "unanswerable_related",
+          "author": "assistant",
+          "question": "What daily melatonin dose does the guide recommend for insomnia?",
+          "answerable": false,
+          "gate": {
+            "tfidf": 0.1833,
+            "embedding": 0.7443
+          },
+          "top": [
+            [
+              "nhlbi-sleep",
+              17,
+              0.0325
+            ],
+            [
+              "nhlbi-sleep",
+              44,
+              0.0325
+            ],
+            [
+              "nhlbi-sleep",
+              35,
+              0.0305
+            ]
+          ]
+        },
+        {
+          "id": "x-02",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.0808,
+            "embedding": 0.7138
+          },
+          "top": [
+            [
+              "nist-csf",
+              9,
+              0.0328
+            ],
+            [
+              "nist-ai-rmf",
+              20,
+              0.0304
+            ],
+            [
+              "nist-ai-rmf",
+              44,
+              0.0268
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "nist-ai-rmf",
+              20
+            ]
+          ]
+        },
+        {
+          "id": "x-06",
+          "type": "specific",
+          "author": "assistant",
+          "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.2481,
+            "embedding": 0.7392
+          },
+          "top": [
+            [
+              "fed-explained",
+              20,
+              0.0328
+            ],
+            [
+              "fed-explained",
+              31,
+              0.0312
+            ],
+            [
+              "fed-explained",
+              16,
+              0.029
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "fed-explained",
+              31
+            ]
+          ]
+        },
+        {
+          "id": "x-08",
+          "type": "paraphrase",
+          "author": "assistant",
+          "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+          "answerable": true,
+          "gate": {
+            "tfidf": 0.1227,
+            "embedding": 0.6836
+          },
+          "top": [
+            [
+              "us-constitution",
+              80,
+              0.0304
+            ],
+            [
+              "us-constitution",
+              52,
+              0.0303
+            ],
+            [
+              "us-constitution",
+              30,
+              0.0303
+            ]
+          ],
+          "rank": 2,
+          "relevant": [
+            [
+              "us-constitution",
+              30
+            ],
+            [
+              "us-constitution",
+              52
+            ],
+            [
+              "us-constitution",
+              69
+            ],
+            [
+              "us-constitution",
+              84
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "product_keyword_latency_ms": {
+    "median": 106.7,
+    "p95": 109.7,
+    "queries": 6
+  },
+  "chunk_experiment": {
+    "split": "dev",
+    "chosen": 950,
+    "rows": {
+      "500/90": {
+        "chunks": 2412,
+        "tfidf": {
+          "recall@3": {
+            "value": 0.6667,
+            "ci": [
+              0.4444,
+              0.8889
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.6844,
+            "ci": [
+              0.4746,
+              0.8935
+            ],
+            "n": 18
+          }
+        },
+        "embedding": {
+          "recall@3": {
+            "value": 0.7778,
+            "ci": [
+              0.6111,
+              0.9444
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.7356,
+            "ci": [
+              0.5595,
+              0.9074
+            ],
+            "n": 18
+          }
+        },
+        "hybrid": {
+          "recall@3": {
+            "value": 0.7778,
+            "ci": [
+              0.5556,
+              0.9444
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.7278,
+            "ci": [
+              0.5482,
+              0.9074
+            ],
+            "n": 18
+          }
+        }
+      },
+      "950/170": {
+        "chunks": 1345,
+        "tfidf": {
+          "recall@3": {
+            "value": 0.6667,
+            "ci": [
+              0.4444,
+              0.8889
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.6598,
+            "ci": [
+              0.4657,
+              0.8634
+            ],
+            "n": 18
+          }
+        },
+        "embedding": {
+          "recall@3": {
+            "value": 0.7778,
+            "ci": [
+              0.5556,
+              0.9444
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.728,
+            "ci": [
+              0.5457,
+              0.9089
+            ],
+            "n": 18
+          }
+        },
+        "hybrid": {
+          "recall@3": {
+            "value": 0.6667,
+            "ci": [
+              0.4444,
+              0.8889
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.6718,
+            "ci": [
+              0.4707,
+              0.869
+            ],
+            "n": 18
+          }
+        }
+      },
+      "1500/270": {
+        "chunks": 887,
+        "tfidf": {
+          "recall@3": {
+            "value": 0.6667,
+            "ci": [
+              0.4444,
+              0.8889
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.6623,
+            "ci": [
+              0.4683,
+              0.8673
+            ],
+            "n": 18
+          }
+        },
+        "embedding": {
+          "recall@3": {
+            "value": 0.7778,
+            "ci": [
+              0.5556,
+              0.9444
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.6918,
+            "ci": [
+              0.4915,
+              0.8722
+            ],
+            "n": 18
+          }
+        },
+        "hybrid": {
+          "recall@3": {
+            "value": 0.7778,
+            "ci": [
+              0.5556,
+              0.9444
+            ],
+            "n": 18
+          },
+          "mrr": {
+            "value": 0.7563,
+            "ci": [
+              0.564,
+              0.9444
+            ],
+            "n": 18
+          }
+        }
+      }
+    }
+  },
+  "recommendation": {
+    "rule": "docs/m7-design.md, pre-registered rule 3",
+    "keyword_balanced_accuracy": 0.6666,
+    "candidates": [
+      {
+        "method": "embedding",
+        "condition_met": true,
+        "difference_demonstrated": false,
+        "balanced_accuracy": 0.6834
+      },
+      {
+        "method": "hybrid",
+        "condition_met": true,
+        "difference_demonstrated": false,
+        "balanced_accuracy": 0.6834
+      }
+    ],
+    "text": "Meaning (embeddings) and Hybrid (experimental) met the pre-registered condition for RECOMMENDING a change of default (higher Recall@3 and MRR, balanced accuracy not lower), but no difference is demonstrated: the 95% intervals overlap. This is a judgment call for the project owner, not a measured win."
+  },
+  "analysis": {
+    "schema": 1,
+    "written": "2026-11-04",
+    "note": "Written AFTER the held-out test split was scored. It is descriptive only: no retrieval code, threshold, label or question was changed in response to it (pre-registered rule 5).",
+    "patterns": [
+      {
+        "title": "Keyword search fails when the question's words differ from the passage's",
+        "evidence": "Recall@3 on paraphrase questions: keyword 0.43, meaning 0.86 (7 questions; the intervals overlap, so this is suggestive, not demonstrated).",
+        "example_ids": [
+          "csf-03",
+          "fed-04",
+          "x-02",
+          "x-08"
+        ]
+      },
+      {
+        "title": "Meaning search's typical error is a topical neighbor, not noise",
+        "evidence": "Its wrong top hits were real, related passages (the Constitution's qualification ages instead of the voting age; the Cybersecurity Framework's 'resilience of technology infrastructure' instead of the AI framework's resilience definition; the FOMC's membership page instead of its meeting schedule). Plausible-looking wrong evidence is harder for a reader to spot than an obviously irrelevant hit.",
+        "example_ids": [
+          "con-03",
+          "x-02",
+          "x-06"
+        ]
+      },
+      {
+        "title": "Meaning search cannot tell 'related but unanswerable' from a real answer",
+        "evidence": "Best similarity: both related-but-unanswerable questions scored 0.74, inside the 0.68-0.88 range of real answers; off-topic questions scored 0.49-0.53. A threshold can reject off-topic questions but not on-topic questions whose answer is absent. Only 4 unanswerable test questions exist, so every abstention number has a very wide interval.",
+        "example_ids": [
+          "rmf-06",
+          "sleep-06",
+          "off-03",
+          "off-05"
+        ]
+      },
+      {
+        "title": "The keyword score cannot be gated usefully",
+        "evidence": "At its tuned threshold (0.25) keyword search abstained correctly on all 4 unanswerable questions but also refused 10 of 15 answerable ones; at the old default (0.05) it never abstained. Keyword scores do not separate 'no answer' from 'weak answer'.",
+        "example_ids": []
+      },
+      {
+        "title": "Thresholds tuned on the development split generalized worse than they looked",
+        "evidence": "Meaning search's correct abstention fell from 0.75 (dev, where it was tuned) to 0.50 (test); its end-to-end Recall@3 at the tuned threshold was 0.67 on test versus 0.87 at the old default. Tuning on a few dozen questions overfits; the test split exists to show exactly this.",
+        "example_ids": []
+      },
+      {
+        "title": "PDF layout noise is a separate source of error",
+        "evidence": "Two-column tables are extracted with the columns interleaved, which scrambles sentences. On the development split meaning search missed a direct question whose answer sat in such a table; the same table page was found in the test run, so this is an observation, not a measured rate.",
+        "example_ids": []
+      }
+    ],
+    "label_limitations": [
+      {
+        "id": "con-04",
+        "explanation": "The Constitution edition includes an analytical index that restates provisions. For the Second Amendment, index pages 75 and 54 quote the text with different capitalization and punctuation ('arms shall' instead of 'Arms, shall'), so my literal answer phrase matched only the amendment's own page (19). Meaning search put the index pages first; they genuinely state the answer, but the frozen labels count them as wrong. The reported miss therefore overstates the failure. Labels were not changed after the test run (pre-registered)."
+      }
+    ],
+    "misses": [
+      {
+        "id": "con-03",
+        "category": "adjacent_topic",
+        "ranks": {
+          "keyword": 7,
+          "meaning": 2,
+          "hybrid": 1
+        },
+        "explanation": "Keyword search matched pages that merely share words with the question (an index entry about a majority vote). Meaning search ranked the index entries for senator and representative qualifications (ages thirty and twenty-five) first: right kind of rule, wrong rule. The answer page was second."
+      },
+      {
+        "id": "con-04",
+        "category": "label_gap",
+        "ranks": {
+          "keyword": 3,
+          "meaning": 9,
+          "hybrid": 3
+        },
+        "explanation": "See the label limitation above: the pages ranked first are index entries that restate the Second Amendment."
+      },
+      {
+        "id": "csf-03",
+        "category": "vocabulary_gap",
+        "ranks": {
+          "keyword": 15,
+          "meaning": 3,
+          "hybrid": 8
+        },
+        "explanation": "The question never mentions 'gap', 'Profile' or 'action plan', the words on the answer page. Keyword search returned generic framework overview pages. Meaning search returned the Tiers appendix pages (organizational posture) and found the answer third."
+      },
+      {
+        "id": "fed-04",
+        "category": "vocabulary_gap",
+        "ranks": {
+          "keyword": 12,
+          "meaning": 1,
+          "hybrid": 2
+        },
+        "explanation": "Keyword search matched 'central bank' in the document's repeated title pages. Meaning search understood that 'territories cutting across state boundaries' means the Federal Reserve Districts."
+      },
+      {
+        "id": "x-02",
+        "category": "adjacent_topic",
+        "ranks": {
+          "keyword": 10,
+          "meaning": 2,
+          "hybrid": 2
+        },
+        "explanation": "Keyword search matched the words 'protect', 'attacks' and 'recover' in the Cybersecurity Framework. Meaning search ranked a Cybersecurity Framework passage about the resilience of technology infrastructure first (a different document) and the correct AI-framework definition second."
+      },
+      {
+        "id": "x-06",
+        "category": "adjacent_topic",
+        "ranks": {
+          "keyword": 4,
+          "meaning": 4,
+          "hybrid": 2
+        },
+        "explanation": "All methods ranked the FOMC membership page above the page that states 'eight regularly scheduled joint meetings'. That membership page does not mention how often the committee meets: it is the right topic and the wrong passage. A true miss."
+      },
+      {
+        "id": "x-08",
+        "category": "vocabulary_gap",
+        "ranks": {
+          "keyword": 5,
+          "meaning": 1,
+          "hybrid": 2
+        },
+        "explanation": "Keyword search latched onto isolated words ('tax' in a clause about importing slaves, 'election' in vacancy rules). The question says 'fee to vote'; the text says 'poll tax'. Meaning search got it first."
+      }
+    ]
+  },
+  "not_measured": [
+    "Citation accuracy and faithfulness of generated answers (needs a language-model key; retrieval only is measured here).",
+    "Production latency: the figures here exclude network and database time, and the product refits keyword search per query.",
+    "Different document types, languages, scanned PDFs, or very large libraries."
+  ]
+}

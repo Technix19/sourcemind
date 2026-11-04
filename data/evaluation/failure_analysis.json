@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "written": "2026-11-04",
+  "note": "Written AFTER the held-out test split was scored. It is descriptive only: no retrieval code, threshold, label or question was changed in response to it (pre-registered rule 5).",
+  "patterns": [
+    {
+      "title": "Keyword search fails when the question's words differ from the passage's",
+      "evidence": "Recall@3 on paraphrase questions: keyword 0.43, meaning 0.86 (7 questions; the intervals overlap, so this is suggestive, not demonstrated).",
+      "example_ids": [
+        "csf-03",
+        "fed-04",
+        "x-02",
+        "x-08"
+      ]
+    },
+    {
+      "title": "Meaning search's typical error is a topical neighbor, not noise",
+      "evidence": "Its wrong top hits were real, related passages (the Constitution's qualification ages instead of the voting age; the Cybersecurity Framework's 'resilience of technology infrastructure' instead of the AI framework's resilience definition; the FOMC's membership page instead of its meeting schedule). Plausible-looking wrong evidence is harder for a reader to spot than an obviously irrelevant hit.",
+      "example_ids": [
+        "con-03",
+        "x-02",
+        "x-06"
+      ]
+    },
+    {
+      "title": "Meaning search cannot tell 'related but unanswerable' from a real answer",
+      "evidence": "Best similarity: both related-but-unanswerable questions scored 0.74, inside the 0.68-0.88 range of real answers; off-topic questions scored 0.49-0.53. A threshold can reject off-topic questions but not on-topic questions whose answer is absent. Only 4 unanswerable test questions exist, so every abstention number has a very wide interval.",
+      "example_ids": [
+        "rmf-06",
+        "sleep-06",
+        "off-03",
+        "off-05"
+      ]
+    },
+    {
+      "title": "The keyword score cannot be gated usefully",
+      "evidence": "At its tuned threshold (0.25) keyword search abstained correctly on all 4 unanswerable questions but also refused 10 of 15 answerable ones; at the old default (0.05) it never abstained. Keyword scores do not separate 'no answer' from 'weak answer'.",
+      "example_ids": []
+    },
+    {
+      "title": "Thresholds tuned on the development split generalized worse than they looked",
+      "evidence": "Meaning search's correct abstention fell from 0.75 (dev, where it was tuned) to 0.50 (test); its end-to-end Recall@3 at the tuned threshold was 0.67 on test versus 0.87 at the old default. Tuning on a few dozen questions overfits; the test split exists to show exactly this.",
+      "example_ids": []
+    },
+    {
+      "title": "PDF layout noise is a separate source of error",
+      "evidence": "Two-column tables are extracted with the columns interleaved, which scrambles sentences. On the development split meaning search missed a direct question whose answer sat in such a table; the same table page was found in the test run, so this is an observation, not a measured rate.",
+      "example_ids": []
+    }
+  ],
+  "label_limitations": [
+    {
+      "id": "con-04",
+      "explanation": "The Constitution edition includes an analytical index that restates provisions. For the Second Amendment, index pages 75 and 54 quote the text with different capitalization and punctuation ('arms shall' instead of 'Arms, shall'), so my literal answer phrase matched only the amendment's own page (19). Meaning search put the index pages first; they genuinely state the answer, but the frozen labels count them as wrong. The reported miss therefore overstates the failure. Labels were not changed after the test run (pre-registered)."
+    }
+  ],
+  "misses": [
+    {
+      "id": "con-03",
+      "category": "adjacent_topic",
+      "ranks": {
+        "keyword": 7,
+        "meaning": 2,
+        "hybrid": 1
+      },
+      "explanation": "Keyword search matched pages that merely share words with the question (an index entry about a majority vote). Meaning search ranked the index entries for senator and representative qualifications (ages thirty and twenty-five) first: right kind of rule, wrong rule. The answer page was second."
+    },
+    {
+      "id": "con-04",
+      "category": "label_gap",
+      "ranks": {
+        "keyword": 3,
+        "meaning": 9,
+        "hybrid": 3
+      },
+      "explanation": "See the label limitation above: the pages ranked first are index entries that restate the Second Amendment."
+    },
+    {
+      "id": "csf-03",
+      "category": "vocabulary_gap",
+      "ranks": {
+        "keyword": 15,
+        "meaning": 3,
+        "hybrid": 8
+      },
+      "explanation": "The question never mentions 'gap', 'Profile' or 'action plan', the words on the answer page. Keyword search returned generic framework overview pages. Meaning search returned the Tiers appendix pages (organizational posture) and found the answer third."
+    },
+    {
+      "id": "fed-04",
+      "category": "vocabulary_gap",
+      "ranks": {
+        "keyword": 12,
+        "meaning": 1,
+        "hybrid": 2
+      },
+      "explanation": "Keyword search matched 'central bank' in the document's repeated title pages. Meaning search understood that 'territories cutting across state boundaries' means the Federal Reserve Districts."
+    },
+    {
+      "id": "x-02",
+      "category": "adjacent_topic",
+      "ranks": {
+        "keyword": 10,
+        "meaning": 2,
+        "hybrid": 2
+      },
+      "explanation": "Keyword search matched the words 'protect', 'attacks' and 'recover' in the Cybersecurity Framework. Meaning search ranked a Cybersecurity Framework passage about the resilience of technology infrastructure first (a different document) and the correct AI-framework definition second."
+    },
+    {
+      "id": "x-06",
+      "category": "adjacent_topic",
+      "ranks": {
+        "keyword": 4,
+        "meaning": 4,
+        "hybrid": 2
+      },
+      "explanation": "All methods ranked the FOMC membership page above the page that states 'eight regularly scheduled joint meetings'. That membership page does not mention how often the committee meets: it is the right topic and the wrong passage. A true miss."
+    },
+    {
+      "id": "x-08",
+      "category": "vocabulary_gap",
+      "ranks": {
+        "keyword": 5,
+        "meaning": 1,
+        "hybrid": 2
+      },
+      "explanation": "Keyword search latched onto isolated words ('tax' in a clause about importing slaves, 'election' in vacancy rules). The question says 'fee to vote'; the text says 'poll tax'. Meaning search got it first."
+    }
+  ]
+}

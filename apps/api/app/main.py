@@ -16,6 +16,7 @@ from .answering import (
 from .auth import AuthGate
 from .config import get_settings
 from .embeddings import EmbeddingError, get_embedder, warm_up
+from .evaluation_results import ResultsUnreadable, load_latest
 from .ingestion import IngestionError, build_chunks, content_type_for, extract_pages, sanitize_filename
 from .llm import generation_available, get_llm_client
 from .repository import SIGNED_URL_SECONDS, Repository, RepositoryError, get_repository
@@ -67,6 +68,18 @@ def health() -> dict:
         "generation_available": generation_available(),  # a boolean, never the key
         "meaning_search_available": get_embedder() is not None,  # switched on (not necessarily loaded yet)
     }
+
+
+@app.get("/api/v1/evaluation/latest")
+def latest_evaluation() -> dict:
+    """Measured retrieval results (see data/evaluation). Static and public; only shown to signed-in users like every other route."""
+    try:
+        results = load_latest()
+    except ResultsUnreadable:
+        raise HTTPException(503, "The published evaluation results could not be read.") from None
+    if results is None:
+        raise HTTPException(404, "No evaluation results have been published yet.")
+    return results
 
 
 def _process(filename: str, raw: bytes) -> tuple[int, list]:
