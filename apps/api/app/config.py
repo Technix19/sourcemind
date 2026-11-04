@@ -33,12 +33,24 @@ class Settings:
     min_embedding_score: float
     supabase_url: str
     supabase_anon_key: str = field(repr=False)  # public key, but still kept out of logs
+    rate_queries_per_minute: int = 30
+    rate_uploads_per_hour: int = 10
+    rate_other_per_minute: int = 120
+    daily_generations: int = 20
 
 
 def _base_url(raw: str) -> str:
     """Scheme + host only, so a pasted '.../rest/v1/' still works."""
     parsed = urlparse(raw.strip())
     return f"{parsed.scheme}://{parsed.netloc}" if parsed.scheme and parsed.netloc else ""
+
+
+def _positive(name: str, default: int) -> int:
+    try:
+        value = int(os.getenv(name, ""))
+    except ValueError:
+        return default
+    return value if value > 0 else default
 
 
 def get_settings() -> Settings:
@@ -67,4 +79,10 @@ def get_settings() -> Settings:
         min_embedding_score=float(os.getenv("MIN_EMBEDDING_SCORE", "0.5")),
         supabase_url=_base_url(os.getenv("SUPABASE_URL", "")),
         supabase_anon_key=(os.getenv("SUPABASE_ANON_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY", "")).strip(),
+        # Per-user limits (see limits.py). A value of 0 or less is ignored in favor of the default, so a
+        # typo can never switch a protection off.
+        rate_queries_per_minute=_positive("RATE_QUERIES_PER_MINUTE", 30),
+        rate_uploads_per_hour=_positive("RATE_UPLOADS_PER_HOUR", 10),
+        rate_other_per_minute=_positive("RATE_OTHER_PER_MINUTE", 120),
+        daily_generations=_positive("DAILY_GENERATIONS", 20),
     )

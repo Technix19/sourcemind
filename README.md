@@ -72,7 +72,7 @@ Off by default. Set both `OPENAI_API_KEY` and `OPENAI_CHAT_MODEL` (a model your 
 - The model sees only the retrieved excerpts, numbered `[1]`, `[2]`, ... and is told to treat them as untrusted data.
 - Code, not the prompt, enforces grounding: citations the model invents are stripped, an answer with no valid citation is withheld, and a model failure or missing key falls back to `sources_only` with a `notice`.
 - With generation enabled, retrieved excerpts and the question are sent to the model provider. Don't enable it for confidential documents.
-- Cost controls: `MAX_CONTEXT_CHARS` and `MAX_ANSWER_TOKENS`. No per-user or daily limits yet (needed before any public deployment).
+- Cost controls: `MAX_CONTEXT_CHARS` and `MAX_ANSWER_TOKENS`. Per-user limits apply (defaults: 30 questions per minute, 10 uploads per hour, 120 other requests per minute, 20 generated answers per rolling 24 hours; see `.env.example`). Past the daily allowance you still get the retrieved evidence, without a model call. **The counters live in the server's memory**: they reset on restart and would multiply across several server instances, so a multi-instance deployment needs a shared store first.
 
 ## Run the web app (local)
 

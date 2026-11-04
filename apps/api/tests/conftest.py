@@ -198,6 +198,15 @@ class InMemoryRepository:
 
 
 @pytest.fixture(autouse=True)
+def fresh_limits():
+    """Limits are process-wide state; every test starts with an empty ledger."""
+    from app.limits import limiter
+    limiter.reset()
+    yield
+    limiter.reset()
+
+
+@pytest.fixture(autouse=True)
 def fake_backend(request, monkeypatch):
     if request.node.get_closest_marker("integration"):
         yield None

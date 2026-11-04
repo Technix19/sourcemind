@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from fastapi import Depends, FastAPI, File, HTTPException, Query, Response, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, Query, Request, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, StringConstraints
 from starlette.concurrency import run_in_threadpool
@@ -13,11 +13,12 @@ from starlette.concurrency import run_in_threadpool
 from .answering import (
     SYSTEM_PROMPT, build_user_prompt, check_citations, is_abstention, select_for_context,
 )
-from .auth import AuthGate
+from .auth import AuthGate, current_user
 from .config import get_settings
 from .embeddings import EmbeddingError, get_embedder, warm_up
 from .evaluation_results import ResultsUnreadable, load_latest
 from .ingestion import IngestionError, build_chunks, content_type_for, extract_pages, sanitize_filename
+from .limits import RateLimitGate, generation_allowed
 from .llm import generation_available, get_llm_client
 from .repository import SIGNED_URL_SECONDS, Repository, RepositoryError, get_repository
 from .retrieval import Hit
@@ -51,6 +52,7 @@ app = FastAPI(
 
 # Middleware order matters: the LAST one added is the OUTERMOST. Auth is added first (inner),
 # CORS last (outer), so even a 401 carries CORS headers and the browser can read it.
+app.add_middleware(RateLimitGate)  # innermost: runs after AuthGate has verified the user
 app.add_middleware(AuthGate)
 app.add_middleware(SecurityHeaders)  # inside CORS, outside auth: even 401s carry the headers
 # Only the configured frontend origin may call the API from a browser. No wildcard,
@@ -254,7 +256,7 @@ def _reply(
 
 
 @app.post("/api/v1/queries")
-async def query(body: QueryRequest, repo: Repository = Depends(get_repository)) -> dict:
+async def query(request: Request, body: QueryRequest, repo: Repository = Depends(get_repository)) -> dict:
     settings = get_settings()
     if body.retrieval == "embedding":
         embedder = get_embedder()
@@ -283,6 +285,9 @@ async def query(body: QueryRequest, repo: Repository = Depends(get_repository)) 
     client = get_llm_client()
     if client is None:
         return reply("sources_only", hits, notice="Answer generation is not configured; showing retrieved evidence.")
+
+    if not generation_allowed(current_user(request).id):
+        return reply("sources_only", hits, notice="You have used today's allowance of generated answers; showing retrieved evidence.")
 
     # Only what fits the budget is sent AND returned, so every [n] resolves to evidence.
     sent = select_for_context(hits, settings.max_context_chars)
