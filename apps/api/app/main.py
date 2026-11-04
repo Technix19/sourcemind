@@ -22,6 +22,7 @@ from .llm import generation_available, get_llm_client
 from .repository import SIGNED_URL_SECONDS, Repository, RepositoryError, get_repository
 from .retrieval import Hit
 from .retrievers import EmbeddingRetriever, TfidfRetriever
+from .security import SecurityHeaders, docs_settings
 
 API_VERSION = "0.7.0"
 logger = logging.getLogger("sourcemind")
@@ -43,11 +44,15 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="SourceMind API", version=API_VERSION, docs_url="/api/docs", lifespan=lifespan)
+app = FastAPI(
+    title="SourceMind API", version=API_VERSION, lifespan=lifespan,
+    **docs_settings(get_settings().app_env),  # docs exist only when APP_ENV=local
+)
 
 # Middleware order matters: the LAST one added is the OUTERMOST. Auth is added first (inner),
 # CORS last (outer), so even a 401 carries CORS headers and the browser can read it.
 app.add_middleware(AuthGate)
+app.add_middleware(SecurityHeaders)  # inside CORS, outside auth: even 401s carry the headers
 # Only the configured frontend origin may call the API from a browser. No wildcard,
 # and no cookies: the token travels in the Authorization header.
 app.add_middleware(
