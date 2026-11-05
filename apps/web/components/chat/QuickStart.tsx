@@ -1,5 +1,7 @@
 "use client";
 
+import { UiIcon } from "@/components/ui/UiIcon";
+
 const PROMPTS = [
   { title: "Summarize the main idea", question: "What is the main idea of this document?" },
   { title: "Find key findings", question: "What are the key findings?" },
@@ -10,17 +12,18 @@ const PROMPTS = [
 export function QuickStart({ onPick }: { onPick: (question: string) => void }) {
   return (
     <div>
-      <p className="mb-3 text-xs font-bold tracking-wider text-muted">GET STARTED WITH A QUESTION</p>
-      <ul className="grid gap-3 sm:grid-cols-3">
-        {PROMPTS.map((p) => (
-          <li key={p.title}>
+      <p className="mb-3 text-[13px] font-bold text-text">Try asking</p>
+      <ul className="flex flex-wrap gap-2">
+        {PROMPTS.map((prompt) => (
+          <li key={prompt.title}>
             <button
               type="button"
-              onClick={() => onPick(p.question)}
-              className="flex h-full w-full flex-col items-start justify-start rounded-xl border border-line bg-panel p-4 text-left transition-colors hover:border-lavender/60"
+              onClick={() => onPick(prompt.question)}
+              className="sm-secondary group text-left"
+              title={prompt.question}
             >
-              <span className="block font-bold">{p.title}</span>
-              <span className="mt-1 block text-sm text-muted">{p.question}</span>
+              {prompt.title}
+              <UiIcon name="arrow" size={14} className="text-[#8a96ac] group-hover:text-lavender" />
             </button>
           </li>
         ))}
