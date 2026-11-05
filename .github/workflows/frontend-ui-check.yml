@@ -1,0 +1,35 @@
+name: Frontend UI checks
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches:
+      - feature/professional-saas-ui-20261105
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install packages
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Run frontend tests
+        run: npm test
+      - name: Build Next.js
+        run: npm run build
