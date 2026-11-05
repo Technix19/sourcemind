@@ -37,12 +37,20 @@ class Settings:
     rate_uploads_per_hour: int = 10
     rate_other_per_minute: int = 120
     daily_generations: int = 20
+    answer_effort: str = "low"
 
 
 def _base_url(raw: str) -> str:
     """Scheme + host only, so a pasted '.../rest/v1/' still works."""
     parsed = urlparse(raw.strip())
     return f"{parsed.scheme}://{parsed.netloc}" if parsed.scheme and parsed.netloc else ""
+
+
+def _effort() -> str:
+    """How hard the model thinks. Low suits grounded Q&A over supplied excerpts. An empty value omits
+    the setting (needed for older models that do not support it); an unknown value falls back to low."""
+    value = os.getenv("ANTHROPIC_EFFORT", "low").strip().lower()
+    return value if value in ("", "low", "medium", "high", "xhigh", "max") else "low"
 
 
 def _positive(name: str, default: int) -> int:
@@ -65,9 +73,11 @@ def get_settings() -> Settings:
         # Initial heuristic, NOT tuned on labeled data yet (that is M7).
         min_relevance_score=float(os.getenv("MIN_RELEVANCE_SCORE", "0.05")),
         # No default model on purpose: the user picks one their account supports.
-        chat_model=os.getenv("OPENAI_CHAT_MODEL", "").strip(),
+        chat_model=os.getenv("ANTHROPIC_MODEL", "").strip(),
         max_context_chars=int(os.getenv("MAX_CONTEXT_CHARS", "8000")),
-        max_answer_tokens=int(os.getenv("MAX_ANSWER_TOKENS", "500")),
+        # Covers the visible answer AND the model's thinking (current Claude models think by default,
+        # and thinking tokens count toward this limit), so it is larger than a bare answer needs.
+        max_answer_tokens=int(os.getenv("MAX_ANSWER_TOKENS", "2000")),
         # Meaning search (M6d). The vector size in the database (384) matches the default model.
         embeddings_enabled=os.getenv("EMBEDDINGS_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off"),
         embedding_model=os.getenv("EMBEDDING_MODEL", "BAAI/bge-small-en-v1.5").strip(),
@@ -85,4 +95,5 @@ def get_settings() -> Settings:
         rate_uploads_per_hour=_positive("RATE_UPLOADS_PER_HOUR", 10),
         rate_other_per_minute=_positive("RATE_OTHER_PER_MINUTE", 120),
         daily_generations=_positive("DAILY_GENERATIONS", 20),
+        answer_effort=_effort(),
     )

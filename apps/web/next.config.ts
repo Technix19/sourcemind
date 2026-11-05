@@ -3,7 +3,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // Basic hardening headers. A Content-Security-Policy is still to do before any public deployment.
+  // Static hardening headers. The Content-Security-Policy is per request (it carries a nonce), so it
+  // is set in proxy.ts.
   async headers() {
     return [
       {
@@ -16,8 +17,9 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  cacheComponents: true,
-  partialPrefetching: true,
+  // cacheComponents / partialPrefetching were removed in M7c: they prerender a static shell at build
+  // time, which cannot carry a per-request nonce, and the app used neither (no `use cache`, and a
+  // signed-in-only UI that renders client-side anyway).
   turbopack: {
     // Pin the root to this app so a stray lockfile higher up can't change it.
     root: path.resolve(import.meta.dirname),

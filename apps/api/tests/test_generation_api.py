@@ -111,8 +111,18 @@ def test_provider_failure_falls_back_without_leaking_details(fake):
     assert body["answer_mode"] == "sources_only" and body["evidence"] and "unavailable" in body["notice"]
 
 
+def test_a_model_refusal_shows_the_evidence_instead_of_an_error(fake):
+    from app.llm import GenerationRefused
+    fake(error=GenerationRefused())
+    paper()
+    res = client.post("/api/v1/queries", json={"question": "Which classifier selects difficulty?", "mode": "generated"})
+    body = res.json()
+    assert res.status_code == 200 and body["answer_mode"] == "sources_only" and body["answer"] is None
+    assert body["evidence"] and body["notice"]
+
+
 def test_not_configured_falls_back_to_sources_only(monkeypatch):
-    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     paper()
     body = ask()
     assert body["answer_mode"] == "sources_only" and "not configured" in body["notice"]
@@ -154,8 +164,8 @@ def test_prompt_injection_in_document_stays_in_the_data_channel(fake):
 
 
 def test_response_never_contains_the_api_key(fake, monkeypatch):
-    monkeypatch.setenv("OPENAI_API_KEY", "sk-test-should-never-appear")
-    monkeypatch.setenv("OPENAI_CHAT_MODEL", "some-model")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test-should-never-appear")
+    monkeypatch.setenv("ANTHROPIC_MODEL", "some-model")
     fake("Yes [1].")
     paper()
     assert "sk-test-should-never-appear" not in client.get("/api/v1/health").text
@@ -164,10 +174,10 @@ def test_response_never_contains_the_api_key(fake, monkeypatch):
 
 
 def test_health_reports_generation_availability_as_a_boolean(monkeypatch):
-    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     assert client.get("/api/v1/health").json()["generation_available"] is False
-    monkeypatch.setenv("OPENAI_API_KEY", "k")
-    monkeypatch.delenv("OPENAI_CHAT_MODEL", raising=False)
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "k")
+    monkeypatch.delenv("ANTHROPIC_MODEL", raising=False)
     assert client.get("/api/v1/health").json()["generation_available"] is False  # model also required
-    monkeypatch.setenv("OPENAI_CHAT_MODEL", "m")
+    monkeypatch.setenv("ANTHROPIC_MODEL", "m")
     assert client.get("/api/v1/health").json()["generation_available"] is True

@@ -6,6 +6,9 @@ import "./globals.css";
 
 const lato = Lato({ variable: "--font-lato", subsets: ["latin"], weight: ["400", "700", "900"] });
 
+// Rendered per request so the Content-Security-Policy nonce (see proxy.ts) reaches every script.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: { default: "SourceMind · Document intelligence", template: "%s · SourceMind" },
   description: "Evidence-first document research assistant (local prototype).",

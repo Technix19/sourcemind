@@ -65,14 +65,15 @@ curl -X POST http://127.0.0.1:8000/api/v1/queries -H 'Content-Type: application/
 ```
 Optional: `document_ids` to restrict the search. `mode` is `sources_only` (default) or `generated`. Tuning knob: `MIN_RELEVANCE_SCORE` (untuned heuristic).
 
-## Optional answer generation
+## Optional answer generation (Claude)
 
-Off by default. Set both `OPENAI_API_KEY` and `OPENAI_CHAT_MODEL` (a model your account supports) in `apps/api/.env` and send `"mode": "generated"`. `GET /api/v1/health` reports `generation_available` (a boolean, never the key).
+Off by default. Create an API key in the [Anthropic Console](https://console.anthropic.com), then set both `ANTHROPIC_API_KEY` and `ANTHROPIC_MODEL` (for example `claude-haiku-5-5`, `claude-sonnet-5-5` or `claude-opus-5-5`) in `apps/api/.env`, restart the API, and send `"mode": "generated"`. `GET /api/v1/health` reports `generation_available` (a boolean, never the key). The model is your choice and has no default, because price and quality differ a lot between them.
 
 - The model sees only the retrieved excerpts, numbered `[1]`, `[2]`, ... and is told to treat them as untrusted data.
-- Code, not the prompt, enforces grounding: citations the model invents are stripped, an answer with no valid citation is withheld, and a model failure or missing key falls back to `sources_only` with a `notice`.
-- With generation enabled, retrieved excerpts and the question are sent to the model provider. Don't enable it for confidential documents.
-- Cost controls: `MAX_CONTEXT_CHARS` and `MAX_ANSWER_TOKENS`. Per-user limits apply (defaults: 30 questions per minute, 10 uploads per hour, 120 other requests per minute, 20 generated answers per rolling 24 hours; see `.env.example`). Past the daily allowance you still get the retrieved evidence, without a model call. **The counters live in the server's memory**: they reset on restart and would multiply across several server instances, so a multi-instance deployment needs a shared store first.
+- Code, not the prompt, enforces grounding: citations the model invents are stripped, an answer with no valid citation is withheld, and a model failure, a refusal or a missing key falls back to `sources_only` with a `notice`.
+- With generation enabled, retrieved excerpts and the question are sent to Anthropic. Don't enable it for confidential documents, and check Anthropic's current data-retention terms for your account before relying on any retention assumption.
+- Cost controls: `MAX_CONTEXT_CHARS` (evidence sent) and `MAX_ANSWER_TOKENS` (output cap, default 2000; it includes the model's thinking, which counts toward the limit). `ANTHROPIC_EFFORT` (default `low`) sets how hard the model thinks; set it empty only for older models that reject it. Per-user limits apply (defaults: 30 questions per minute, 10 uploads per hour, 120 other requests per minute, 20 generated answers per rolling 24 hours; see `.env.example`). Past the daily allowance you still get the retrieved evidence, without a model call. **The counters live in the server's memory**: they reset on restart and would multiply across several server instances, so a multi-instance deployment needs a shared store first.
+- Also set a monthly spend limit in the Anthropic Console. The per-user caps here do not bound your total bill.
 
 ## Run the web app (local)
 
