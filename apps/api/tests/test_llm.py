@@ -92,3 +92,13 @@ def test_settings_defaults_and_effort_validation(monkeypatch):
     assert get_settings().answer_effort == "low"
     monkeypatch.setenv("ANTHROPIC_EFFORT", "")
     assert get_settings().answer_effort == ""
+
+
+def test_token_usage_of_the_last_call_is_exposed_for_cost_tracking(monkeypatch):
+    response = reply(block("text", "ok"))
+    response.usage = types.SimpleNamespace(input_tokens=11, output_tokens=7)
+    fake_anthropic(monkeypatch, response)
+    client = ClaudeClient("m", 100)
+    assert client.last_usage is None
+    client.complete("s", "u")
+    assert client.last_usage == {"input_tokens": 11, "output_tokens": 7}

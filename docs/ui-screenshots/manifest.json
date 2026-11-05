@@ -1,0 +1,377 @@
+{
+ "captured": [
+  {
+   "folder": "01-pages",
+   "file": "01-login-sign-in.png",
+   "title": "Sign in",
+   "note": "/login, default mode"
+  },
+  {
+   "folder": "02-components",
+   "file": "login-form.png",
+   "title": "Sign-in form",
+   "note": "Email, password, submit, switch to create account"
+  },
+  {
+   "folder": "01-pages",
+   "file": "02-login-create-account.png",
+   "title": "Create account",
+   "note": "/login after choosing Create an account (adds the 8-character hint)"
+  },
+  {
+   "folder": "03-states",
+   "file": "login-wrong-password.png",
+   "title": "Sign-in error",
+   "note": "Wrong email or password (a made-up address is shown, not a real one)"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "login.png",
+   "title": "Sign in (phone)",
+   "note": "390 x 844"
+  },
+  {
+   "folder": "01-pages",
+   "file": "03-ask-start-no-documents.png",
+   "title": "Ask questions: first run",
+   "note": "/ with an empty library: hero, upload zone, starter questions, evidence panel and source health"
+  },
+  {
+   "folder": "02-components",
+   "file": "sidebar.png",
+   "title": "Sidebar",
+   "note": "Brand, workspace, navigation, signed-in status, sign out (email masked)"
+  },
+  {
+   "folder": "02-components",
+   "file": "topbar.png",
+   "title": "Top bar",
+   "note": "Breadcrumb, answer-mode status, sign out, compact nav on small screens"
+  },
+  {
+   "folder": "02-components",
+   "file": "upload-zone.png",
+   "title": "Upload zone",
+   "note": "Drop area with browse link, accepted types and size limit"
+  },
+  {
+   "folder": "02-components",
+   "file": "quick-start.png",
+   "title": "Starter questions",
+   "note": "Three prompts that fill the question box"
+  },
+  {
+   "folder": "02-components",
+   "file": "source-health.png",
+   "title": "Source health panel",
+   "note": "Counts, last question, and the two reassurance notes (see the stale-text note in INDEX.md)"
+  },
+  {
+   "folder": "02-components",
+   "file": "question-form-no-documents.png",
+   "title": "Question form: no documents",
+   "note": "Disabled input with a link to upload"
+  },
+  {
+   "folder": "03-states",
+   "file": "skip-link-focused.png",
+   "title": "Skip link (keyboard focus)",
+   "note": "First Tab stop: the 'Skip to main content' link becomes visible"
+  },
+  {
+   "folder": "03-states",
+   "file": "api-offline-banner.png",
+   "title": "API offline banner",
+   "note": "What the app shows when the API cannot be reached (request blocked on purpose)"
+  },
+  {
+   "folder": "01-pages",
+   "file": "04-documents-empty.png",
+   "title": "Documents: empty library",
+   "note": "/documents with no files"
+  },
+  {
+   "folder": "01-pages",
+   "file": "05-documents-with-document.png",
+   "title": "Documents: one file",
+   "note": "/documents after uploading the sample PDF"
+  },
+  {
+   "folder": "02-components",
+   "file": "document-list-item.png",
+   "title": "Document row",
+   "note": "Type badge, name, size, pages, passages, status, Open, Remove"
+  },
+  {
+   "folder": "02-components",
+   "file": "documents-header.png",
+   "title": "Documents header",
+   "note": "Title, counts, upload button"
+  },
+  {
+   "folder": "02-components",
+   "file": "documents-search.png",
+   "title": "Documents search box",
+   "note": "Filter by file name"
+  },
+  {
+   "folder": "03-states",
+   "file": "document-remove-confirm.png",
+   "title": "Remove confirmation",
+   "note": "Inline Confirm / Cancel after clicking Remove"
+  },
+  {
+   "folder": "01-pages",
+   "file": "06-ask-start-with-document.png",
+   "title": "Ask questions: ready",
+   "note": "/ with one document indexed"
+  },
+  {
+   "folder": "02-components",
+   "file": "question-form-ready.png",
+   "title": "Question form: filled",
+   "note": "Starter question inserted; Search-by choice and Generate option shown"
+  },
+  {
+   "folder": "03-states",
+   "file": "quick-start-filled.png",
+   "title": "Starter question picked",
+   "note": "Picking a starter fills the box but does not send it"
+  },
+  {
+   "folder": "03-states",
+   "file": "ask-pending.png",
+   "title": "Searching…",
+   "note": "Shown while the API is working (the delay was added for this capture)"
+  },
+  {
+   "folder": "01-pages",
+   "file": "07-ask-answer-keyword.png",
+   "title": "Answer: keyword search",
+   "note": "Evidence-only answer with the supporting passages in the right rail"
+  },
+  {
+   "folder": "02-components",
+   "file": "conversation-turn.png",
+   "title": "Conversation turn",
+   "note": "The question bubble and SourceMind's reply card with its badge"
+  },
+  {
+   "folder": "02-components",
+   "file": "evidence-panel.png",
+   "title": "Evidence panel",
+   "note": "Ranked passages with page numbers and match scores"
+  },
+  {
+   "folder": "02-components",
+   "file": "evidence-card.png",
+   "title": "Evidence card",
+   "note": "One passage: citation number, file, page, rank, score, excerpt, Open page"
+  },
+  {
+   "folder": "02-components",
+   "file": "source-health-after-question.png",
+   "title": "Source health after a question",
+   "note": "Counts and the last question filled in"
+  },
+  {
+   "folder": "01-pages",
+   "file": "08-ask-answer-meaning.png",
+   "title": "Answer: meaning search",
+   "note": "Same app, Meaning selected (finds passages that share no words with the question)"
+  },
+  {
+   "folder": "01-pages",
+   "file": "09-ask-answer-generated.png",
+   "title": "Answer: generated with citations",
+   "note": "Claude's answer with [n] citation chips and the model label"
+  },
+  {
+   "folder": "02-components",
+   "file": "answer-card-generated.png",
+   "title": "Generated answer card",
+   "note": "Answer text with citation chips, 'Generated by' line"
+  },
+  {
+   "folder": "03-states",
+   "file": "citation-selected.png",
+   "title": "Citation chip activated",
+   "note": "Clicking [n] highlights the matching evidence card"
+  },
+  {
+   "folder": "01-pages",
+   "file": "10-ask-insufficient-evidence.png",
+   "title": "Answer: not enough evidence",
+   "note": "The product declines instead of guessing"
+  },
+  {
+   "folder": "02-components",
+   "file": "conversation-turn-insufficient.png",
+   "title": "Turn: not enough evidence",
+   "note": "Abstention reply"
+  },
+  {
+   "folder": "03-states",
+   "file": "evaluation-loading.png",
+   "title": "Evaluation: loading",
+   "note": "Shown while the results download (delay added for this capture)"
+  },
+  {
+   "folder": "01-pages",
+   "file": "11-evaluation-top.png",
+   "title": "Evaluation: top of page",
+   "note": "Heading, run details and the 'Read this first' caveats"
+  },
+  {
+   "folder": "01-pages",
+   "file": "12-evaluation-full-page.png",
+   "title": "Evaluation: full page",
+   "note": "Every section on one tall image"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-caveats.png",
+   "title": "Evaluation caveats box",
+   "note": "The limits that come before the numbers"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-01-ranking-quality.png",
+   "title": "Evaluation section: Ranking quality",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-02-saying-not-enough-evidence.png",
+   "title": "Evaluation section: Saying “not enough evidence”",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-03-recommendation.png",
+   "title": "Evaluation section: Recommendation",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-04-speed.png",
+   "title": "Evaluation section: Speed",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-05-chunk-size-development-split.png",
+   "title": "Evaluation section: Chunk size (development split)",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-06-failure-analysis.png",
+   "title": "Evaluation section: Failure analysis",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-section-07-not-measured.png",
+   "title": "Evaluation section: Not measured",
+   "note": "One section of the results page"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-table-01-ranking-quality-by-search-method-with-95-interva.png",
+   "title": "Table: Ranking quality by search method, with 95% intervals",
+   "note": "Result table (bars are decorative; numbers are written out)"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-table-02-recall-at-3-by-question-type-and-search-method.png",
+   "title": "Table: Recall at 3 by question type and search method",
+   "note": "Result table (bars are decorative; numbers are written out)"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-table-03-abstention-behavior-at-the-tuned-thresholds-and-.png",
+   "title": "Table: Abstention behavior at the tuned thresholds and at the product defaults",
+   "note": "Result table (bars are decorative; numbers are written out)"
+  },
+  {
+   "folder": "02-components",
+   "file": "eval-table-04-recall-at-3-for-different-chunk-sizes-on-the-dev.png",
+   "title": "Table: Recall at 3 for different chunk sizes on the development split",
+   "note": "Result table (bars are decorative; numbers are written out)"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "ask-start.png",
+   "title": "Ask questions: ready (phone)",
+   "note": "390 x 844"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "compact-navigation.png",
+   "title": "Compact navigation (phone)",
+   "note": "Navigation moves from the sidebar into the top bar below the large breakpoint"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "ask-answer.png",
+   "title": "Answer (phone)",
+   "note": "Evidence moves into a drawer on small screens"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "sources-drawer-open.png",
+   "title": "Sources drawer (phone)",
+   "note": "Bottom sheet with the evidence cards"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "documents.png",
+   "title": "Documents (phone)",
+   "note": "File row wraps its actions on narrow screens"
+  },
+  {
+   "folder": "04-mobile-390",
+   "file": "evaluation-top.png",
+   "title": "Evaluation (phone)",
+   "note": "Caveats first; tables scroll sideways inside their own box"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "ask-start.png",
+   "title": "Ask questions: ready (tablet)",
+   "note": "820 x 1180"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "compact-navigation.png",
+   "title": "Compact navigation (tablet)",
+   "note": "Navigation moves from the sidebar into the top bar below the large breakpoint"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "ask-answer.png",
+   "title": "Answer (tablet)",
+   "note": "Evidence moves into a drawer on small screens"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "sources-drawer-open.png",
+   "title": "Sources drawer (tablet)",
+   "note": "Bottom sheet with the evidence cards"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "documents.png",
+   "title": "Documents (tablet)",
+   "note": "File row wraps its actions on narrow screens"
+  },
+  {
+   "folder": "05-tablet-820",
+   "file": "evaluation-top.png",
+   "title": "Evaluation (tablet)",
+   "note": "Caveats first; tables scroll sideways inside their own box"
+  }
+ ],
+ "failed": []
+}

@@ -124,7 +124,7 @@ What this project does not do, or has not proven. Nothing here is hidden in the 
 - Scanned (image-only) PDFs are rejected; there is no OCR. Supported: PDF, TXT, MD, up to 12 MB, 150 pages and 12 documents per user.
 
 **Answer generation**
-- Off unless you add an Anthropic key and choose a model. It works end to end (checked by hand), but answer quality and citation accuracy are unmeasured, and refusal and provider-error paths are tested only with fakes.
+- Off unless you add an Anthropic key and choose a model. A small mechanical check (`docs/m8-generation-eval.md`, 45 questions x 3 runs, Haiku 5.5) found every answer to a question with retrieved evidence cited a page that contains the labeled answer, and on every unanswerable question the model said it could not find the information. It did not verify that the answer text is true, and it found one product flaw: a reply that opens with the abstention sentence and then explains still gets the green "Grounded" badge. Refusal and provider-error paths are tested only with fakes.
 - Cost is bounded per user (rate limits and a daily cap) but not in total. Set a spend limit in the Anthropic Console.
 
 **Security and operations**

@@ -1,0 +1,5358 @@
+{
+ "run": {
+  "date": "2026-11-05",
+  "git": {
+   "commit": "47e9d10",
+   "dirty": false
+  },
+  "model": "claude-haiku-5-5",
+  "effort": "low",
+  "max_tokens": 2000,
+  "top_k": 4,
+  "min_relevance_score": 0.05,
+  "max_context_chars": 8000,
+  "questions": 45,
+  "runs": 3
+ },
+ "runs": [
+  {
+   "records": [
+    {
+     "id": "csf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What are the six Functions of the CSF Core?",
+     "evidence": [
+      [
+       "nist-csf",
+       20
+      ],
+      [
+       "nist-csf",
+       31
+      ],
+      [
+       "nist-csf",
+       8
+      ],
+      [
+       "nist-csf",
+       4
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2696.9,
+     "usage": {
+      "input_tokens": 1215,
+      "output_tokens": 228
+     },
+     "outcome": "answered",
+     "answer": "The six CSF Functions are **Govern, Identify, Protect, Detect, Respond, and Recover** [2]. The source defines a CSF Function as \"the highest level of organization for cybersecurity outcomes\" [2].\n\nThe evidence does not describe the Functions further, and the excerpt from the Appendix A introduction says the Core's order is \"not alphabetical\" [1]. It also says the order and size of the Functions \"does not imply the sequence or importance of achieving them\" [3].",
+     "cited": [
+      1,
+      2,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which short beginner guides help a company get started with the framework?",
+     "evidence": [
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "nhlbi-sleep",
+       52
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       2
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1919.8,
+     "usage": {
+      "input_tokens": 1196,
+      "output_tokens": 315
+     },
+     "outcome": "answered",
+     "answer": "The evidence points to **Quick-Start Guides (QSGs)** from NIST. They are \"brief documents on specific CSF-related topics and are often tailored to specific audiences.\" They \"can help an organization implement the CSF because they distill specific portions of the CSF into actionable 'first steps' that an organization can consider on the path to improving their cybersecurity posture and management of associated risks\" [3].\n\nThe excerpts do not name any specific Quick-Start Guide. [4] also mentions Community Profiles as additional implementation resources, but it does not describe them as beginner guides, so I can't say they fit the question.",
+     "cited": [
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-03",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+     "evidence": [
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       16
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4594.0,
+     "usage": {
+      "input_tokens": 1244,
+      "output_tokens": 715
+     },
+     "outcome": "answered",
+     "answer": "The excerpts don't give a complete step-by-step process, but they point to a few actions after an organization identifies its gaps:\n\n1. **Address the gaps.** The CSF's \"Understand and Assess\" function is to determine gaps and \"assess progress toward addressing those gaps\" [1].\n2. **Plan and carry out the work in an action plan.** Practitioners \"focus on implementing the target state,\" with an action plan such as a risk register, risk detail report, or POA&M [3].\n3. **Measure and report progress.** As controls are implemented, practitioners give managers and executives information such as key performance indicators and key risk indicators so they can make informed decisions and maintain or adjust the risk strategy [3].\n4. **Update the profile and repeat.** Changes in expectations and priorities are included in updated Organizational Profiles, and \"the cycle repeats\" [3].\n\nThe target posture itself is a Target Profile, which specifies the Core outcomes the organization has selected and prioritized [4]. The CSF describes desired outcomes but does not prescribe how to achieve them; implementation guidance is in separate online resources [2].\n\nMy inference: the sources imply that the organization should work to close the gap through the action plan, track progress, and then revisit its profile. The excerpts don't explicitly say \"close the gap\" as a named step.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "csf-04",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which email address can be used to suggest new Informative References for CSF 2.0?",
+     "evidence": [
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1079.0,
+     "usage": {
+      "input_tokens": 1282,
+      "output_tokens": 120
+     },
+     "outcome": "answered",
+     "answer": "The email address is olir@nist.gov. Evidence [1] and [4] both state that suggestions for new Informative References for CSF 2.0 can be shared with NIST at olir@nist.gov. Evidence [1] also says that suggestions for other resources, including additional QSG topics, go to cyberframework@nist.gov, which is a different address for a different purpose.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which Tier describes an organization that adapts its practices using lessons learned and predictive indicators?",
+     "evidence": [
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1257.1,
+     "usage": {
+      "input_tokens": 1173,
+      "output_tokens": 144
+     },
+     "outcome": "answered",
+     "answer": "Tier 4, the Adaptive tier. The evidence states that at Tier 4 \"The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators\" [1]. The same excerpt names the four Tiers as Partial (Tier 1), Risk Informed (Tier 2), Repeatable (Tier 3), and Adaptive (Tier 4) [4].",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What financial penalties does NIST impose on organizations that fail to adopt the Cybersecurity Framework?",
+     "evidence": [
+      [
+       "nist-csf",
+       2
+      ],
+      [
+       "nist-csf",
+       4
+      ],
+      [
+       "nist-csf",
+       5
+      ],
+      [
+       "nist-csf",
+       17
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1470.8,
+     "usage": {
+      "input_tokens": 1476,
+      "output_tokens": 159
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence describes the CSF as guidance that organizations can use voluntarily to manage cybersecurity risk [1][3]. It states that the CSF \"does not prescribe how outcomes should be achieved\" [1] and that \"the CSF does not embrace a one-size-fits-all approach\" [3]. None of the excerpts mention financial penalties, fines, or any enforcement consequences for organizations that do not adopt the framework.",
+     "cited": [
+      1,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What does the framework say about decommissioning and phasing out AI systems?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1486.6,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 170
+     },
+     "outcome": "answered",
+     "answer": "The provided documents say the following about decommissioning and phasing out AI systems:\n\n- GOVERN 1.7 states that \"Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization's trustworthiness\" [1][2].\n\nThe evidence doesn't include further detail, such as specific steps or procedures for decommissioning. The excerpts also don't explain how GOVERN 1.7 relates to the other subcategories beyond what is listed above.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which people across the creation and use of artificial intelligence are expected to read and apply this document?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-csf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       22
+      ],
+      [
+       "nist-csf",
+       19
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2059.2,
+     "usage": {
+      "input_tokens": 1124,
+      "output_tokens": 296
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "rmf-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       14
+      ],
+      [
+       "nist-ai-rmf",
+       15
+      ],
+      [
+       "nist-ai-rmf",
+       5
+      ],
+      [
+       "nist-ai-rmf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1590.5,
+     "usage": {
+      "input_tokens": 1327,
+      "output_tokens": 164
+     },
+     "outcome": "answered",
+     "answer": "The OECD framework uses five key socio-technical dimensions for classifying AI lifecycle activities [1]. NIST's Figure 2 is modified from that OECD framework, and the NIST version lists four AI dimensions: Application Context, Data and Input, AI Model, and Task and Output [4]. The sources do not explicitly explain the difference between the five OECD dimensions and the four NIST dimensions, so I can't say from these excerpts which OECD dimension NIST dropped or merged.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Is an AI system acceptable if it is very hard to hack but treats people unfairly?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       12
+      ],
+      [
+       "nist-ai-rmf",
+       6
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4106.8,
+     "usage": {
+      "input_tokens": 1421,
+      "output_tokens": 668
+     },
+     "outcome": "answered",
+     "answer": "The uploaded documents don't directly answer whether this system is acceptable, so I can't give a yes or no based on them.\n\nThe closest relevant material is from the NIST AI RMF. It states that the framework \"does not prescribe risk tolerance,\" and that the level of risk acceptable to an organization or society is \"highly contextual and application and use-case specific\" [2]. It also notes that risk tolerances can be shaped by legal or regulatory requirements, policies, and norms, and that they change over time [2]. Under that framing, whether unfair treatment is acceptable would be decided by the organization and its context, not by the framework.\n\nThe document also says AI systems are \"inherently socio-technical in nature,\" so their risks can come from \"the interplay of technical aspects combined\" with societal dynamics and human behavior [3]. That suggests a system's security strength doesn't settle its broader risk profile, but the excerpt doesn't address fairness or discrimination specifically.\n\nThe sleep guide [1][4] is unrelated to this question.\n\nMy inference: strong security doesn't offset unfair treatment of people. The sources don't say that outright, but the risk framework treats different risks as separate concerns to be assessed in context.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 925.5,
+     "usage": {
+      "input_tokens": 1076,
+      "output_tokens": 89
+     },
+     "outcome": "answered",
+     "answer": "The subcategory is GOVERN 2.2. The evidence states: \"GOVERN 2.2: The organization's personnel and partners receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements.\" [1]",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       26
+      ],
+      [
+       "nist-ai-rmf",
+       24
+      ],
+      [
+       "nist-ai-rmf",
+       47
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1200.2,
+     "usage": {
+      "input_tokens": 1205,
+      "output_tokens": 93
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts describe the AI RMF as voluntary [2][4], and say that NIST plans future evaluations of the Framework's effectiveness [3]. They do not name any AI vendors or mention any certification or compliance program.",
+     "cited": [
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "sleep-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many hours a night do healthy adults sleep on average when they have unlimited opportunity to sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       1
+      ],
+      [
+       "nhlbi-sleep",
+       21
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1534.4,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 205
+     },
+     "outcome": "answered",
+     "answer": "Healthy adults who are given unlimited opportunity to sleep sleep on average between 8 and 8.5 hours a night [1].\n\nRelated context from the same document: sleep needs vary, with some people needing about 7 hours and others needing 9 or more [1]. Another passage says adults need at least 7–8 hours of sleep each night to be well rested, and that the average adult now sleeps fewer than 7 hours a night [4]. This is a difference in framing rather than a direct conflict: the 8–8.5 hour figure describes unrestricted sleep, while the 7–8 hour figure describes what is needed to be well rested.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       29
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1870.6,
+     "usage": {
+      "input_tokens": 1388,
+      "output_tokens": 329
+     },
+     "outcome": "answered",
+     "answer": "No. The sources say sleeping in on the weekend does not fully make up for lost sleep.\n\n- Evidence [1] states that if you have lost too much sleep, sleeping in on a weekend \"does not completely erase your sleep debt,\" and that sleeping more at the end of the week won't make up for poor performance earlier in the week.\n- Evidence [3] (Myth 6) says this pattern \"will help you feel more rested,\" but \"will not completely make up for the lack of sleep or correct your sleep debt,\" and will not necessarily make up for impaired performance or physical problems. It also notes that later weekend sleep can affect your biological clock, making it harder to fall asleep on Sunday night and wake early on Monday.\n- Evidence [4] repeats that sleeping later on weekends \"won't fully make up for a lack of sleep during the week.\"\n\nInference: the sources consistently treat weekend catch-up sleep as partial at best, and they describe a benefit in feeling more rested, so it is not useless, just incomplete.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long does each pause in breathing typically last in sleep apnea?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       36
+      ],
+      [
+       "nhlbi-sleep",
+       46
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 979.6,
+     "usage": {
+      "input_tokens": 1228,
+      "output_tokens": 61
+     },
+     "outcome": "answered",
+     "answer": "Each pause in breathing typically lasts 10–120 seconds [1][2]. The same passage says these pauses may occur 20–30 times or more each sleeping hour [1][2].",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can herbal or over-the-counter supplements reliably treat persistent sleeplessness?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ],
+      [
+       "nhlbi-sleep",
+       48
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 3471.2,
+     "usage": {
+      "input_tokens": 1279,
+      "output_tokens": 693
+     },
+     "outcome": "answered",
+     "answer": "No, the uploaded documents do not show that herbal or over-the-counter supplements reliably treat sleeplessness.\n\n- **Melatonin:** \"Little evidence exists that melatonin can help relieve insomnia\" [1].\n- **Valerian:** \"Studies with valerian also have been inconclusive,\" and the actual dose and purity may vary from product to product [1].\n- **Safety:** Melatonin, valerian, and other natural remedies \"are not regulated by the Food and Drug Administration, their safety is not monitored\" [1].\n\nThe documents point to other treatments. Experts recommend going to bed only when sleepy, and getting out of bed for a relaxing activity if you can't fall asleep within 20 minutes. \"Studies have shown that this reconditioning therapy is an effective way to treat insomnia\" [2]. Doctors also diagnose and treat any underlying medical or psychological problems [4].\n\nA separate passage advises avoiding \"herbal supplements\" and sleeping pills because they can make breathing harder during sleep [3]. That passage is in the context of sleep-disordered breathing, not insomnia, so it doesn't directly address insomnia treatment.\n\nMy inference: the evidence doesn't establish that these products are ineffective in every case. It only says the evidence is weak or inconclusive and that they aren't monitored for safety. The documents don't address persistent sleeplessness specifically in relation to supplements beyond melatonin and valerian.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many hours of sleep do teenagers actually get on average?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2243.5,
+     "usage": {
+      "input_tokens": 1263,
+      "output_tokens": 323
+     },
+     "outcome": "answered",
+     "answer": "Most teenagers get an average of only **7–7.5 hours of sleep a night** [1]. The document attributes this partly to the delayed sleep–wake rhythm that puberty causes, which conflicts with early high school start times [1].\n\nThe sources also differ on how much sleep teenagers need. One passage says teenagers need between 9 and 10 hours [1]. Another says school-aged children and adolescents need at least 10 hours [2]. Either way, the average 7–7.5 hours is below both figures.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What daily melatonin dose does the guide recommend for insomnia?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       17
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1250.6,
+     "usage": {
+      "input_tokens": 1216,
+      "output_tokens": 162
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe documents do not state a recommended daily melatonin dose for insomnia. Source [1] says \"Little evidence exists that melatonin can help relieve insomnia\" and that the dose of supplements may vary from product to product. Source [2] describes melatonin as a possible jet lag treatment, noting that \"melatonin's effectiveness is controversial\" and that its safety over prolonged use \"is unclear.\" Neither excerpt gives a dose.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How long is the term of a member of the Board of Governors?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       12
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       56
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1141.8,
+     "usage": {
+      "input_tokens": 1273,
+      "output_tokens": 118
+     },
+     "outcome": "answered",
+     "answer": "Each member of the Board of Governors is appointed for a 14-year term [1]. The terms are staggered so that one term expires on January 31 of each even-numbered year [1]. A Board member may not be reappointed after serving a full 14-year term, though someone confirmed to fill the remainder of a term that was left early may later be appointed to a full 14-year term [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which two goals has Congress given the central bank for its interest-rate decisions?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2075.1,
+     "usage": {
+      "input_tokens": 958,
+      "output_tokens": 294
+     },
+     "outcome": "answered",
+     "answer": "Congress has mandated two goals: **maximum employment and price stability**. The FOMC sets monetary policy, including its target range for the federal funds rate, to move the economy toward these \"dual objectives\" [4].\n\nThe excerpt doesn't explicitly say these goals apply to Congress's direction on interest-rate decisions specifically, but it does say the FOMC uses the policy rate to pursue them [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many voting members does the Federal Open Market Committee have?",
+     "evidence": [
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1248.2,
+     "usage": {
+      "input_tokens": 1297,
+      "output_tokens": 103
+     },
+     "outcome": "answered",
+     "answer": "The Federal Open Market Committee has 12 voting members [4]. These consist of the 7 members of the Board of Governors, the president of the Federal Reserve Bank of New York, and 4 of the remaining 11 Reserve Bank presidents, who serve one-year terms on a rotating basis [2][4].",
+     "cited": [
+      2,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Why do the central bank's regional territories cut across state boundaries?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       10
+      ],
+      [
+       "fed-explained",
+       76
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1353.3,
+     "usage": {
+      "input_tokens": 947,
+      "output_tokens": 166
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts state that the framers \"purposely rejected the concept of a single central bank\" and instead created a system with a central governing Board, a decentralized structure of 12 Reserve Banks, and a mix of public and private characteristics [3]. They also describe how supervision is carried out for community and regional banks and holding companies [4]. However, none of the provided evidence explains the reasoning for how the Reserve Bank districts are drawn or why they cross state lines.",
+     "cited": [
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       21
+      ],
+      [
+       "fed-explained",
+       17
+      ],
+      [
+       "fed-explained",
+       16
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1290.4,
+     "usage": {
+      "input_tokens": 1170,
+      "output_tokens": 136
+     },
+     "outcome": "answered",
+     "answer": "The Chair and Vice Chair of the Board serve four-year terms and may be reappointed to additional four-year terms [1]. They are appointed by the President and confirmed by the Senate [1][3].\n\nNote: Source [3] describes the governors' 14-year terms, and [1] says the Chair and Vice Chair \"serve only four-year terms\" as Board posts. These are different terms for different roles, not a conflict.",
+     "cited": [
+      1,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which cryptocurrency has the Federal Reserve endorsed as legal tender?",
+     "evidence": [
+      [
+       "fed-explained",
+       103
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "fed-explained",
+       78
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1425.0,
+     "usage": {
+      "input_tokens": 1222,
+      "output_tokens": 147
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe documents discuss U.S. currency generally. They state that all U.S. government-issued currency remains legal tender and that virtually all currency in circulation is in the form of Federal Reserve notes [1]. The Constitution excerpt references legal tender in the context of gold and silver coin for the states [2]. None of the excerpts mention cryptocurrency or any endorsement of one as legal tender.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many Senators does each State have?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       64
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2394.4,
+     "usage": {
+      "input_tokens": 1340,
+      "output_tokens": 371
+     },
+     "outcome": "answered",
+     "answer": "Each State has **two Senators**. The Senate \"shall be composed of two Senators from each State\" [1].\n\nThe excerpts describe two versions of this rule. The original wording says the Senators were \"chosen by the legislature for six years\" [1]. A later version, marked \"[Amendments],\" says they are \"elected by the people thereof, for six years\" [1]. The excerpts don't show the amendment's number or full text, so I can't say more about how the selection method changed.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which amendment stops Congress from setting up an official state religion?",
+     "evidence": [
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "fed-explained",
+       108
+      ],
+      [
+       "us-constitution",
+       61
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2462.6,
+     "usage": {
+      "input_tokens": 1461,
+      "output_tokens": 382
+     },
+     "outcome": "answered",
+     "answer": "The First Amendment. The index entry reads \"Religion or prohibiting the free exercise thereof. Congress shall make no law respecting the establishment of. [Amendments]... 1\" [2]. The clause is cross-referenced to the Amendments column with the number 1, which the index's layout indicates is the First Amendment. The excerpt does not spell out \"First Amendment\" in words, so that identification is my inference from the index format.",
+     "cited": [
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+     "evidence": [
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       47
+      ],
+      [
+       "nist-csf",
+       25
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1776.4,
+     "usage": {
+      "input_tokens": 1477,
+      "output_tokens": 219
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "con-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the Constitution protect the right of people to own weapons?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       19
+      ],
+      [
+       "us-constitution",
+       63
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 3243.8,
+     "usage": {
+      "input_tokens": 1560,
+      "output_tokens": 527
+     },
+     "outcome": "answered",
+     "answer": "Yes, the document says the Constitution protects a right to keep and bear arms, though it does not use the phrase \"own weapons.\"\n\n- The Second Amendment reads: \"A well-regulated militia being necessary to the security of a free State, the right of the people to keep and bear arms shall not be infringed\" [1].\n- The same text appears as \"Article [II.]\" in the amendments section, with \"Arms\" capitalized: \"the right of the people to keep and bear Arms, shall not be infringed\" [3].\n- The constitution's index also lists this right under \"Right to keep and bear arms\" [1][4].\n\nMy inference: \"keep\" plausibly covers possessing weapons, so \"keep and bear arms\" is the closest textual match to owning them. The document does not define these terms or address how far the right extends, such as limits on types of weapons or regulation of ownership. The excerpts also do not include any court interpretation.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How old and how long a resident must a person be to qualify as President?",
+     "evidence": [
+      [
+       "us-constitution",
+       71
+      ],
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       13
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1904.6,
+     "usage": {
+      "input_tokens": 1446,
+      "output_tokens": 232
+     },
+     "outcome": "answered",
+     "answer": "A person must have attained the age of **thirty-five years** and been **fourteen years a resident within the United States** to be eligible for President [3]. The same requirement appears in the constitutional index entries [1][4].\n\nThe evidence also says that a natural-born citizen, or a citizen of the United States at the time the Constitution was adopted, is eligible for the office [3]. The excerpts don't address other eligibility conditions.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What did the Supreme Court decide in Marbury v. Madison?",
+     "evidence": [
+      [
+       "us-constitution",
+       59
+      ],
+      [
+       "us-constitution",
+       49
+      ],
+      [
+       "us-constitution",
+       60
+      ],
+      [
+       "us-constitution",
+       60
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1370.2,
+     "usage": {
+      "input_tokens": 1449,
+      "output_tokens": 154
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence consists of index-style excerpts from the U.S. Constitution (pages 49, 59, and 60 of us-constitution.pdf). They describe the judicial power of the United States, the Supreme Court's original and appellate jurisdiction [3][4], and the tenure and compensation of judges [1][2]. None of the excerpts mention *Marbury v. Madison* or any Supreme Court decision.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-01",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the capital city of Australia?",
+     "evidence": [
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "fed-explained",
+       81
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1034.1,
+     "usage": {
+      "input_tokens": 1201,
+      "output_tokens": 87
+     },
+     "outcome": "withheld",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers U.S. bank capital rules and the Federal Reserve, plus excerpts from the U.S. Constitution and an 18th-century convention report, but nothing about Australia or its capital city.",
+     "invalid_citations": []
+    },
+    {
+     "id": "off-02",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How do I bake sourdough bread at home?",
+     "evidence": [
+      [
+       "fed-explained",
+       121
+      ],
+      [
+       "nhlbi-sleep",
+       50
+      ],
+      [
+       "fed-explained",
+       120
+      ],
+      [
+       "nhlbi-sleep",
+       14
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1066.9,
+     "usage": {
+      "input_tokens": 1540,
+      "output_tokens": 107
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers consumer finance laws (such as the Home Mortgage Disclosure Act and Fair Credit Reporting Act) [1][3], sleep disorder testing and night-shift health risks [2][4]. None of it addresses baking sourdough bread.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-03",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "Who won the 2018 FIFA World Cup?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       23
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 965.4,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 19
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "off-04",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the boiling point of water at sea level in Celsius?",
+     "evidence": [
+      [
+       "us-constitution",
+       50
+      ],
+      [
+       "fed-explained",
+       36
+      ],
+      [
+       "us-constitution",
+       85
+      ],
+      [
+       "us-constitution",
+       43
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 921.9,
+     "usage": {
+      "input_tokens": 1447,
+      "output_tokens": 19
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "off-05",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How many moons does Mars have?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       48
+      ],
+      [
+       "fed-explained",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 916.3,
+     "usage": {
+      "input_tokens": 721,
+      "output_tokens": 63
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "x-01",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the AI framework tell organizations how much risk they should be willing to accept?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "fed-explained",
+       44
+      ],
+      [
+       "nist-ai-rmf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3150.5,
+     "usage": {
+      "input_tokens": 1154,
+      "output_tokens": 489
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts from the NIST AI RMF 1.0 describe the framework's characteristics [4] and its four core functions, GOVERN, MAP, MEASURE, and MANAGE [4]. They also say organizations should track emergent risks [3]. None of the excerpts say how much risk an organization should accept. The Federal Reserve excerpt [2] is unrelated to AI risk.",
+     "cited": [
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+     "evidence": [
+      [
+       "nist-csf",
+       9
+      ],
+      [
+       "nist-csf",
+       25
+      ],
+      [
+       "nist-csf",
+       26
+      ],
+      [
+       "fed-explained",
+       30
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 5676.0,
+     "usage": {
+      "input_tokens": 1490,
+      "output_tokens": 1089
+     },
+     "outcome": "answered",
+     "answer": "The evidence doesn't directly contrast \"bouncing back\" with \"being protected,\" but the NIST CSF excerpts suggest a distinction, and one of them shows the two overlap.\n\n**What the sources say:**\n\n- **Recovery (bouncing back):** Under RECOVER, \"Assets and operations affected by a cybersecurity incident are restored,\" and this \"supports the timely restoration of normal operations to reduce the effects\" of an incident [1].\n- **Protection:** The PR (Protect) category covers safeguards such as keeping data's \"confidentiality, integrity, and availability\" protected [2] and protecting technology assets \"from environmental threats\" [3].\n- **Overlap:** PR.IR-03 is a Protect-category outcome, but it describes \"mechanisms... to achieve resilience requirements in normal and adverse situations\" [3]. So the framework treats resilience as partly a protective property, not only a post-incident activity.\n- **Fed document:** The \"demand shocks\" passage [4] uses \"surprise\" in an economic sense, with the FOMC responding by adjusting monetary policy. It doesn't discuss system resilience or security, so it isn't useful for this comparison.\n\n**My inference:** Protection tries to prevent or limit harm before it happens. Recovery assumes some harm may get through and focuses on restoring normal operations afterward. In the CSF, resilience (PR.IR-03) spans both, since it means being able to keep functioning in adverse situations, while RECOVER covers the restoration step after an incident.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What fraction of pregnant women begin snoring for the first time during the second trimester?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       32
+      ],
+      [
+       "nhlbi-sleep",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1132.9,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 86
+     },
+     "outcome": "answered",
+     "answer": "About one-third of pregnant women begin snoring for the first time during their second trimester [1].\n\nThis comes from the NHLBI sleep guide (nhlbi-sleep.pdf, page 37) and is stated directly in the source; I have not added anything beyond it.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which condition makes people abruptly drop off to sleep at moments when they should be awake?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       47
+      ],
+      [
+       "nhlbi-sleep",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       53
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3149.6,
+     "usage": {
+      "input_tokens": 1018,
+      "output_tokens": 545
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe closest related text is [2], which says that falling asleep within a few minutes usually means someone is very sleepy during the day, and that daytime sleepiness can be a sign of sleep apnea. However, it does not say that sleep apnea, or any other condition, causes people to abruptly drop off to sleep when they should be awake.",
+     "cited": [
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-05",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which prescription drug brand does the guide recommend for restless legs syndrome?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1169.2,
+     "usage": {
+      "input_tokens": 1359,
+      "output_tokens": 115
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence describes restless legs syndrome as causing an unpleasant prickling or tingling in the legs that is relieved by moving or massaging them [1], and it lists RLS in the guide's table of contents [4]. None of the excerpts name a prescription drug or brand recommended for the condition.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-06",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+     "evidence": [
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1509.3,
+     "usage": {
+      "input_tokens": 1242,
+      "output_tokens": 203
+     },
+     "outcome": "answered",
+     "answer": "The FOMC holds **eight regularly scheduled meetings each year**. The source describes these as \"eight regularly scheduled joint meetings of the Board and FOMC each year,\" where the Board members and the 12 Reserve Bank presidents discuss conditions and deliberate on monetary policy [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-07",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How do harvest failures caused by bad weather affect prices and jobs?",
+     "evidence": [
+      [
+       "fed-explained",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       49
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1430.8,
+     "usage": {
+      "input_tokens": 661,
+      "output_tokens": 205
+     },
+     "outcome": "answered",
+     "answer": "Based on the evidence, crop losses from extreme weather are an example of a \"supply shock,\" which the Federal Reserve document describes as follows:\n\n- Supply shocks alter the costs of production or the technology used in production, and examples include \"crop losses due to extreme weather\" [1].\n- Such adverse supply shocks \"tend to raise prices and reduce output (and also employment)\" [1].\n\nSo, according to this source, harvest failures caused by bad weather tend to push prices up and reduce output and employment [1].\n\nThe second document [2] is a personal account about CPAP sleep apnea treatment and does not address harvests, prices, or jobs.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-08",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+     "evidence": [
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       76
+      ],
+      [
+       "us-constitution",
+       25
+      ],
+      [
+       "us-constitution",
+       77
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4150.8,
+     "usage": {
+      "input_tokens": 1502,
+      "output_tokens": 771
+     },
+     "outcome": "answered",
+     "answer": "No. The evidence says a state cannot deny or limit the right to vote for failure to pay a tax. The index entry reads: \"Poll tax. The right of citizens of the United States to vote shall not be denied or abridged by the United States or any State by reason of failure to pay. [Amendments]\" [1]. The entry's reference is \"24 1,\" which I read as Amendment XXIV, Section 1, though the excerpt doesn't spell that out.\n\nLimits of the evidence:\n- The excerpts are index summaries, not the full amendment text, so I can't confirm the exact wording.\n- The excerpt says \"the right of citizens of the United States to vote\" without expressly saying \"federal elections.\" Its plain terms cover voting generally, but I can't confirm from these excerpts how the provision applies to every type of election.\n- Nothing in the evidence addresses whether a fee other than a tax (or a registration requirement) would be treated the same way.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-09",
+     "type": "direct",
+     "answerable": true,
+     "question": "At what time on which day in January do the terms of the President and Vice President end?",
+     "evidence": [
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       64
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2628.7,
+     "usage": {
+      "input_tokens": 1459,
+      "output_tokens": 391
+     },
+     "outcome": "answered",
+     "answer": "The terms of the President and Vice President end **at noon on the 20th day of January** [1]. The passage says their terms end \"at noon on the 20th day of January,\" and that the terms of Senators and Representatives end at noon on January 3 [1].\n\nThe passage is labeled \"ARTICLE [XX.]\" in the document [1]. The other excerpts do not address the end of the terms [2][3][4].",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-10",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the tallest mountain in South America?",
+     "evidence": [
+      [
+       "us-constitution",
+       16
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "us-constitution",
+       54
+      ],
+      [
+       "fed-explained",
+       131
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1141.6,
+     "usage": {
+      "input_tokens": 1101,
+      "output_tokens": 117
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe question about the tallest mountain in South America isn't addressed in any of the provided excerpts. They cover the U.S. Constitution's opening lines and signature page [1][2], a table of constitutional index entries [3], and a Federal Reserve document's discussion of advisory councils and community organizations [4].",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    }
+   ],
+   "metrics": {
+    "outcomes": {
+     "no_evidence": 0,
+     "abstained": 5,
+     "withheld": 1,
+     "answered": 39,
+     "error": 0
+    },
+    "answerable_with_evidence": {
+     "answer_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "supported_citation_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "wrong_abstention_rate": {
+      "value": 0.0,
+      "ci": [
+       0.0,
+       0.0
+      ],
+      "n": 22
+     }
+    },
+    "answerable_without_evidence": {
+     "answered_anyway": {
+      "value": 0.8182,
+      "ci": [
+       0.5455,
+       1.0
+      ],
+      "n": 11
+     }
+    },
+    "unanswerable": {
+     "invented_answer_rate": {
+      "value": 0.6667,
+      "ci": [
+       0.4167,
+       0.9167
+      ],
+      "n": 12
+     },
+     "product_abstained": {
+      "value": 0.25,
+      "ci": [
+       0.0,
+       0.5
+      ],
+      "n": 12
+     },
+     "model_was_called": 12
+    },
+    "latency_ms": {
+     "median": 1486.6,
+     "p95": 4150.8,
+     "calls": 45
+    },
+    "tokens": {
+     "input_tokens": 56270,
+     "output_tokens": 12089
+    },
+    "concerns": [
+     "Answered an unanswerable question: csf-06",
+     "Answered an unanswerable question: rmf-06",
+     "Answered an unanswerable question: sleep-06",
+     "Answered an unanswerable question: fed-06",
+     "Answered an unanswerable question: con-06",
+     "Answered an unanswerable question: off-02",
+     "Answered an unanswerable question: x-05",
+     "Answered an unanswerable question: x-10"
+    ]
+   }
+  },
+  {
+   "records": [
+    {
+     "id": "csf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What are the six Functions of the CSF Core?",
+     "evidence": [
+      [
+       "nist-csf",
+       20
+      ],
+      [
+       "nist-csf",
+       31
+      ],
+      [
+       "nist-csf",
+       8
+      ],
+      [
+       "nist-csf",
+       4
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1612.3,
+     "usage": {
+      "input_tokens": 1215,
+      "output_tokens": 230
+     },
+     "outcome": "answered",
+     "answer": "The six CSF Functions are **Govern, Identify, Protect, Detect, Respond, and Recover** [2]. The document defines a CSF Function as \"the highest level of organization for cybersecurity outcomes\" [2].\n\nThe Core is arranged by Function, then Category, then Subcategory [3]. The order of the Functions doesn't imply a sequence or importance [3].",
+     "cited": [
+      2,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which short beginner guides help a company get started with the framework?",
+     "evidence": [
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "nhlbi-sleep",
+       52
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       2
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2262.3,
+     "usage": {
+      "input_tokens": 1196,
+      "output_tokens": 396
+     },
+     "outcome": "answered",
+     "answer": "The uploaded documents describe **Quick-Start Guides (QSGs)** as the short, beginner-oriented resource for this. They are \"brief documents on specific CSF-related topics and are often tailored to specific audiences,\" and they \"distill specific portions of the CSF into actionable 'first steps' that an organization can consider on the path to improving their cybersecurity posture\" [3].\n\n[4] adds that NIST will keep building resources to help organizations implement the CSF, including Quick Start Guides and Community Profiles, and that these are publicly available on the NIST CSF website.\n\nThe excerpts do not name any specific Quick-Start Guide titles, so I can't say which ones address getting started. Suggestions for additional resources can be sent to cyberframework@nist.gov [4].",
+     "cited": [
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-03",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+     "evidence": [
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       16
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3665.1,
+     "usage": {
+      "input_tokens": 1244,
+      "output_tokens": 677
+     },
+     "outcome": "answered",
+     "answer": "The evidence doesn't give a single step-by-step answer, but it points to a few actions once an organization has identified its gaps:\n\n1. **Assess progress toward the gaps.** The CSF is meant to help organizations \"determine gaps, and assess progress toward addressing those gaps\" [1].\n\n2. **Implement the target state and measure operational risk.** Practitioners \"focus on implementing the target state and measuring changes in operational risk to help plan, carry out, and monitor specific cybersecurity activities\" [3]. The evidence says this is done through an action plan, such as a risk register, risk detail report, or POA&M [3].\n\n3. **Report to managers and executives.** As controls are implemented to reach an acceptable risk level, practitioners give leaders information such as key performance indicators and key risk indicators so they can understand posture, make decisions, and adjust the risk strategy [3].\n\n4. **Update priorities and repeat the cycle.** Changes to expectations and priorities are reflected in updated Organizational Profiles, and \"the cycle repeats\" [3].\n\nThe evidence also says the CSF \"does not prescribe outcomes nor how they may be achieved.\" Specific methods are described in supplementary online resources [2].\n\nMy inference: the sequence is to close the gaps by implementing the target profile, track progress with metrics, report to leadership, and then revise the profile and repeat. The sources describe these activities but do not spell out this exact sequence.",
+     "cited": [
+      1,
+      2,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "csf-04",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which email address can be used to suggest new Informative References for CSF 2.0?",
+     "evidence": [
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1145.8,
+     "usage": {
+      "input_tokens": 1282,
+      "output_tokens": 120
+     },
+     "outcome": "answered",
+     "answer": "The email address is olir@nist.gov. The document states that \"Suggestions for new Informative References for CSF 2.0 can always be shared with NIST at olir@nist.gov\" [1][4].\n\nFor other suggestions, such as additional Quick-Start Guide topics or resources for the NIST CSF website, the document directs them to cyberframework@nist.gov [1].",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which Tier describes an organization that adapts its practices using lessons learned and predictive indicators?",
+     "evidence": [
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1253.0,
+     "usage": {
+      "input_tokens": 1173,
+      "output_tokens": 109
+     },
+     "outcome": "answered",
+     "answer": "Tier 4, the Adaptive tier. The evidence says that at Tier 4, \"The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators\" [1]. The same excerpt names the four Tiers, including Adaptive (Tier 4) [4].",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What financial penalties does NIST impose on organizations that fail to adopt the Cybersecurity Framework?",
+     "evidence": [
+      [
+       "nist-csf",
+       2
+      ],
+      [
+       "nist-csf",
+       4
+      ],
+      [
+       "nist-csf",
+       5
+      ],
+      [
+       "nist-csf",
+       17
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1396.9,
+     "usage": {
+      "input_tokens": 1476,
+      "output_tokens": 153
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe provided excerpts describe the CSF as guidance that organizations can use voluntarily. For example, the framework \"provides guidance to industry, government agencies, and other organizations to manage cybersecurity risks\" [1], and \"the CSF does not prescribe how outcomes should be achieved\" [1]. However, none of the excerpts mention any penalties, fines, or enforcement for organizations that do not adopt it.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What does the framework say about decommissioning and phasing out AI systems?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1858.4,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 324
+     },
+     "outcome": "answered",
+     "answer": "The provided documents say the following about decommissioning and phasing out AI systems:\n\n- GOVERN 1.7 states: \"Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization's trustworthiness.\" [1]\n\n- The GOVERN 1.6 subcategory addresses inventorying AI systems, which is a separate item from decommissioning. It says mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities. [1]\n\n- The GOVERN 1.5 subcategory addresses ongoing monitoring and periodic review of the risk management process, with roles and responsibilities defined. This is also separate from decommissioning. [1]\n\nNote that the text of GOVERN 1.7 continues onto page 28 as shown in [2], which repeats the same sentence. The excerpts do not describe specific decommissioning steps, timelines, or procedures beyond this subcategory statement.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which people across the creation and use of artificial intelligence are expected to read and apply this document?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-csf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       22
+      ],
+      [
+       "nist-csf",
+       19
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2654.5,
+     "usage": {
+      "input_tokens": 1124,
+      "output_tokens": 425
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe closest related text is in [4], which says cybersecurity and privacy risk considerations \"are applicable to the design, development, deployment, evaluation, and use of\" AI. That describes lifecycle stages, not the people expected to read or apply the framework. The excerpt from the AI RMF [1][3] does not name an intended audience.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       14
+      ],
+      [
+       "nist-ai-rmf",
+       15
+      ],
+      [
+       "nist-ai-rmf",
+       5
+      ],
+      [
+       "nist-ai-rmf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1692.1,
+     "usage": {
+      "input_tokens": 1327,
+      "output_tokens": 191
+     },
+     "outcome": "answered",
+     "answer": "The OECD framework uses five key socio-technical dimensions for classifying AI lifecycle activities [1]. NIST's version, shown in Figure 2, modifies that framework slightly [1][2]. The NIST figure's two inner circles show four AI system dimensions: Application Context, Data and Input, AI Model, and Task and Output [4].\n\nThe evidence does not state how many dimensions NIST's modified version contains, so I can't confirm a count for NIST's version from these excerpts alone. The figure list also describes the inner circles as \"key dimensions\" without giving a number [3].",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Is an AI system acceptable if it is very hard to hack but treats people unfairly?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       12
+      ],
+      [
+       "nist-ai-rmf",
+       6
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3154.6,
+     "usage": {
+      "input_tokens": 1421,
+      "output_tokens": 539
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe closest material is in the NIST AI RMF excerpt, which says the framework \"does not prescribe risk tolerance\" and that acceptable risk is \"highly contextual and application and use-case specific\" [2]. It also notes that AI risks \"can emerge from the interplay of technical aspects combined\" with societal dynamics and human behavior [3]. Neither excerpt addresses whether a system that is secure but unfair is acceptable. The NHLBI sleep excerpt is unrelated [1][4].",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1275.9,
+     "usage": {
+      "input_tokens": 1076,
+      "output_tokens": 171
+     },
+     "outcome": "answered",
+     "answer": "The subcategory is **GOVERN 2.2**. It states: \"The organization's personnel and partners receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements.\" [1]\n\nIt falls under the GOVERN 2 category, Accountability structures [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       26
+      ],
+      [
+       "nist-ai-rmf",
+       24
+      ],
+      [
+       "nist-ai-rmf",
+       47
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1054.1,
+     "usage": {
+      "input_tokens": 1205,
+      "output_tokens": 94
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts describe the AI RMF as voluntary [2][4] and say that evaluations of its effectiveness will be part of future NIST activities [3]. They do not mention any certification program or list any vendors as certified or compliant.",
+     "cited": [
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "sleep-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many hours a night do healthy adults sleep on average when they have unlimited opportunity to sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       1
+      ],
+      [
+       "nhlbi-sleep",
+       21
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1772.3,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 271
+     },
+     "outcome": "answered",
+     "answer": "When healthy adults have unlimited opportunity to sleep, they sleep on average between 8 and 8.5 hours a night [1].\n\nSleep needs vary by person. Some need only about 7 hours to avoid problem sleepiness, while others need 9 or more [1]. Another source says adults need at least 7–8 hours of sleep each night to be well rested, and that the average adult now sleeps fewer than 7 hours [4]. These figures describe different things: the first is what people sleep when unrestricted, the second is a recommended minimum and a description of current habits.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       29
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2022.7,
+     "usage": {
+      "input_tokens": 1388,
+      "output_tokens": 276
+     },
+     "outcome": "answered",
+     "answer": "No. The sources say sleeping in on the weekend does not fully make up for lost sleep.\n\n- Sleeping in on a weekend does not completely erase sleep debt [1].\n- Sleeping more on weekends \"will not completely make up for the lack of sleep or correct your sleep debt\" [3].\n- It also will not necessarily make up for impaired performance during the week [3].\n- Later weekend sleep can affect your biological clock, making it harder to fall asleep on Sunday nights and wake early on Monday [3].\n- The tips section similarly says sleeping later on weekends won't fully make up for a lack of sleep during the week [4].\n\nNote: The document says weekend sleep \"will help you feel more rested\" [3], so it may improve how rested you feel, but it does not fully repay the sleep debt. This answer is based only on the cited excerpts.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long does each pause in breathing typically last in sleep apnea?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       36
+      ],
+      [
+       "nhlbi-sleep",
+       46
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1008.9,
+     "usage": {
+      "input_tokens": 1228,
+      "output_tokens": 69
+     },
+     "outcome": "answered",
+     "answer": "Each pause in breathing typically lasts 10–120 seconds [2]. The same passage notes that it may occur 20–30 times or more each sleeping hour [2]. Source [1] repeats the same description.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can herbal or over-the-counter supplements reliably treat persistent sleeplessness?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ],
+      [
+       "nhlbi-sleep",
+       48
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 3721.7,
+     "usage": {
+      "input_tokens": 1279,
+      "output_tokens": 754
+     },
+     "outcome": "answered",
+     "answer": "No, the documents don't support relying on herbal or over-the-counter supplements to treat persistent sleeplessness.\n\n- **Melatonin:** \"Little evidence exists that melatonin can help relieve insomnia\" [1].\n- **Valerian:** \"Studies with valerian also have been inconclusive,\" and the actual dose and purity may vary from product to product [1].\n- **Safety:** Because melatonin, valerian, and other natural remedies \"are not regulated by the Food and Drug Administration, their safety is not monitored\" [1].\n- **Evidence-based alternative:** Experts recommend reconditioning therapy: go to bed only when sleepy, and if you can't fall asleep within 20 minutes, get out of bed and do a relaxing activity until sleepy. \"Studies have shown that this reconditioning therapy is an effective way to treat insomnia\" [2]. Doctors diagnose insomnia mainly from sleep history, often using a sleep diary, and also try to find and treat underlying medical or psychological problems [4].\n\nA separate caution: in the context of sleep apnea, the document advises avoiding \"herbal supplements, and any other medications that make you sleepy,\" because they can make breathing pauses longer and more severe [3].\n\nMy inference: the sources show weak or inconclusive evidence for supplements, not that they never help. They also don't cover every supplement, and they don't address combining supplements with other treatments. For persistent insomnia, the documents point toward behavioral approaches and a medical evaluation rather than supplements.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many hours of sleep do teenagers actually get on average?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2110.4,
+     "usage": {
+      "input_tokens": 1263,
+      "output_tokens": 280
+     },
+     "outcome": "answered",
+     "answer": "Teenagers average **7–7.5 hours of sleep a night**, according to the NHLBI sleep document [1]. The same passage says teenagers need between 9 and 10 hours of sleep a night [1], so they are getting less than the amount the document describes as needed [1][2].\n\nThe document gives a reason: puberty shifts teens' biological clocks, so they tend to go to bed later and want to sleep later in the morning. That delayed rhythm conflicts with the early start times of many high schools, which the document says helps explain the shortfall [1].",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What daily melatonin dose does the guide recommend for insomnia?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       17
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1506.2,
+     "usage": {
+      "input_tokens": 1216,
+      "output_tokens": 194
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "fed-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How long is the term of a member of the Board of Governors?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       12
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       56
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1394.2,
+     "usage": {
+      "input_tokens": 1273,
+      "output_tokens": 111
+     },
+     "outcome": "answered",
+     "answer": "Each member of the Board of Governors is appointed for a 14-year term [1]. The terms are staggered so that one term expires on January 31 of each even-numbered year [1]. A member who completes a full 14-year term may not be reappointed, but a person who fills the remainder of a vacated term may later be appointed to a full 14-year term [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which two goals has Congress given the central bank for its interest-rate decisions?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1097.8,
+     "usage": {
+      "input_tokens": 958,
+      "output_tokens": 133
+     },
+     "outcome": "answered",
+     "answer": "Congress has mandated two goals for the Fed's interest-rate decisions: maximum employment and price stability. The FOMC makes its monetary policy decisions \"to help move the economy toward the congressionally mandated goals of maximum employment and price stability\" [4]. The FOMC also \"raises and lowers its target range for the policy rate, which is the federal funds rate,\" to achieve these dual objectives [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many voting members does the Federal Open Market Committee have?",
+     "evidence": [
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1124.0,
+     "usage": {
+      "input_tokens": 1297,
+      "output_tokens": 99
+     },
+     "outcome": "answered",
+     "answer": "The Federal Open Market Committee has 12 voting members [4]. These are the 7 members of the Board of Governors, the president of the Federal Reserve Bank of New York, and 4 of the remaining 11 Reserve Bank presidents, who serve one-year terms on a rotating basis [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Why do the central bank's regional territories cut across state boundaries?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       10
+      ],
+      [
+       "fed-explained",
+       76
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1862.0,
+     "usage": {
+      "input_tokens": 947,
+      "output_tokens": 248
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "fed-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       21
+      ],
+      [
+       "fed-explained",
+       17
+      ],
+      [
+       "fed-explained",
+       16
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1123.4,
+     "usage": {
+      "input_tokens": 1170,
+      "output_tokens": 109
+     },
+     "outcome": "answered",
+     "answer": "The Chair and Vice Chair of the Board serve four-year terms [1]. They may be reappointed to additional four-year terms [1].\n\nNote: The evidence also describes the Board's general governors' terms as 14 years, which is a separate term length [1][3][4]. The Chair and Vice Chair terms are specified only in [1].",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which cryptocurrency has the Federal Reserve endorsed as legal tender?",
+     "evidence": [
+      [
+       "fed-explained",
+       103
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "fed-explained",
+       78
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1478.5,
+     "usage": {
+      "input_tokens": 1222,
+      "output_tokens": 184
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers the history of U.S. paper currency, which it says has been Federal Reserve notes since 1914 and that \"All currency issued by the U.S. government since then remains legal tender\" [1]. It also notes that the Constitution gives Congress power over legal tender, stating \"No State shall make anything but gold and silver coin a\" legal tender [2]. Nothing in the excerpts mentions cryptocurrency or says the Federal Reserve has endorsed any cryptocurrency as legal tender.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many Senators does each State have?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       64
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1667.6,
+     "usage": {
+      "input_tokens": 1340,
+      "output_tokens": 222
+     },
+     "outcome": "answered",
+     "answer": "Each State has two Senators. The Senate \"shall be composed of two Senators from each State\" [1]. The original wording said they would be \"chosen by the legislature,\" and the later amendment changed this to \"elected by the people thereof\" [1][2]. The number of Senators per State is the same under both versions.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which amendment stops Congress from setting up an official state religion?",
+     "evidence": [
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "fed-explained",
+       108
+      ],
+      [
+       "us-constitution",
+       61
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2887.7,
+     "usage": {
+      "input_tokens": 1461,
+      "output_tokens": 462
+     },
+     "outcome": "answered",
+     "answer": "The First Amendment. The index entry reads \"Congress shall make no law respecting the establishment of\" and is listed under \"[Amendments]\" with the number 1 [1][2].\n\nThe excerpts cut off before the words \"religion\" and \"establishment\" are completed, so they don't spell out the full clause. The reference to an official state religion comes from my own knowledge of the First Amendment, not from these documents.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+     "evidence": [
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       47
+      ],
+      [
+       "nist-csf",
+       25
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1857.5,
+     "usage": {
+      "input_tokens": 1477,
+      "output_tokens": 252
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "con-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the Constitution protect the right of people to own weapons?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       19
+      ],
+      [
+       "us-constitution",
+       63
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2775.0,
+     "usage": {
+      "input_tokens": 1560,
+      "output_tokens": 464
+     },
+     "outcome": "answered",
+     "answer": "Yes, the evidence says the Constitution protects a right related to weapons. The Second Amendment provides: \"A well-regulated militia being necessary to the security of a free State, the right of the people to keep and bear arms shall not be infringed\" [1]. The same text appears in the amendments article, where it is Article II: \"A well regulated Militia, being necessary to the security of a free State, the right of the people to keep and bear Arms, shall not be infringed\" [3]. An index in the document also lists it as the \"right to keep and bear arms\" [4].\n\nThe evidence does not say whether \"keep and bear arms\" covers owning any particular type of weapon, or how far the right extends or can be regulated. Its prefatory clause about a well-regulated militia is also not explained. Answering those questions would require sources that interpret the amendment, such as court decisions.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How old and how long a resident must a person be to qualify as President?",
+     "evidence": [
+      [
+       "us-constitution",
+       71
+      ],
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       13
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2577.2,
+     "usage": {
+      "input_tokens": 1446,
+      "output_tokens": 371
+     },
+     "outcome": "answered",
+     "answer": "A person must have attained the age of **thirty-five years** and been **fourteen years a resident within the United States** [3]. The Constitution's text also says the person must be a natural born Citizen, or a Citizen of the United States at the time of the Adoption of the Constitution [3].\n\nThe other excerpts repeat the same age and residency requirements [1][4]. These excerpts are index-style and truncated, so the Article II text in [3] is the fuller source.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What did the Supreme Court decide in Marbury v. Madison?",
+     "evidence": [
+      [
+       "us-constitution",
+       59
+      ],
+      [
+       "us-constitution",
+       49
+      ],
+      [
+       "us-constitution",
+       60
+      ],
+      [
+       "us-constitution",
+       60
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1340.7,
+     "usage": {
+      "input_tokens": 1449,
+      "output_tokens": 145
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence consists of index-style excerpts from the U.S. Constitution (pages 49, 59, and 60 of us-constitution.pdf). They cover topics such as the judicial power, the jurisdiction of the Supreme Court [1][3][4], and the jury trial provisions [4]. None of them mention *Marbury v. Madison* or describe any Supreme Court decision.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-01",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the capital city of Australia?",
+     "evidence": [
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "fed-explained",
+       81
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 878.0,
+     "usage": {
+      "input_tokens": 1201,
+      "output_tokens": 64
+     },
+     "outcome": "withheld",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers Federal Reserve capital requirements and the U.S. Constitution's history, but nothing about Australia's capital city.",
+     "invalid_citations": []
+    },
+    {
+     "id": "off-02",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How do I bake sourdough bread at home?",
+     "evidence": [
+      [
+       "fed-explained",
+       121
+      ],
+      [
+       "nhlbi-sleep",
+       50
+      ],
+      [
+       "fed-explained",
+       120
+      ],
+      [
+       "nhlbi-sleep",
+       14
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 998.2,
+     "usage": {
+      "input_tokens": 1540,
+      "output_tokens": 85
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers consumer credit and mortgage regulations [1][3], sleep disorder testing [2], and night shift work and sleepiness [4]. None of it addresses baking sourdough bread.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-03",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "Who won the 2018 FIFA World Cup?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       23
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1132.7,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 88
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers sleep tips from the NHLBI sleep document [1][2][4] and risk management concepts from the NIST AI RMF [3], but nothing about the 2018 FIFA World Cup.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-04",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the boiling point of water at sea level in Celsius?",
+     "evidence": [
+      [
+       "us-constitution",
+       50
+      ],
+      [
+       "fed-explained",
+       36
+      ],
+      [
+       "us-constitution",
+       85
+      ],
+      [
+       "us-constitution",
+       43
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1004.6,
+     "usage": {
+      "input_tokens": 1447,
+      "output_tokens": 19
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "off-05",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How many moons does Mars have?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       48
+      ],
+      [
+       "fed-explained",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 777.6,
+     "usage": {
+      "input_tokens": 721,
+      "output_tokens": 19
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "x-01",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the AI framework tell organizations how much risk they should be willing to accept?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "fed-explained",
+       44
+      ],
+      [
+       "nist-ai-rmf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2963.6,
+     "usage": {
+      "input_tokens": 1154,
+      "output_tokens": 440
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts don't say how much risk an organization should accept. They do say that all AI actors \"should manage risk in the AI systems they develop, deploy, or use\" [3], and that GOVERN, MAP, MEASURE, and MANAGE are the framework's four core functions [4]. The Federal Reserve excerpt [2] is unrelated to AI risk.",
+     "cited": [
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+     "evidence": [
+      [
+       "nist-csf",
+       9
+      ],
+      [
+       "nist-csf",
+       25
+      ],
+      [
+       "nist-csf",
+       26
+      ],
+      [
+       "fed-explained",
+       30
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4735.6,
+     "usage": {
+      "input_tokens": 1490,
+      "output_tokens": 921
+     },
+     "outcome": "answered",
+     "answer": "The evidence supports a distinction between protecting a system and recovering from an incident, though it doesn't state the contrast in those exact terms.\n\n**Protection (preventive):** The CSF's PROTECT-related outcomes aim to keep systems secure. For example, data are managed \"to protect the confidentiality, integrity, and availability of information\" [2], and platform hardware and software are managed \"to protect their confidentiality, integrity, and\" availability [2]. These outcomes focus on keeping attacks from succeeding.\n\n**Bouncing back (recovery):** RECOVER is described as the function in which \"Assets and operations affected by a cybersecurity incident are restored,\" and it \"supports the timely restoration of normal operations to reduce the effects of\" the incident [1]. This applies after something has already gone wrong.\n\n**Where they overlap:** Some outcomes span both. PR.IR-03 calls for mechanisms \"to achieve resilience requirements in normal and adverse situations\" [3], and PR.DS-11 requires that backups be \"created, protected, maintained, and tested\" [2]. Backups support recovery, so the two concepts are connected in practice.\n\n**Fed excerpt:** The \"demand shocks\" passage [4] describes unexpected economic events and how the FOMC may respond to them. It is about economic policy, not cybersecurity or system resilience, so it doesn't answer this question.\n\n**My inference:** Protection tries to stop an attack from causing harm, while bouncing back accepts that a surprise or incident may happen and focuses on restoring operations afterward. The sources treat these as separate functions, but they don't explicitly compare them.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What fraction of pregnant women begin snoring for the first time during the second trimester?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       32
+      ],
+      [
+       "nhlbi-sleep",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1096.0,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 71
+     },
+     "outcome": "answered",
+     "answer": "About one-third of pregnant women begin snoring for the first time during their second trimester [1].\n\nThis is stated directly in the source, so it is not an inference. The evidence does not cover other trimesters or give a more precise figure.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which condition makes people abruptly drop off to sleep at moments when they should be awake?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       47
+      ],
+      [
+       "nhlbi-sleep",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       53
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2758.3,
+     "usage": {
+      "input_tokens": 1018,
+      "output_tokens": 413
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe closest excerpt is [2], which says that falling asleep within a few minutes usually means someone is very sleepy during the day, and that this can be a sign of sleep apnea. It does not name a condition that causes sudden sleep onset at inappropriate times.",
+     "cited": [
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-05",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which prescription drug brand does the guide recommend for restless legs syndrome?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1308.1,
+     "usage": {
+      "input_tokens": 1359,
+      "output_tokens": 131
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe excerpts describe restless legs syndrome as causing an unpleasant prickling or tingling in the legs, relieved by moving or massaging them, and note it can make falling and staying asleep difficult [1]. The excerpts also list RLS in the table of contents [3][4], but none of the provided text names a prescription drug or brand for treating it.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-06",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+     "evidence": [
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1435.6,
+     "usage": {
+      "input_tokens": 1242,
+      "output_tokens": 195
+     },
+     "outcome": "answered",
+     "answer": "The evidence states that the members of the Board of Governors and the presidents of the 12 Federal Reserve Banks gather for eight regularly scheduled joint meetings of the Board and FOMC each year [4]. So the answer is eight.\n\nNote that these are described as joint meetings of the Board and the FOMC, so the source does not specifically say that eight meetings are FOMC-only meetings. Also, the FOMC's composition is described in [1], which mentions 4 of the 11 remaining Reserve Bank presidents serving one-year rotating terms, but that passage does not address meeting frequency.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-07",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How do harvest failures caused by bad weather affect prices and jobs?",
+     "evidence": [
+      [
+       "fed-explained",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       49
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2110.2,
+     "usage": {
+      "input_tokens": 661,
+      "output_tokens": 287
+     },
+     "outcome": "answered",
+     "answer": "Harvest failures caused by bad weather are an example of a \"supply shock.\" According to the document, these \"adverse supply shocks tend to raise prices and reduce output (and also employment)\" [1].\n\nThe excerpt does not go into further detail about harvests specifically, such as how far food prices would rise or how long the effects would last. The second excerpt, about CPAP machines and sleep, is not relevant to this question.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-08",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+     "evidence": [
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       76
+      ],
+      [
+       "us-constitution",
+       25
+      ],
+      [
+       "us-constitution",
+       77
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4395.9,
+     "usage": {
+      "input_tokens": 1502,
+      "output_tokens": 732
+     },
+     "outcome": "answered",
+     "answer": "No. According to the constitutional index, the right of citizens to vote \"shall not be denied or abridged by the United States or any State by reason of failure to pay\" [1]. The index entry is labeled \"Poll tax\" and is marked \"[Amendments]\" [1].\n\nSome limits apply:\n\n- The excerpt is an index summary, not the full amendment text, so I can't confirm the exact wording or any exceptions.\n- The entry doesn't say \"federal election\" explicitly. It refers to the right to vote generally. Whether that covers only federal elections is outside what these excerpts show.\n- The entry's notation (\"24 1\") appears to point to an amendment and section, but the excerpts don't name the amendment, so I'm inferring that it is the 24th Amendment, Section 1.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-09",
+     "type": "direct",
+     "answerable": true,
+     "question": "At what time on which day in January do the terms of the President and Vice President end?",
+     "evidence": [
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       64
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1867.7,
+     "usage": {
+      "input_tokens": 1459,
+      "output_tokens": 246
+     },
+     "outcome": "answered",
+     "answer": "The terms of the President and Vice President end **at noon on January 20th**. [1] states that \"the terms of the President and Vice President shall end at noon on the 20th day of January,\" and that the terms of their successors then begin.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-10",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the tallest mountain in South America?",
+     "evidence": [
+      [
+       "us-constitution",
+       16
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "us-constitution",
+       54
+      ],
+      [
+       "fed-explained",
+       131
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1036.7,
+     "usage": {
+      "input_tokens": 1101,
+      "output_tokens": 85
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    }
+   ],
+   "metrics": {
+    "outcomes": {
+     "no_evidence": 0,
+     "abstained": 6,
+     "withheld": 1,
+     "answered": 38,
+     "error": 0
+    },
+    "answerable_with_evidence": {
+     "answer_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "supported_citation_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "wrong_abstention_rate": {
+      "value": 0.0,
+      "ci": [
+       0.0,
+       0.0
+      ],
+      "n": 22
+     }
+    },
+    "answerable_without_evidence": {
+     "answered_anyway": {
+      "value": 0.8182,
+      "ci": [
+       0.5455,
+       1.0
+      ],
+      "n": 11
+     }
+    },
+    "unanswerable": {
+     "invented_answer_rate": {
+      "value": 0.5833,
+      "ci": [
+       0.3333,
+       0.8333
+      ],
+      "n": 12
+     },
+     "product_abstained": {
+      "value": 0.3333,
+      "ci": [
+       0.0833,
+       0.5833
+      ],
+      "n": 12
+     },
+     "model_was_called": 12
+    },
+    "latency_ms": {
+     "median": 1612.3,
+     "p95": 3721.7,
+     "calls": 45
+    },
+    "tokens": {
+     "input_tokens": 56270,
+     "output_tokens": 11869
+    },
+    "concerns": [
+     "Answered an unanswerable question: csf-06",
+     "Answered an unanswerable question: rmf-06",
+     "Answered an unanswerable question: fed-06",
+     "Answered an unanswerable question: con-06",
+     "Answered an unanswerable question: off-02",
+     "Answered an unanswerable question: off-03",
+     "Answered an unanswerable question: x-05"
+    ]
+   }
+  },
+  {
+   "records": [
+    {
+     "id": "csf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What are the six Functions of the CSF Core?",
+     "evidence": [
+      [
+       "nist-csf",
+       20
+      ],
+      [
+       "nist-csf",
+       31
+      ],
+      [
+       "nist-csf",
+       8
+      ],
+      [
+       "nist-csf",
+       4
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1485.5,
+     "usage": {
+      "input_tokens": 1215,
+      "output_tokens": 219
+     },
+     "outcome": "answered",
+     "answer": "The six CSF Functions are **Govern, Identify, Protect, Detect, Respond, and Recover** [2].\n\nThe sources also say that the CSF Core is a set of cybersecurity outcomes arranged by Function, then Category, and then Subcategory [3]. Appendix A describes the Core's Functions, Categories, and Subcategories [1].",
+     "cited": [
+      1,
+      2,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which short beginner guides help a company get started with the framework?",
+     "evidence": [
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "nhlbi-sleep",
+       52
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       2
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2503.5,
+     "usage": {
+      "input_tokens": 1196,
+      "output_tokens": 417
+     },
+     "outcome": "answered",
+     "answer": "The uploaded documents point to **Quick-Start Guides (QSGs)** from NIST's Cybersecurity Framework (CSF) 2.0.\n\n- QSGs are \"brief documents on specific CSF-related topics and are often tailored to specific audiences.\" They \"distill specific portions of the CSF into actionable 'first steps' that an organization can consider on the path to improving their cybersecurity posture and management of associated risks\" [3].\n- NIST plans to keep building resources to help organizations implement the CSF, \"including Quick Start Guides and Community Profiles,\" and these are publicly available on the NIST CSF website [4].\n\nThe excerpts don't name any specific guides, so I can't list individual titles. The excerpts also don't say the guides are aimed at beginners; that is my inference from their \"first steps\" description. To find the actual titles, check the NIST CSF website, which the document says hosts them [4].",
+     "cited": [
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-03",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "What should an organization do once it knows how far it is from the cybersecurity posture it wants?",
+     "evidence": [
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       6
+      ],
+      [
+       "nist-csf",
+       16
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3226.5,
+     "usage": {
+      "input_tokens": 1244,
+      "output_tokens": 611
+     },
+     "outcome": "answered",
+     "answer": "The evidence doesn't give a single step-by-step answer, but it points to a few actions:\n\n1. **Implement the target state.** Practitioners \"focus on implementing the target state and measuring changes in operational risk to help plan, carry out, and monitor specific cybersecurity activities\" [3].\n\n2. **Track progress and report it.** As controls are implemented, practitioners give managers and executives information such as key performance indicators and key risk indicators so they can understand the posture, make informed decisions, and maintain or adjust the risk strategy [3].\n\n3. **Update the profile and repeat the cycle.** Changes in expectations and priorities are reflected in updated Organizational Profiles, and \"the cycle repeats\" [3].\n\nThe framing comes from the CSF's stated purpose: to \"understand, assess, prioritize, and communicate cybersecurity risks,\" including determining gaps and assessing progress toward closing them [1].\n\nThe evidence doesn't say how to rank or sequence the gaps, or which specific controls to choose. Those details would need to come from the CSF's supplementary resources, which the document says provide guidance on practices and controls but are not included in the excerpts provided [2].",
+     "cited": [
+      1,
+      2,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "csf-04",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which email address can be used to suggest new Informative References for CSF 2.0?",
+     "evidence": [
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ],
+      [
+       "nist-csf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1256.9,
+     "usage": {
+      "input_tokens": 1282,
+      "output_tokens": 121
+     },
+     "outcome": "answered",
+     "answer": "The email address is olir@nist.gov. The document states that \"Suggestions for new Informative References for CSF 2.0 can always be shared with NIST at olir@nist.gov\" [1][4].\n\nFor other suggestions, such as new Quick-Start Guide topics or other resources for the NIST CSF website, the document directs readers to cyberframework@nist.gov [1].",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which Tier describes an organization that adapts its practices using lessons learned and predictive indicators?",
+     "evidence": [
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-csf",
+       30
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ],
+      [
+       "nist-csf",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1399.8,
+     "usage": {
+      "input_tokens": 1173,
+      "output_tokens": 177
+     },
+     "outcome": "answered",
+     "answer": "Tier 4, the Adaptive tier, describes an organization that adapts its practices using lessons learned and predictive indicators [1][2]. The evidence states that the organization \"adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators\" [1]. Tier 4 is also one of the four Tiers named in the glossary: Partial (Tier 1), Risk Informed (Tier 2), Repeatable (Tier 3), and Adaptive (Tier 4) [4].",
+     "cited": [
+      1,
+      2,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "csf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What financial penalties does NIST impose on organizations that fail to adopt the Cybersecurity Framework?",
+     "evidence": [
+      [
+       "nist-csf",
+       2
+      ],
+      [
+       "nist-csf",
+       4
+      ],
+      [
+       "nist-csf",
+       5
+      ],
+      [
+       "nist-csf",
+       17
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1660.1,
+     "usage": {
+      "input_tokens": 1476,
+      "output_tokens": 151
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe provided excerpts describe the CSF as guidance that organizations can use voluntarily: it \"provides guidance to industry, government agencies, and other organizations to manage cybersecurity risks\" [1], and \"does not prescribe how outcomes should be achieved\" [1]. None of the excerpts mention financial penalties, fines, or any enforcement mechanism for organizations that do not adopt the CSF.",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "What does the framework say about decommissioning and phasing out AI systems?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       7
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1475.5,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 212
+     },
+     "outcome": "answered",
+     "answer": "The provided documents say the following about decommissioning and phasing out AI systems:\n\n- GOVERN 1.7 states that \"Processes and procedures are in place for decommissioning and phasing out AI systems safely and in a manner that does not increase risks or decrease the organization's trustworthiness\" [1][2].\n\nThe excerpts do not add further detail, such as specific steps or required procedures for decommissioning.\n\nRelated to this, GOVERN 1.6 says mechanisms are in place to inventory AI systems and are resourced according to organizational risk priorities [1]. This is listed alongside GOVERN 1.7 but is not itself about decommissioning.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which people across the creation and use of artificial intelligence are expected to read and apply this document?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-csf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       22
+      ],
+      [
+       "nist-csf",
+       19
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2354.8,
+     "usage": {
+      "input_tokens": 1124,
+      "output_tokens": 338
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "rmf-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many socio-technical dimensions does the OECD classification use for AI lifecycle activities?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       14
+      ],
+      [
+       "nist-ai-rmf",
+       15
+      ],
+      [
+       "nist-ai-rmf",
+       5
+      ],
+      [
+       "nist-ai-rmf",
+       14
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1592.5,
+     "usage": {
+      "input_tokens": 1327,
+      "output_tokens": 200
+     },
+     "outcome": "answered",
+     "answer": "The OECD framework classifies AI lifecycle activities according to five key socio-technical dimensions [1]. The NIST AI RMF adapts this framework, with Figure 2 showing these dimensions \"slightly modified by NIST\" [1]. The NIST version lists four AI dimensions: Application Context, Data and Input, AI Model, and Task and Output [4].\n\nThe sources do not conflict on the count. The five dimensions are the OECD's original framework, while the four named in the NIST document are its modified version. The evidence does not list the OECD's five dimensions by name, so I can't say what the fifth one is.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Is an AI system acceptable if it is very hard to hack but treats people unfairly?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       12
+      ],
+      [
+       "nist-ai-rmf",
+       6
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3172.5,
+     "usage": {
+      "input_tokens": 1421,
+      "output_tokens": 551
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe closest related material is from the NIST AI RMF. It says the framework \"does not prescribe risk tolerance,\" and that risk tolerance is \"highly contextual and application and use-case specific\" [2]. It also notes that AI risks are \"inherently socio-technical,\" shaped by \"societal dynamics and human behavior\" [3]. Neither passage says whether an AI system that is hard to hack but treats people unfairly is acceptable. The sleep document [1][4] doesn't address AI at all.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "rmf-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "Which subcategory says personnel and partners should receive AI risk management training?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       28
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ],
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 939.9,
+     "usage": {
+      "input_tokens": 1076,
+      "output_tokens": 89
+     },
+     "outcome": "answered",
+     "answer": "The subcategory is GOVERN 2.2. The evidence states: \"GOVERN 2.2: The organization's personnel and partners receive AI risk management training to enable them to perform their duties and responsibilities consistent with related policies, procedures, and agreements.\" [1]",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "rmf-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which AI vendors have been officially certified as compliant with the AI RMF?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "nist-ai-rmf",
+       26
+      ],
+      [
+       "nist-ai-rmf",
+       24
+      ],
+      [
+       "nist-ai-rmf",
+       47
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1335.0,
+     "usage": {
+      "input_tokens": 1205,
+      "output_tokens": 147
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "sleep-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many hours a night do healthy adults sleep on average when they have unlimited opportunity to sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       1
+      ],
+      [
+       "nhlbi-sleep",
+       21
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1475.7,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 200
+     },
+     "outcome": "answered",
+     "answer": "Healthy adults who are given unlimited opportunity to sleep sleep on average between 8 and 8.5 hours a night [1].\n\nThe sources also note that individual needs vary: some people appear to need only about 7 hours to avoid problem sleepiness, while others need 9 or more [1]. A separate passage says adults need at least 7–8 hours of sleep each night to be well rested, and that recent surveys show the average adult now sleeps fewer than 7 hours a night [4]. These figures describe different things (unrestricted sleep versus recommended need and current averages), so they are not contradictory, but they do differ.",
+     "cited": [
+      1,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does sleeping in on the weekend fully make up for earlier lost sleep?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       27
+      ],
+      [
+       "nhlbi-sleep",
+       29
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1843.2,
+     "usage": {
+      "input_tokens": 1388,
+      "output_tokens": 319
+     },
+     "outcome": "answered",
+     "answer": "No. The sources say sleeping in on the weekend does not fully make up for lost sleep.\n\n- Document [1] states that if you have lost too much sleep, sleeping in on a weekend does not completely erase your sleep debt, and that sleeping more at the end of a week won't make up for poor performance earlier in the week.\n- Document [3] (page 29) says this pattern will help you feel more rested but will not completely make up for the lack of sleep or correct your sleep debt, and it will not necessarily make up for impaired weekday performance or the physical problems that can result from not sleeping enough.\n- Document [4] adds that sleeping later on weekends won't fully make up for a lack of sleep during the week and will make it harder to wake up early on Monday.\n\nInference: The evidence also suggests that weekend catch-up sleep can disrupt your schedule, since document [3] notes it can affect your biological clock. The excerpts do not quantify how much sleep debt remains after a given weekend.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long does each pause in breathing typically last in sleep apnea?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       36
+      ],
+      [
+       "nhlbi-sleep",
+       46
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1155.7,
+     "usage": {
+      "input_tokens": 1228,
+      "output_tokens": 72
+     },
+     "outcome": "answered",
+     "answer": "Each pause in breathing typically lasts 10–120 seconds [2]. The same passage notes that these pauses may occur 20–30 times or more each sleeping hour [2]. Source [1] repeats the same description.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can herbal or over-the-counter supplements reliably treat persistent sleeplessness?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ],
+      [
+       "nhlbi-sleep",
+       48
+      ],
+      [
+       "nhlbi-sleep",
+       42
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 3997.1,
+     "usage": {
+      "input_tokens": 1279,
+      "output_tokens": 750
+     },
+     "outcome": "answered",
+     "answer": "No, the evidence does not support herbal or over-the-counter supplements as a reliable treatment for persistent sleeplessness.\n\n- **Melatonin:** \"Little evidence exists that melatonin can help relieve insomnia\" [1].\n- **Valerian:** \"Studies with valerian also have been inconclusive\" [1].\n- **Product variability:** The \"actual dose and purity\" of valerian products \"may vary from product to product\" [1].\n- **Safety monitoring:** Melatonin, valerian, and other natural remedies \"are not regulated by the Food and Drug Administration, their safety is not monitored\" [1].\n\nThe document points instead to behavioral approaches. It says \"reconditioning therapy is an effective way to treat insomnia.\" The recommendation is to go to bed only when sleepy, and to leave bed for a relaxing activity if you can't fall asleep within 20 minutes [2]. Doctors also diagnose and treat any underlying medical or psychological problems and look for behaviors that may cause insomnia [4].\n\nA separate passage, in the context of sleep apnea, advises avoiding \"herbal supplements\" and other sedating products because they \"make it harder for your airways to stay open while you sleep\" [3]. This is about sleep apnea rather than insomnia, so it doesn't directly address insomnia treatment.\n\nMy inference: the document does not show that supplements are unreliable in every case. It shows that evidence for them is weak or inconclusive, so they should not be relied on as a dependable fix. Persistent sleeplessness is best discussed with a doctor, who can check for other causes.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many hours of sleep do teenagers actually get on average?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ],
+      [
+       "nhlbi-sleep",
+       8
+      ],
+      [
+       "nhlbi-sleep",
+       25
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2139.9,
+     "usage": {
+      "input_tokens": 1263,
+      "output_tokens": 300
+     },
+     "outcome": "answered",
+     "answer": "According to the document, most teenagers get an average of only **7–7.5 hours of sleep a night** [1].\n\nThe same source says teenagers need more than that. One passage says teenagers need \"between 9 and 10 hours of sleep a night\" [1], while another says \"school-aged children and adolescents need at least 10 hours of sleep each night\" [2]. These two statements differ slightly on the recommended amount.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "sleep-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What daily melatonin dose does the guide recommend for insomnia?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       44
+      ],
+      [
+       "nhlbi-sleep",
+       17
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ],
+      [
+       "nhlbi-sleep",
+       41
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1372.8,
+     "usage": {
+      "input_tokens": 1216,
+      "output_tokens": 196
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence does not state a recommended daily melatonin dose for insomnia. What the sources do say:\n\n- Little evidence exists that melatonin can help relieve insomnia, and the dose and purity of natural remedies may vary from product to product [1].\n- Melatonin is available as an over-the-counter supplement and is considered safe when used over a period of days or weeks, but its effectiveness is controversial and its safety over a prolonged period is unclear [2].\n- Melatonin is not regulated by the FDA, so its safety is not monitored [1].",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How long is the term of a member of the Board of Governors?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       12
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       56
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1099.8,
+     "usage": {
+      "input_tokens": 1273,
+      "output_tokens": 111
+     },
+     "outcome": "answered",
+     "answer": "Each member of the Board of Governors is appointed for a 14-year term [1]. The terms are staggered so that one term expires on January 31 of each even-numbered year [1]. A member who completes a full 14-year term may not be reappointed, but a person who fills the remainder of a vacated term may later be appointed to a full 14-year term [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which two goals has Congress given the central bank for its interest-rate decisions?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       26
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1344.3,
+     "usage": {
+      "input_tokens": 958,
+      "output_tokens": 139
+     },
+     "outcome": "answered",
+     "answer": "Congress has given the central bank two goals for its interest-rate decisions: maximum employment and price stability. The FOMC sets national monetary policy and makes decisions about the stance of monetary policy \"to help move the economy toward the congressionally mandated goals of maximum employment and price stability\" [4]. It does this by raising and lowering its target range for the federal funds rate, which it uses \"to achieve these dual objectives\" [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "fed-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many voting members does the Federal Open Market Committee have?",
+     "evidence": [
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       20
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1288.4,
+     "usage": {
+      "input_tokens": 1297,
+      "output_tokens": 99
+     },
+     "outcome": "answered",
+     "answer": "The Federal Open Market Committee has 12 voting members [4]. These are the 7 members of the Board of Governors, the president of the Federal Reserve Bank of New York, and 4 of the remaining 11 Reserve Bank presidents, who serve one-year terms on a rotating basis [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Why do the central bank's regional territories cut across state boundaries?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       10
+      ],
+      [
+       "fed-explained",
+       76
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1739.4,
+     "usage": {
+      "input_tokens": 947,
+      "output_tokens": 216
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "fed-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How long do the Chair and Vice Chair of the Board serve per term?",
+     "evidence": [
+      [
+       "fed-explained",
+       16
+      ],
+      [
+       "fed-explained",
+       21
+      ],
+      [
+       "fed-explained",
+       17
+      ],
+      [
+       "fed-explained",
+       16
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1076.7,
+     "usage": {
+      "input_tokens": 1170,
+      "output_tokens": 123
+     },
+     "outcome": "answered",
+     "answer": "The Chair and Vice Chair of the Board serve four-year terms [1]. They may be reappointed to additional four-year terms [1]. Their nominees must already be Board members or be appointed to the Board at the same time [1].\n\nNote: the evidence distinguishes these posts from ordinary governors, who serve staggered 14-year terms and may not be reappointed [3][4].",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "fed-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which cryptocurrency has the Federal Reserve endorsed as legal tender?",
+     "evidence": [
+      [
+       "fed-explained",
+       103
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "fed-explained",
+       15
+      ],
+      [
+       "fed-explained",
+       78
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1378.1,
+     "usage": {
+      "input_tokens": 1222,
+      "output_tokens": 155
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe documents discuss U.S. currency generally. They state that all U.S. government-issued currency remains legal tender and that virtually all currency in circulation is Federal Reserve notes [1]. The Constitution excerpt also refers to legal tender in payment of debts, but only in terms of gold and silver coin for the states [2]. None of the evidence mentions cryptocurrency or any endorsement of one as legal tender.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-01",
+     "type": "direct",
+     "answerable": true,
+     "question": "How many Senators does each State have?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       64
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2025.5,
+     "usage": {
+      "input_tokens": 1340,
+      "output_tokens": 277
+     },
+     "outcome": "answered",
+     "answer": "Each State has **two Senators**. The document states that \"The Senate shall be composed of two Senators from each State\" [1].\n\nThe source shows two versions of the clause. The original text says the Senators were \"chosen by the legislature for six years\" [1]. The amended text says they are \"elected by the people thereof, for six years\" [1]. The amendment changes how Senators are chosen, not how many each State has. The excerpt doesn't name the amendment, but its label is \"[Amendments]\" [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which amendment stops Congress from setting up an official state religion?",
+     "evidence": [
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "us-constitution",
+       73
+      ],
+      [
+       "fed-explained",
+       108
+      ],
+      [
+       "us-constitution",
+       61
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2823.9,
+     "usage": {
+      "input_tokens": 1461,
+      "output_tokens": 459
+     },
+     "outcome": "answered",
+     "answer": "The **First Amendment** prohibits Congress from making laws \"respecting the establishment\" of religion. The index entry reads \"Religion or prohibiting the free exercise thereof. Congress shall make no law respecting the establishment of. [Amendments]\" with the number 1 in the amendments column [1][2].\n\nThe excerpt cuts off before the rest of the clause, so the text doesn't spell out \"official state religion.\" The index entry is the only support for the amendment number, so identifying it as the First Amendment is my inference from that entry.",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "con-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What minimum age for voting is protected by the Twenty-sixth Amendment?",
+     "evidence": [
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       61
+      ],
+      [
+       "us-constitution",
+       47
+      ],
+      [
+       "nist-csf",
+       25
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1493.5,
+     "usage": {
+      "input_tokens": 1477,
+      "output_tokens": 145
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "con-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the Constitution protect the right of people to own weapons?",
+     "evidence": [
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       75
+      ],
+      [
+       "us-constitution",
+       19
+      ],
+      [
+       "us-constitution",
+       63
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2582.2,
+     "usage": {
+      "input_tokens": 1560,
+      "output_tokens": 429
+     },
+     "outcome": "answered",
+     "answer": "Yes, in part. The Constitution's text states that \"the right of the people to keep and bear arms shall not be infringed\" [1][3]. The evidence doesn't say whether \"keep and bear arms\" means owning weapons specifically, or how far the right extends, so I can't confirm more than that.\n\nThe text also includes a prefatory clause: \"A well-regulated militia being necessary to the security of a free State\" [1][3]. The evidence doesn't explain how that clause affects the scope of the right.\n\nThe uploaded documents are the constitution text and its index, not court decisions or commentary, so they don't show how this right has been interpreted or limited in practice.",
+     "cited": [
+      1,
+      3
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-05",
+     "type": "specific",
+     "answerable": true,
+     "question": "How old and how long a resident must a person be to qualify as President?",
+     "evidence": [
+      [
+       "us-constitution",
+       71
+      ],
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       13
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2113.0,
+     "usage": {
+      "input_tokens": 1446,
+      "output_tokens": 327
+     },
+     "outcome": "answered",
+     "answer": "A person must have attained the age of **35 years** and been a resident of the United States for **14 years** to be eligible for President. [3] states that no person \"shall be eligible to that Office who shall not have attained to the Age of thirty five Years, and been fourteen Years a Resident within the United States.\" [1] and [4] contain the same requirement.\n\nThe same clause also requires the person to be a natural born citizen, or a citizen of the United States at the time the Constitution was adopted. [3]",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "con-06",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "What did the Supreme Court decide in Marbury v. Madison?",
+     "evidence": [
+      [
+       "us-constitution",
+       59
+      ],
+      [
+       "us-constitution",
+       49
+      ],
+      [
+       "us-constitution",
+       60
+      ],
+      [
+       "us-constitution",
+       60
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1184.6,
+     "usage": {
+      "input_tokens": 1449,
+      "output_tokens": 134
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence consists of index-style excerpts from the U.S. Constitution (pages 49, 59, and 60 of us-constitution.pdf). They describe the judicial power, the Supreme Court's original and appellate jurisdiction [1][3][4], and related topics, but they do not mention Marbury v. Madison or any Supreme Court decision.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-01",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the capital city of Australia?",
+     "evidence": [
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "fed-explained",
+       81
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "fed-explained",
+       81
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1139.2,
+     "usage": {
+      "input_tokens": 1201,
+      "output_tokens": 88
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers U.S. bank capital requirements [1][2][4] and an excerpt from the U.S. Constitution about a commercial regulation meeting [3], but nothing about Australia or its capital city.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-02",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How do I bake sourdough bread at home?",
+     "evidence": [
+      [
+       "fed-explained",
+       121
+      ],
+      [
+       "nhlbi-sleep",
+       50
+      ],
+      [
+       "fed-explained",
+       120
+      ],
+      [
+       "nhlbi-sleep",
+       14
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 899.4,
+     "usage": {
+      "input_tokens": 1540,
+      "output_tokens": 70
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers consumer finance regulations [1][3] and sleep disorders and testing [2][4], and none of it addresses baking sourdough bread.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "off-03",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "Who won the 2018 FIFA World Cup?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       23
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ],
+      [
+       "nist-ai-rmf",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       33
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1248.9,
+     "usage": {
+      "input_tokens": 1165,
+      "output_tokens": 87
+     },
+     "outcome": "withheld",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence covers sleep tips (NHLBI sleep document, pages 23 and 33) and risk management concepts (NIST AI RMF, page 9), but nothing about the FIFA World Cup.",
+     "invalid_citations": []
+    },
+    {
+     "id": "off-04",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the boiling point of water at sea level in Celsius?",
+     "evidence": [
+      [
+       "us-constitution",
+       50
+      ],
+      [
+       "fed-explained",
+       36
+      ],
+      [
+       "us-constitution",
+       85
+      ],
+      [
+       "us-constitution",
+       43
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 975.7,
+     "usage": {
+      "input_tokens": 1447,
+      "output_tokens": 19
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "off-05",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "How many moons does Mars have?",
+     "evidence": [
+      [
+       "fed-explained",
+       1
+      ],
+      [
+       "fed-explained",
+       3
+      ],
+      [
+       "fed-explained",
+       48
+      ],
+      [
+       "fed-explained",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1176.6,
+     "usage": {
+      "input_tokens": 721,
+      "output_tokens": 110
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "x-01",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Does the AI framework tell organizations how much risk they should be willing to accept?",
+     "evidence": [
+      [
+       "nist-ai-rmf",
+       1
+      ],
+      [
+       "fed-explained",
+       44
+      ],
+      [
+       "nist-ai-rmf",
+       10
+      ],
+      [
+       "nist-ai-rmf",
+       8
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 3140.3,
+     "usage": {
+      "input_tokens": 1154,
+      "output_tokens": 542
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe NIST AI RMF excerpts discuss managing AI risk in general. [3] says all parties \"should manage risk in the AI systems they develop, deploy, or use\" and that identifying and tracking emergent risks will enhance risk management. [4] describes the Core functions (GOVERN, MAP, MEASURE, MANAGE) that help organizations address AI risks in practice. Neither excerpt states how much risk an organization should accept. The Federal Reserve excerpt [2] is about interest rates and bank reserves and does not address AI risk.",
+     "cited": [
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-02",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How is a system's ability to bounce back from a surprise different from being protected against attacks?",
+     "evidence": [
+      [
+       "nist-csf",
+       9
+      ],
+      [
+       "nist-csf",
+       25
+      ],
+      [
+       "nist-csf",
+       26
+      ],
+      [
+       "fed-explained",
+       30
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4949.4,
+     "usage": {
+      "input_tokens": 1490,
+      "output_tokens": 931
+     },
+     "outcome": "answered",
+     "answer": "The evidence supports a partial answer. The NIST CSF excerpts describe resilience and recovery separately from protection, but they don't state the distinction directly.\n\n**From the NIST CSF excerpts:**\n- **Recovery** is about bouncing back. RECOVER is the function where \"assets and operations affected by a cybersecurity incident are restored,\" which \"supports the timely restoration of normal operations to reduce the effects\" of an incident [1].\n- **Resilience** is a stated requirement. PR.IR-03 says \"mechanisms are implemented to achieve resilience requirements in normal and adverse situations\" [3]. The phrase \"adverse situations\" suggests resilience covers operating through disruption, not only preventing it.\n- **Protection** is about safeguarding assets and data. The PR (Protect) subcategories cover confidentiality, integrity, and availability of data-at-rest, in-transit, and in-use, plus backups [2]. PR.IR-02 covers protecting technology assets from environmental threats [3].\n\n**Inference:** Protection aims to keep attacks or harm from succeeding in the first place. Resilience and recovery accept that some disruption will occur and focus on restoring normal operations afterward. The CSF pairs these with separate functions (PR versus RC), which supports the distinction, though the excerpts don't spell out the contrast.\n\n**Note on the Fed document:** The \"surprise\" language in the Federal Reserve excerpt refers to \"demand shocks\" in the economy, such as shifts in consumer confidence or credit standards [4]. It doesn't address system resilience or cyber attacks, so I didn't use it for this answer.",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-03",
+     "type": "specific",
+     "answerable": true,
+     "question": "What fraction of pregnant women begin snoring for the first time during the second trimester?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       37
+      ],
+      [
+       "nhlbi-sleep",
+       32
+      ],
+      [
+       "nhlbi-sleep",
+       38
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1076.6,
+     "usage": {
+      "input_tokens": 1166,
+      "output_tokens": 44
+     },
+     "outcome": "answered",
+     "answer": "According to the NHLBI sleep document, about one-third of all pregnant women begin snoring for the first time during their second trimester [1].",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-04",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Which condition makes people abruptly drop off to sleep at moments when they should be awake?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       47
+      ],
+      [
+       "nhlbi-sleep",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       53
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 2043.1,
+     "usage": {
+      "input_tokens": 1018,
+      "output_tokens": 282
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    },
+    {
+     "id": "x-05",
+     "type": "unanswerable_related",
+     "answerable": false,
+     "question": "Which prescription drug brand does the guide recommend for restless legs syndrome?",
+     "evidence": [
+      [
+       "nhlbi-sleep",
+       53
+      ],
+      [
+       "nhlbi-sleep",
+       9
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ],
+      [
+       "nhlbi-sleep",
+       5
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 1298.5,
+     "usage": {
+      "input_tokens": 1359,
+      "output_tokens": 129
+     },
+     "outcome": "answered",
+     "answer": "I couldn't find that information in the uploaded documents.\n\nThe evidence describes restless legs syndrome as causing an unpleasant prickling or tingling in the legs, relieved by moving or massaging them, and notes it can make falling and staying asleep difficult [1]. The excerpts also list RLS in the table of contents [3][4], but none of them name any prescription drug or brand recommended for it.",
+     "cited": [
+      1,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-06",
+     "type": "specific",
+     "answerable": true,
+     "question": "How many regularly scheduled meetings does the Federal Open Market Committee hold each year?",
+     "evidence": [
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       14
+      ],
+      [
+       "fed-explained",
+       20
+      ],
+      [
+       "fed-explained",
+       31
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1307.2,
+     "usage": {
+      "input_tokens": 1242,
+      "output_tokens": 150
+     },
+     "outcome": "answered",
+     "answer": "The FOMC holds **eight regularly scheduled meetings each year** [4]. The source describes these as joint meetings of the Board of Governors and the FOMC, where members discuss economic and financial conditions and deliberate on monetary policy [4].",
+     "cited": [
+      4
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-07",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "How do harvest failures caused by bad weather affect prices and jobs?",
+     "evidence": [
+      [
+       "fed-explained",
+       31
+      ],
+      [
+       "nhlbi-sleep",
+       49
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 1386.0,
+     "usage": {
+      "input_tokens": 661,
+      "output_tokens": 163
+     },
+     "outcome": "answered",
+     "answer": "Based on the evidence, crop losses from extreme weather are an example of a supply shock. Such shocks alter production costs or production capacity, and adverse supply shocks of this kind tend to raise prices and reduce output (and also employment) [1].\n\nThe document does not explicitly name harvest failures as a cause of job losses; it says adverse supply shocks reduce \"output (and also employment)\" in general terms [1]. The second excerpt, about CPAP use and sleep, is not relevant to this question [2].",
+     "cited": [
+      1,
+      2
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-08",
+     "type": "paraphrase",
+     "answerable": true,
+     "question": "Can a state make people pay a fee before they are allowed to vote in a federal election?",
+     "evidence": [
+      [
+       "us-constitution",
+       66
+      ],
+      [
+       "us-constitution",
+       76
+      ],
+      [
+       "us-constitution",
+       25
+      ],
+      [
+       "us-constitution",
+       77
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 4196.5,
+     "usage": {
+      "input_tokens": 1502,
+      "output_tokens": 761
+     },
+     "outcome": "answered",
+     "answer": "No. The evidence indicates that a state cannot require a payment as a condition of voting in a federal election.\n\nThe index entry \"Poll tax\" states that \"[t]he right of citizens of the United States to vote shall not be denied or abridged by the United States or any State by reason of failure to pay\" a tax [1]. The entry is tagged \"[Amendments]\" and refers to Article/Amendment \"24 1,\" which I read as Amendment 24, Section 1 [1].\n\nLimits of the evidence:\n- The excerpt is an index entry, not the full text of the amendment. It doesn't spell out the amendment's full scope.\n- The excerpt doesn't say whether the amendment covers all elections or only federal ones. Since the question concerns a federal election, I'm inferring that the amendment applies, based on the entry's wording about the right to vote in the United States.\n- The other excerpts concern Senate vacancies, Senate elections, and related constitutional provisions, so they don't address poll taxes [2][3][4].",
+     "cited": [
+      1,
+      2,
+      3,
+      4
+     ],
+     "invalid_citations": [],
+     "supported": false
+    },
+    {
+     "id": "x-09",
+     "type": "direct",
+     "answerable": true,
+     "question": "At what time on which day in January do the terms of the President and Vice President end?",
+     "evidence": [
+      [
+       "us-constitution",
+       27
+      ],
+      [
+       "us-constitution",
+       52
+      ],
+      [
+       "us-constitution",
+       64
+      ],
+      [
+       "us-constitution",
+       68
+      ]
+     ],
+     "evidence_has_answer": true,
+     "latency_ms": 2168.3,
+     "usage": {
+      "input_tokens": 1459,
+      "output_tokens": 307
+     },
+     "outcome": "answered",
+     "answer": "The terms of the President and Vice President end **at noon on January 20**. [1] states that \"the terms of the President and Vice President shall end at noon on the 20th day of January\" under the article labeled [XX], Section 1.\n\nThe same section says the terms of Senators and Representatives end at noon on January 3, and that the successors' terms then begin. [1]",
+     "cited": [
+      1
+     ],
+     "invalid_citations": [],
+     "supported": true
+    },
+    {
+     "id": "x-10",
+     "type": "unanswerable_offtopic",
+     "answerable": false,
+     "question": "What is the tallest mountain in South America?",
+     "evidence": [
+      [
+       "us-constitution",
+       16
+      ],
+      [
+       "us-constitution",
+       7
+      ],
+      [
+       "us-constitution",
+       54
+      ],
+      [
+       "fed-explained",
+       131
+      ]
+     ],
+     "evidence_has_answer": false,
+     "latency_ms": 979.5,
+     "usage": {
+      "input_tokens": 1101,
+      "output_tokens": 42
+     },
+     "outcome": "abstained",
+     "answer": "I couldn't find that information in the uploaded documents."
+    }
+   ],
+   "metrics": {
+    "outcomes": {
+     "no_evidence": 0,
+     "abstained": 8,
+     "withheld": 1,
+     "answered": 36,
+     "error": 0
+    },
+    "answerable_with_evidence": {
+     "answer_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "supported_citation_rate": {
+      "value": 1.0,
+      "ci": [
+       1.0,
+       1.0
+      ],
+      "n": 22
+     },
+     "wrong_abstention_rate": {
+      "value": 0.0,
+      "ci": [
+       0.0,
+       0.0
+      ],
+      "n": 22
+     }
+    },
+    "answerable_without_evidence": {
+     "answered_anyway": {
+      "value": 0.6364,
+      "ci": [
+       0.3636,
+       0.9091
+      ],
+      "n": 11
+     }
+    },
+    "unanswerable": {
+     "invented_answer_rate": {
+      "value": 0.5833,
+      "ci": [
+       0.3333,
+       0.8333
+      ],
+      "n": 12
+     },
+     "product_abstained": {
+      "value": 0.3333,
+      "ci": [
+       0.0833,
+       0.5833
+      ],
+      "n": 12
+     },
+     "model_was_called": 12
+    },
+    "latency_ms": {
+     "median": 1475.5,
+     "p95": 3997.1,
+     "calls": 45
+    },
+    "tokens": {
+     "input_tokens": 56270,
+     "output_tokens": 11409
+    },
+    "concerns": [
+     "Answered an unanswerable question: csf-06",
+     "Answered an unanswerable question: sleep-06",
+     "Answered an unanswerable question: fed-06",
+     "Answered an unanswerable question: con-06",
+     "Answered an unanswerable question: off-01",
+     "Answered an unanswerable question: off-02",
+     "Answered an unanswerable question: x-05"
+    ]
+   }
+  }
+ ],
+ "unstable_questions": [
+  {
+   "id": "rmf-02",
+   "outcomes": [
+    "abstained",
+    "answered",
+    "abstained"
+   ]
+  },
+  {
+   "id": "rmf-06",
+   "outcomes": [
+    "answered",
+    "answered",
+    "abstained"
+   ]
+  },
+  {
+   "id": "sleep-06",
+   "outcomes": [
+    "answered",
+    "abstained",
+    "answered"
+   ]
+  },
+  {
+   "id": "fed-04",
+   "outcomes": [
+    "answered",
+    "abstained",
+    "abstained"
+   ]
+  },
+  {
+   "id": "off-01",
+   "outcomes": [
+    "withheld",
+    "withheld",
+    "answered"
+   ]
+  },
+  {
+   "id": "off-03",
+   "outcomes": [
+    "abstained",
+    "answered",
+    "withheld"
+   ]
+  },
+  {
+   "id": "x-04",
+   "outcomes": [
+    "answered",
+    "answered",
+    "abstained"
+   ]
+  },
+  {
+   "id": "x-10",
+   "outcomes": [
+    "answered",
+    "abstained",
+    "abstained"
+   ]
+  }
+ ]
+}

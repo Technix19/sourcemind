@@ -27,6 +27,7 @@ class ClaudeClient:
         self.model = model
         self._max_tokens = max_tokens  # covers the answer AND any thinking the model does
         self._effort = effort
+        self.last_usage: dict | None = None  # tokens used by the last call (for cost tracking; never the key)
 
     def complete(self, system: str, user: str) -> str:
         import anthropic  # imported lazily: not needed in sources-only mode
@@ -39,6 +40,9 @@ class ClaudeClient:
             messages=[{"role": "user", "content": user}],
             **extra,
         )
+        usage = getattr(response, "usage", None)
+        if usage is not None:
+            self.last_usage = {"input_tokens": getattr(usage, "input_tokens", 0), "output_tokens": getattr(usage, "output_tokens", 0)}
         if response.stop_reason == "refusal":
             raise GenerationRefused()
         # Only the visible text: thinking blocks are never shown or used as the answer.

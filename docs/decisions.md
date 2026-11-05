@@ -95,3 +95,9 @@ If the context budget drops chunks, they are also dropped from the response. Tha
 ## ADR-019: A written data-handling statement, with unverified items marked (M7c-3)
 **Decision:** `docs/data-handling.md` states what is stored and where, what leaves the machine, what is logged, and how deletion works, derived from the code and migrations, and it labels what was **not verified** (backups on the Supabase plan, storage cleanup when a user is deleted, Anthropic's retention terms, host logs). The README carries a Limitations section and no longer claims "no authentication" or "documents live in process memory", which had been false since M6.
 **Why:** a portfolio project that handles other people's documents should say plainly what happens to them; guessing at retention terms would be worse than saying they were not checked.
+
+## ADR-020: Generated-answer evaluation: pre-register, then read the answers (M8)
+**Decision:** the metrics, the outcome classes and the concern lines were written before the harness existed; the run was one pre-registered pass of three repeats; every flagged answer was then read by hand, and a re-scoring done afterwards is labeled post-hoc and kept separate from the pre-registered numbers.
+**Why:** the strict mechanical result (58 to 67% "invented answers" on unanswerable questions) was misleading. Reading the replies showed they all began with the abstention sentence and then explained what the passages cover; the product's exact-match abstention check had classified them as answers. Reporting only the headline would have either alarmed or falsely reassured; the written plan made it possible to show both views honestly.
+**Found (product):** the UI shows the "Grounded" badge on such replies. A fix is the owner's decision and makes this run development evidence.
+**Not verified:** that answer text is true; prompt-injection resistance; other models, efforts or retrieval methods.
