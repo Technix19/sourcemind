@@ -33,9 +33,9 @@ export function TopBar() {
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <ThemeToggle />
-          <span className="inline-flex items-center gap-2 whitespace-nowrap text-[11px] font-medium text-muted sm:text-xs" role="status">
+          <span className="inline-flex items-center gap-2 whitespace-nowrap text-[11px] font-medium text-muted sm:text-xs" role="status" title={mode}>
             <span aria-hidden className={"size-[7px] rounded-full " + (apiError ? "bg-danger" : loaded ? "bg-emerald-600" : "bg-amber")} />
-            {mode}
+            <span className="sr-only sm:not-sr-only">{mode}</span>
           </span>
           {pathname === "/" && (
             <Link href="/documents" className="sm-secondary hidden sm:inline-flex">
@@ -47,8 +47,11 @@ export function TopBar() {
             type="button"
             onClick={() => void signOut()}
             className="sm-secondary lg:hidden"
+            aria-label="Sign out"
+            title="Sign out"
           >
-            Sign out
+            <UiIcon name="logout" size={16} />
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
       </div>
