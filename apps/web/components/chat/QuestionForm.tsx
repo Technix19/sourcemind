@@ -37,7 +37,7 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
 
   return (
     <form onSubmit={submit} className="sm-panel overflow-hidden">
-      <div className="flex min-h-[65px] items-center gap-3 px-4 py-2 focus-within:bg-[#fbfcff]">
+      <div className="flex min-h-[65px] items-center gap-3 px-4 py-2 focus-within:bg-[#fbfcff] dark:focus-within:bg-[#252437]">
         <label htmlFor="question" className="sr-only">Ask a question about your documents</label>
         <input
           id="question"
@@ -60,7 +60,7 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
           </button>
         )}
       </div>
-      <div id={hintId} className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-line bg-[#fbfcfe] px-4 py-2.5 text-xs text-muted">
+      <div id={hintId} className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-line bg-[#fbfcfe] dark:bg-[#181a2b] px-4 py-2.5 text-xs text-muted">
         <span className="order-3 w-full text-[11px] leading-relaxed sm:order-none sm:w-auto">
           {noDocs && !apiError ? (
             <>

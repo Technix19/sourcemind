@@ -55,10 +55,10 @@ export function TurnView({ turn }: { turn: Turn }) {
   const active = activeTurn?.id === turn.id;
   return (
     <div className="space-y-3">
-      <div className="ml-auto w-fit max-w-[90%] break-words rounded-xl bg-[#eef0ff] px-4 py-3 text-[14px] font-semibold text-[#303b6b]">{turn.question}</div>
+      <div className="ml-auto w-fit max-w-[90%] break-words rounded-xl bg-[#eef0ff] dark:bg-[#33284e] px-4 py-3 text-[14px] font-semibold text-[#303b6b] dark:text-[#e4d7ff]">{turn.question}</div>
       <div
         aria-busy={turn.status === "pending"}
-        className={`sm-panel px-5 py-5 sm:px-6 ${active ? "border-[#c5caff]" : ""}`}
+        className={`sm-panel px-5 py-5 sm:px-6 ${active ? "border-[#c5caff] dark:border-[#7055ac]" : ""}`}
       >
         <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line pb-3">
           <span aria-hidden className="size-3 rounded-full bg-lavender" />

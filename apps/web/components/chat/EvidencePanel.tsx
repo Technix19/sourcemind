@@ -49,10 +49,10 @@ function EvidenceCard({ turnId, item, selected, retrieval }: { turnId: number; i
       data-cid={item.citation_id}
       tabIndex={-1}
       aria-label={`Source ${item.citation_id}: ${item.filename}, page ${item.page_number}`}
-      className={`rounded-lg border px-3 py-3.5 transition-colors ${selected ? "border-[#a5b4fc] bg-[#f5f6ff] ring-1 ring-[#c7d2fe]" : "border-line bg-white hover:border-[#c8d2e2]"}`}
+      className={`rounded-lg border px-3 py-3.5 transition-colors ${selected ? "border-[#a5b4fc] dark:border-[#7f5cc0] bg-[#f5f6ff] dark:bg-[#2b2644] ring-1 ring-[#c7d2fe] dark:ring-[#7960bd]" : "border-line bg-white dark:bg-[#1a1b2b] hover:border-[#c8d2e2]"}`}
     >
       <div className="flex items-center gap-2">
-        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#eef0ff] text-[11px] font-bold text-lavender">[{item.citation_id}]</span>
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#eef0ff] dark:bg-[#33284e] text-[11px] font-bold text-lavender">[{item.citation_id}]</span>
         <p className="min-w-0 flex-1 truncate text-[12px] font-bold">{item.filename}</p>
       </div>
       <p className="mt-2 text-[11px] text-muted">
@@ -67,7 +67,7 @@ function EvidenceCard({ turnId, item, selected, retrieval }: { turnId: number; i
           </span>
         )}
       </p>
-      <blockquote className={`mt-3 break-words text-[12px] leading-[1.8] text-[#455267] ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
+      <blockquote className={`mt-3 break-words text-[12px] leading-[1.8] text-[#455267] dark:text-[#c5c6db] ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line pt-2">
         {long && (
           <button
