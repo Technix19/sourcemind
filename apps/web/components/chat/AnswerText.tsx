@@ -37,7 +37,7 @@ export function AnswerText({
                       type="button"
                       onClick={() => onCite(n)}
                       aria-label={`Show source ${n}: ${source.filename}, page ${source.page_number}`}
-                      className="mx-0.5 inline-block min-w-6 rounded bg-[#eeefff] px-1 py-0.5 text-center text-xs font-bold text-lavender hover:bg-[#dfe3ff]"
+                      className="mx-0.5 inline-block min-w-6 rounded bg-[#eeefff] dark:bg-[#392c54] px-1 py-0.5 text-center text-xs font-bold text-lavender hover:bg-[#dfe3ff] dark:hover:bg-[#45335f]"
                     >
                       [{n}]
                     </button>

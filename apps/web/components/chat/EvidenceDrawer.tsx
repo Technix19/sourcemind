@@ -34,7 +34,7 @@ export function EvidenceDrawer() {
       aria-labelledby="sources-title"
       onClose={() => setDrawerOpen(false)}
       onClick={(e) => e.target === dialog.current && setDrawerOpen(false)} // click on the backdrop
-      className="m-0 mt-auto max-h-[85vh] w-full max-w-none rounded-t-2xl border border-line bg-white p-0 text-text shadow-xl backdrop:bg-slate-900/45 xl:hidden"
+      className="m-0 mt-auto max-h-[85vh] w-full max-w-none rounded-t-2xl border border-line bg-white dark:bg-[#1a1b2b] p-0 text-text shadow-xl backdrop:bg-slate-900/45 xl:hidden"
     >
       <div className="flex items-center justify-between border-b border-line px-5 py-3">
         <h2 id="sources-title" className="font-bold">

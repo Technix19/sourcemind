@@ -31,10 +31,10 @@ export function UploadZone() {
         }}
         className={
           "flex flex-col items-center rounded-lg border border-dashed px-5 py-9 text-center transition-colors " +
-          (dragging ? "border-lavender bg-[#eef0ff]" : "border-[#cbd4e4] bg-[#fcfdff]")
+          (dragging ? "border-lavender bg-[#eef0ff] dark:bg-[#33284e]" : "border-[#cbd4e4] dark:border-[#51526c] bg-[#fcfdff] dark:bg-[#1d1e2f]")
         }
       >
-        <span aria-hidden="true" className="mb-4 flex size-11 items-center justify-center rounded-lg border border-line bg-white text-lavender">
+        <span aria-hidden="true" className="mb-4 flex size-11 items-center justify-center rounded-lg border border-line bg-white dark:bg-[#1a1b2b] text-lavender">
           <UiIcon name="upload" size={21} />
         </span>
         <p className="text-[15px] font-bold">Drop documents here</p>

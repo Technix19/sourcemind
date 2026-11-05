@@ -22,7 +22,7 @@ export function Sidebar() {
   const online = loaded && !apiError;
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col overflow-y-auto border-r border-line bg-white px-3.5 py-5 lg:flex">
+    <aside className="sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col overflow-y-auto border-r border-line bg-white dark:bg-[#1a1b2b] px-3.5 py-5 lg:flex">
       <Link href="/" className="mb-9 inline-flex min-h-11 items-center rounded-lg px-2">
         <BrandLogo compact />
       </Link>
@@ -51,8 +51,8 @@ export function Sidebar() {
                   className={
                     "flex min-h-11 items-center gap-3 rounded-lg px-3 text-[13px] font-bold transition-colors " +
                     (active
-                      ? "bg-[#edeefe] text-[#3730a3]"
-                      : "text-[#516075] hover:bg-ink hover:text-text")
+                      ? "bg-[#edeefe] dark:bg-[#382953] text-[#3730a3] dark:text-[#d1bcff]"
+                      : "text-[#516075] dark:text-[#b4b6cf] hover:bg-ink hover:text-text")
                   }
                 >
                   <UiIcon name={icons[item.href]} size={18} />

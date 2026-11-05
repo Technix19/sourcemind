@@ -12,7 +12,7 @@ export function ResultBar({ stat }: { stat: Stat | null | undefined }) {
   return (
     <div className="min-w-28 sm-metric">
       <span className="text-[12px] font-bold text-text">{fmtStat(stat)}</span>
-      <div aria-hidden className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-[#e9ecf6]">
+      <div aria-hidden className="relative mt-2 h-1.5 overflow-hidden rounded-full bg-[#e9ecf6] dark:bg-[#353247]">
         <div className="absolute inset-y-0 left-0 rounded-full bg-[#6366f1]" style={{ width: pct(value) }} />
         {stat.ci && (
           <div

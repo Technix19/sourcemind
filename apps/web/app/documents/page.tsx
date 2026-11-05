@@ -46,13 +46,13 @@ export default function DocumentsPage() {
       </div>
 
       <div className="mb-5 flex flex-wrap gap-2 text-[12px] text-muted">
-        <span className="rounded-md border border-line bg-white px-3 py-2">
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2">
           <strong className="sm-metric text-text">{documents.length}</strong> {documents.length === 1 ? "document" : "documents"}
         </span>
-        <span className="rounded-md border border-line bg-white px-3 py-2">
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2">
           <strong className="sm-metric text-text">{passages}</strong> {passages === 1 ? "searchable passage" : "searchable passages"}
         </span>
-        <span className="rounded-md border border-line bg-white px-3 py-2">
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2">
           <strong className="text-text">{MAX_DOCUMENTS - documents.length}</strong> upload slots remaining
         </span>
       </div>

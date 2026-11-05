@@ -23,7 +23,7 @@ export function QuickStart({ onPick }: { onPick: (question: string) => void }) {
               title={prompt.question}
             >
               {prompt.title}
-              <UiIcon name="arrow" size={14} className="text-[#8a96ac] group-hover:text-lavender" />
+              <UiIcon name="arrow" size={14} className="text-[#8a96ac] dark:text-[#a9aac4] group-hover:text-lavender" />
             </button>
           </li>
         ))}

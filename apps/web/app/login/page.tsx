@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export default function LoginPage() {
   const { signIn, signUp, notice, configured } = useAuth();
@@ -25,7 +26,8 @@ export default function LoginPage() {
   };
 
   return (
-    <main id="main" tabIndex={-1} className="grid min-h-screen place-items-center bg-[#f7f9fc] px-5 py-10 outline-none">
+    <main id="main" tabIndex={-1} className="sm-auth-shell relative grid min-h-screen place-items-center bg-[#f7f9fc] dark:bg-[#0e0d1b] px-5 py-10 outline-none">
+      <div className="absolute right-5 top-5"><ThemeToggle /></div>
       <div className="w-full max-w-[440px]">
         <div className="mb-8 flex justify-center">
           <BrandLogo tagline />
@@ -87,7 +89,7 @@ export default function LoginPage() {
               )}
             </div>
 
-            <p role="alert" className={error ? "rounded-lg bg-rose-50 p-3 text-sm text-danger" : "sr-only"}>{error}</p>
+            <p role="alert" className={error ? "rounded-lg bg-rose-50 dark:bg-[#442636] p-3 text-sm text-danger" : "sr-only"}>{error}</p>
 
             <button
               type="submit"
