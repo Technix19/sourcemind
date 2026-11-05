@@ -1,38 +1,46 @@
 "use client";
 
+import Link from "next/link";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
-import { useChat } from "./ChatProvider";
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <p className="text-3xl font-black">{value}</p>
-      <p className="text-sm text-muted">{label}</p>
-    </div>
-  );
-}
+import { UiIcon } from "@/components/ui/UiIcon";
+import { plural } from "@/lib/format";
 
 export function SourceHealth() {
   const { documents } = useDocuments();
-  const { lastQuestion } = useChat();
-  const passages = documents.reduce((sum, d) => sum + d.chunk_count, 0);
+  const passages = documents.reduce((sum, doc) => sum + doc.chunk_count, 0);
+
   return (
-    <aside aria-label="Source health" className="h-fit rounded-2xl border border-line bg-panel p-6">
-      <p className="mb-5 text-xs font-bold tracking-wider text-lavender">SOURCE HEALTH</p>
-      <div className="space-y-5">
-        <Stat value={String(documents.length).padStart(2, "0")} label="Documents indexed" />
-        <Stat value={String(passages).padStart(3, "0")} label="Searchable passages" />
-        <div>
-          <p className="line-clamp-2 text-lg font-bold">{lastQuestion ?? "—"}</p>
-          <p className="text-sm text-muted">Last question</p>
+    <section aria-label="Your sources" className="sm-panel overflow-hidden">
+      <div className="flex items-center justify-between border-b border-line px-4 py-3.5">
+        <h2 className="text-[14px] font-bold">Sources</h2>
+        <span className="text-xs text-muted">{plural(documents.length, "document")}</span>
+      </div>
+      {documents.length === 0 ? (
+        <div className="px-4 py-7 text-center">
+          <UiIcon name="file" size={25} className="mx-auto mb-3 text-[#8190a7]" />
+          <p className="text-sm font-bold">No documents yet</p>
+          <p className="mt-1 text-xs leading-relaxed text-muted">Upload a PDF, text, or Markdown file to start your research.</p>
+          <Link href="/documents" className="sm-secondary mt-4">Go to documents</Link>
         </div>
-      </div>
-      <div className="mt-6 border-t border-line pt-5">
-        <p className="font-bold">Evidence before answers</p>
-        <p className="mt-1 text-sm text-muted">Every response includes the passages retrieved from your files, with page numbers.</p>
-        <p className="mt-4 font-bold">Your data stays in memory</p>
-        <p className="mt-1 text-sm text-muted">Uploaded files are not saved to a database in this local prototype. Restarting the API clears them.</p>
-      </div>
-    </aside>
+      ) : (
+        <ul className="divide-y divide-line">
+          {documents.map((doc) => (
+            <li key={doc.id} className="flex items-start gap-2.5 px-4 py-3">
+              <UiIcon name="file" size={17} className="mt-0.5 shrink-0 text-[#69758d]" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[12px] font-bold" title={doc.name}>{doc.name}</p>
+                <p className="mt-1 text-[11px] text-muted">{plural(doc.page_count, "page")} · {plural(doc.chunk_count, "passage")}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {documents.length > 0 && (
+        <div className="flex items-center justify-between border-t border-line bg-ink px-4 py-3 text-xs">
+          <span className="text-muted">{plural(passages, "searchable passage")}</span>
+          <Link href="/documents" className="font-bold text-lavender hover:underline">Manage sources</Link>
+        </div>
+      )}
+    </section>
   );
 }

@@ -4,7 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
+import { BrandLogo } from "@/components/ui/BrandLogo";
+import { UiIcon, type IconName } from "@/components/ui/UiIcon";
 import { NAV } from "./nav";
+
+const icons: Record<string, IconName> = {
+  "/": "message",
+  "/documents": "file",
+  "/evaluation": "chart",
+};
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -14,26 +22,25 @@ export function Sidebar() {
   const online = loaded && !apiError;
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col self-start overflow-y-auto border-r border-line bg-panel px-4 py-5 lg:sticky lg:top-0 lg:flex lg:h-screen">
-      <Link href="/" className="mb-8 flex items-center gap-3 rounded-lg px-1">
-        <span aria-hidden className="grid size-10 place-items-center rounded-xl bg-lavender text-lg font-black text-ink">
-          S
-        </span>
-        <span>
-          <span className="block text-xl font-black leading-none">sourcemind</span>
-          <span className="text-[10px] font-bold tracking-widest text-lavender">DOCUMENT INTELLIGENCE</span>
-        </span>
+    <aside className="sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col overflow-y-auto border-r border-line bg-white px-3.5 py-5 lg:flex">
+      <Link href="/" className="mb-9 inline-flex min-h-11 items-center rounded-lg px-2">
+        <BrandLogo compact />
       </Link>
 
-      <p className="mb-2 px-1 text-[11px] font-bold tracking-widest text-muted">YOUR WORKSPACE</p>
-      <div className="mb-8 rounded-xl border border-line bg-ink/40 px-3 py-2.5">
-        <p className="font-bold">Research workspace</p>
-        <p className="text-xs text-muted">Personal workspace</p>
+      <div className="mb-6 px-2">
+        <p className="sm-muted-label mb-2">Workspace</p>
+        <div className="flex items-center gap-2 rounded-lg border border-line bg-ink px-3 py-3">
+          <UiIcon name="folder" size={17} className="shrink-0 text-lavender" />
+          <div className="min-w-0">
+            <p className="truncate text-[13px] font-bold text-text">Research workspace</p>
+            <p className="text-[11px] text-muted">Personal workspace</p>
+          </div>
+        </div>
       </div>
 
-      <nav aria-label="Main">
-        <p className="mb-2 px-1 text-[11px] font-bold tracking-widest text-muted">NAVIGATION</p>
-        <ul className="space-y-1">
+      <nav aria-label="Main" className="flex-1">
+        <p className="sm-muted-label mb-2 px-2">Navigate</p>
+        <ul className="space-y-0.5">
           {NAV.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
             return (
@@ -41,11 +48,15 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   aria-current={active ? "page" : undefined}
-                  className={`block min-h-11 rounded-xl px-3 py-2.5 font-bold transition-colors ${
-                    active ? "bg-lavender/20 text-lavender" : "text-muted hover:bg-surface hover:text-text"
-                  }`}
+                  className={
+                    "flex min-h-11 items-center gap-3 rounded-lg px-3 text-[13px] font-bold transition-colors " +
+                    (active
+                      ? "bg-[#edeefe] text-[#3730a3]"
+                      : "text-[#516075] hover:bg-ink hover:text-text")
+                  }
                 >
-                  {item.label}
+                  <UiIcon name={icons[item.href]} size={18} />
+                  <span>{item.label === "Ask questions" ? "Ask" : item.label}</span>
                 </Link>
               </li>
             );
@@ -53,19 +64,18 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <div className="mt-auto border-t border-line pt-4 text-sm">
-        <p className="flex items-center gap-2 text-muted">
-          <span aria-hidden className={`size-2 shrink-0 rounded-full ${online ? "bg-mint" : "bg-danger"}`} />
-          {online ? "Signed in" : "API offline"}
-        </p>
-        <p className="mt-1 truncate font-bold" title={email}>
-          {email}
-        </p>
+      <div className="border-t border-line pt-4">
+        <div className="flex items-center gap-2 px-2 text-xs text-muted">
+          <span aria-hidden className={"size-2 rounded-full " + (online ? "bg-emerald-600" : loaded ? "bg-danger" : "bg-amber")} />
+          <span>{online ? "Connected" : apiError ? "API offline" : "Connecting"}</span>
+        </div>
+        <p className="mt-2 truncate px-2 text-[13px] font-bold text-text" title={email}>{email}</p>
         <button
           type="button"
           onClick={() => void signOut()}
-          className="mt-2 min-h-10 rounded-lg px-3 text-muted hover:bg-surface hover:text-text"
+          className="mt-2 flex min-h-10 w-full items-center gap-2 rounded-lg px-2 text-[13px] font-medium text-muted hover:bg-ink hover:text-text"
         >
+          <UiIcon name="logout" size={16} />
           Sign out
         </button>
       </div>

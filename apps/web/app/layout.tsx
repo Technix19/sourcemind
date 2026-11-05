@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: { default: "SourceMind · Document intelligence", template: "%s · SourceMind" },
-  description: "Evidence-first document research assistant (local prototype).",
+  description: "Research your documents with source-backed answers and verifiable evidence.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

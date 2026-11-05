@@ -19,7 +19,7 @@ export function AnswerText({
 }) {
   const byId = new Map(evidence.map((e) => [e.citation_id, e]));
   return (
-    <div className="space-y-3 leading-relaxed">
+    <div className="space-y-3 text-[14px] leading-[1.8] text-text">
       {text.split(/\n{2,}/).map((paragraph, p) => (
         <p key={p} className="whitespace-pre-wrap">
           {splitCitations(paragraph).map((segment, i) => {
@@ -37,7 +37,7 @@ export function AnswerText({
                       type="button"
                       onClick={() => onCite(n)}
                       aria-label={`Show source ${n}: ${source.filename}, page ${source.page_number}`}
-                      className="mx-0.5 inline-block min-w-7 rounded bg-lavender/20 px-1.5 py-0.5 text-center text-sm font-bold text-lavender-soft hover:bg-lavender/30"
+                      className="mx-0.5 inline-block min-w-6 rounded bg-[#eeefff] px-1 py-0.5 text-center text-xs font-bold text-lavender hover:bg-[#dfe3ff]"
                     >
                       [{n}]
                     </button>

@@ -6,20 +6,21 @@ import { TopBar } from "./TopBar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { apiError, refresh } = useDocuments();
+
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-ink">
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar />
         {apiError && (
-          <div role="alert" className="flex items-center gap-3 border-b border-danger/30 bg-danger/10 px-4 py-3 text-sm text-danger sm:px-6">
+          <div role="alert" className="flex items-center gap-3 border-b border-rose-200 bg-rose-50 px-5 py-3 text-sm text-danger sm:px-8">
             <span className="flex-1">{apiError}</span>
-            <button type="button" onClick={() => void refresh()} className="rounded-lg border border-danger/40 px-3 py-1 font-bold hover:bg-danger/10">
+            <button type="button" onClick={() => void refresh()} className="sm-secondary shrink-0">
               Retry
             </button>
           </div>
         )}
-        <main id="main" tabIndex={-1} className="flex-1 px-4 py-6 outline-none sm:px-6 sm:py-8">
+        <main id="main" tabIndex={-1} className="min-w-0 flex-1 px-4 py-6 outline-none sm:px-7 sm:py-8 xl:px-10">
           {children}
         </main>
       </div>

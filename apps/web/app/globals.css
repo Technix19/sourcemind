@@ -1,49 +1,110 @@
 @import "tailwindcss";
 
-/* Design tokens taken from the blueprint mockups: dark ink surfaces,
-   lavender for actions/active state, mint for "grounded"/ready status. */
 @theme {
-  --color-ink: #0f0f17;
-  --color-panel: #151520;
-  --color-surface: #1b1b2a;
-  --color-line: #2a2a3d;
-  --color-text: #f2f2f8;
-  --color-muted: #9494ab;
-  --color-lavender: #a78bfa;
-  --color-lavender-deep: #7c5cf0;
-  /* Lighter lavender for text on lavender-tinted chips: plain lavender is 4.46:1 there, under the 4.5:1 AA minimum. */
-  --color-lavender-soft: #c4b5fd;
-  --color-mint: #5fe3c0;
-  --color-amber: #f2b45c;
-  --color-danger: #f87171;
+  --color-ink: #f8fafc;
+  --color-panel: #ffffff;
+  --color-surface: #f2f5fa;
+  --color-line: #e2e7ef;
+  --color-text: #161d2d;
+  --color-muted: #627087;
+  --color-lavender: #4338ca;
+  --color-lavender-deep: #4f46e5;
+  --color-lavender-soft: #4338ca;
+  --color-mint: #087a57;
+  --color-amber: #95580c;
+  --color-danger: #b42333;
   --font-sans: var(--font-lato), ui-sans-serif, system-ui, sans-serif;
 }
 
-html {
-  color-scheme: dark;
+:root {
+  color-scheme: light;
+  --sm-elevation: 0 1px 2px rgb(15 23 42 / 0.035);
+  --sm-elevation-floating: 0 15px 40px rgb(15 23 42 / 0.1);
 }
 
-body {
-  background: var(--color-ink);
-  color: var(--color-text);
-  font-family: var(--font-sans);
-}
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #f8fafc; color: var(--color-text); font-family: var(--font-sans); }
+::selection { color: #312e81; background: #e0e7ff; }
 
-/* Visible keyboard focus everywhere (blueprint accessibility requirement).
-   Kept in the base layer so a component can replace it with its own ring
-   (e.g. the question box) using normal Tailwind utilities. */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-lavender);
-    outline-offset: 2px;
+    outline: 2px solid #4f46e5;
+    outline-offset: 3px;
   }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
 }
 
-/* Motion is decoration only; respect the user's setting. */
+@layer components {
+  .sm-panel {
+    border: 1px solid var(--color-line);
+    border-radius: 12px;
+    background: var(--color-panel);
+    box-shadow: var(--sm-elevation);
+  }
+  .sm-field {
+    width: 100%;
+    min-height: 44px;
+    border: 1px solid #d8deea;
+    border-radius: 9px;
+    background: #fff;
+    color: #182234;
+    padding: 11px 13px;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .sm-field::placeholder { color: #8a96a9; }
+  .sm-field:focus { border-color: #6366f1; box-shadow: 0 0 0 3px rgb(99 102 241 / .12); }
+  .sm-field:disabled { background: #f1f5f9; color: #94a3b8; }
+  .sm-primary {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #4338ca;
+    border-radius: 9px;
+    background: #4f46e5;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: white;
+    transition: background .15s ease;
+  }
+  .sm-primary:hover:not(:disabled) { background: #4338ca; }
+  .sm-primary:disabled { opacity: .45; }
+  .sm-secondary {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid #dbe2ed;
+    border-radius: 9px;
+    background: white;
+    padding: 8px 13px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #334155;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .sm-secondary:hover:not(:disabled) { background: #f8faff; border-color: #b8c2d6; }
+  .sm-muted-label { color: #5e6b80; font-size: 12px; font-weight: 700; }
+  .sm-page-title { font-size: clamp(24px, 3vw, 31px); font-weight: 900; letter-spacing: -.035em; line-height: 1.2; }
+  .sm-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .sm-table th { color: #617087; font-size: 11px; font-weight: 700; text-transform: none; }
+  .sm-table td, .sm-table th { border-bottom: 1px solid #e8ecf3; padding: 13px 14px; text-align: left; }
+  .sm-table tbody tr:last-child td, .sm-table tbody tr:last-child th { border-bottom: 0; }
+  .sm-table tbody tr:hover { background: #fafbfe; }
+  .sm-metric { font-variant-numeric: tabular-nums; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
