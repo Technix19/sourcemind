@@ -58,7 +58,9 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   const isDark = theme === "dark";
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
+    // Read the actual preference on hydration instead of momentarily resetting
+    // the bootstrap script\u0027s dark choice to the SSR fallback.
+    document.documentElement.dataset.theme = snapshot();
   }, [theme]);
 
   return (
