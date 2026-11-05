@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Theme state lives on <html>; dark: utilities respect this attribute. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-ink: #f8fafc;
   --color-panel: #ffffff;
@@ -22,9 +25,30 @@
   --sm-elevation-floating: 0 15px 40px rgb(15 23 42 / 0.1);
 }
 
+/* Overrides the same semantic tokens used by the existing light theme.
+   The theme switch does not affect the search, auth, or API state. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-ink: #0e101d;
+  --color-panel: #1a1b2a;
+  --color-surface: #25263a;
+  --color-line: #38394e;
+  --color-text: #f3f2fa;
+  --color-muted: #abaec5;
+  --color-lavender: #bea2ff;
+  --color-lavender-deep: #7853df;
+  --color-lavender-soft: #ccb7ff;
+  --color-mint: #6de6bd;
+  --color-amber: #f7c478;
+  --color-danger: #ff9cb5;
+  --sm-elevation: 0 1px 2px rgb(0 0 0 / 0.12);
+  --sm-elevation-floating: 0 18px 50px rgb(0 0 0 / 0.28);
+}
+
 html { scroll-behavior: smooth; }
-body { margin: 0; background: #f8fafc; color: var(--color-text); font-family: var(--font-sans); }
+body { margin: 0; background: var(--color-ink); color: var(--color-text); font-family: var(--font-sans); }
 ::selection { color: #312e81; background: #e0e7ff; }
+:root[data-theme="dark"] ::selection { color: #fff; background: #6545a7; }
 
 @layer base {
   :focus-visible {
@@ -101,6 +125,56 @@ body { margin: 0; background: #f8fafc; color: var(--color-text); font-family: va
   .sm-table tbody tr:hover { background: #fafbfe; }
   .sm-metric { font-variant-numeric: tabular-nums; }
 }
+
+/* Premium dark palette. Using restrained surfaces and the same component structure
+   as light mode keeps both themes functional, not two competing UIs. */
+:root[data-theme="dark"] .sm-app-shell {
+  background-color: var(--color-ink);
+  background-image: radial-gradient(ellipse 65% 60% at 105% 100%, rgb(111 58 180 / 0.10), transparent 70%);
+}
+:root[data-theme="dark"] .sm-auth-shell {
+  background-color: #0e0d1b;
+  background-image:
+    radial-gradient(ellipse 60% 48% at 105% 90%, rgb(110 57 180 / 0.16), transparent 80%),
+    radial-gradient(ellipse 55% 43% at -12% -10%, rgb(105 57 175 / 0.12), transparent 70%);
+}
+:root[data-theme="dark"] .sm-panel {
+  background: var(--color-panel);
+  border-color: var(--color-line);
+  box-shadow: var(--sm-elevation);
+}
+:root[data-theme="dark"] .sm-field {
+  border-color: #45465f;
+  background: #202134;
+  color: #f5f2ff;
+}
+:root[data-theme="dark"] .sm-field::placeholder { color: #9294ad; }
+:root[data-theme="dark"] .sm-field:focus {
+  border-color: #a58af8;
+  box-shadow: 0 0 0 3px rgb(147 111 245 / 0.22);
+}
+:root[data-theme="dark"] .sm-field:disabled { background: #292a3b; color: #9494ab; }
+:root[data-theme="dark"] .sm-primary {
+  border-color: #8460ef;
+  background: #7853df;
+  color: white;
+}
+:root[data-theme="dark"] .sm-primary:hover:not(:disabled) { background: #6843ce; }
+:root[data-theme="dark"] .sm-secondary {
+  background: #232438;
+  border-color: #414359;
+  color: #e0ddec;
+}
+:root[data-theme="dark"] .sm-secondary:hover:not(:disabled) {
+  background: #303047;
+  border-color: #77708f;
+}
+:root[data-theme="dark"] .sm-muted-label { color: #a5a4be; }
+:root[data-theme="dark"] .sm-table th { color: #b1b0c8; }
+:root[data-theme="dark"] .sm-table td,
+:root[data-theme="dark"] .sm-table th { border-color: var(--color-line); }
+:root[data-theme="dark"] .sm-table tbody tr:hover { background: #25253a; }
+:root[data-theme="dark"] :focus-visible { outline-color: #b39af7; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
