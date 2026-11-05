@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
 import { BrandLogo } from "@/components/ui/BrandLogo";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { UiIcon, type IconName } from "@/components/ui/UiIcon";
 import { NAV } from "./nav";
 
@@ -30,7 +31,8 @@ export function TopBar() {
           <UiIcon name="arrow" size={13} className="hidden shrink-0 text-[#94a3b8] lg:inline" />
           <span className="hidden truncate font-bold text-text lg:inline">{current.crumb}</span>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <ThemeToggle />
           <span className="inline-flex items-center gap-2 whitespace-nowrap text-[11px] font-medium text-muted sm:text-xs" role="status">
             <span aria-hidden className={"size-[7px] rounded-full " + (apiError ? "bg-danger" : loaded ? "bg-emerald-600" : "bg-amber")} />
             {mode}
