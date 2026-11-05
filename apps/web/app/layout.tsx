@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Lato } from "next/font/google";
+import { headers } from "next/headers";
 import { AppGate } from "@/components/auth/AppGate";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import "./globals.css";
@@ -14,9 +15,27 @@ export const metadata: Metadata = {
   description: "Research your documents with source-backed answers and verifiable evidence.",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
-    <html lang="en" className={lato.variable}>
+    <html lang="en" className={lato.variable} suppressHydrationWarning>
+      <head>
+        <script
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: `(function () {
+              try {
+                var saved = localStorage.getItem("sourcemind.theme");
+                var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+                document.documentElement.dataset.theme = saved === "light" || saved === "dark"
+                  ? saved : dark ? "dark" : "light";
+              } catch (_) {
+                document.documentElement.dataset.theme = "light";
+              }
+            })();`,
+          }}
+        />
+      </head>
       <body className="antialiased">
         <a
           href="#main"
