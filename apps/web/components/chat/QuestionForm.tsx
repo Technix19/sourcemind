@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import { useDocuments } from "@/components/documents/DocumentsProvider";
 import type { Retrieval } from "@/lib/types";
+import { UiIcon } from "@/components/ui/UiIcon";
 import { MAX_QUESTION, MIN_QUESTION, useChat } from "./ChatProvider";
 
 const METHODS: { value: Retrieval; label: string; hint: string }[] = [
@@ -35,11 +36,9 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
   };
 
   return (
-    <form onSubmit={submit} className="space-y-2">
-      <div className="flex items-center gap-3 rounded-2xl border border-line bg-panel p-2 pl-4 focus-within:border-lavender focus-within:ring-2 focus-within:ring-lavender/40">
-        <label htmlFor="question" className="sr-only">
-          Ask a question about your documents
-        </label>
+    <form onSubmit={submit} className="sm-panel overflow-hidden">
+      <div className="flex min-h-[65px] items-center gap-3 px-4 py-2 focus-within:bg-[#fbfcff]">
+        <label htmlFor="question" className="sr-only">Ask a question about your documents</label>
         <input
           id="question"
           ref={input}
@@ -50,64 +49,57 @@ export function QuestionForm({ draft, setDraft }: { draft: string; setDraft: (va
           autoComplete="off"
           aria-describedby={hintId}
           placeholder={noDocs ? "Upload a document first…" : "Ask about your documents…"}
-          className="min-w-0 flex-1 bg-transparent py-2 outline-none focus-visible:outline-none placeholder:text-muted disabled:cursor-not-allowed"
+          className="min-w-0 flex-1 bg-transparent py-2 text-[14px] text-text outline-none placeholder:text-muted focus-visible:outline-none disabled:cursor-not-allowed"
         />
         {pending ? (
-          <button type="button" onClick={stop} className="min-h-11 rounded-xl border border-line px-4 font-bold hover:bg-surface">
-            Stop
-          </button>
+          <button type="button" onClick={stop} className="sm-secondary">Stop</button>
         ) : (
-          <button
-            type="submit"
-            disabled={disabled || tooShort}
-            className="min-h-11 rounded-xl bg-lavender-deep px-4 font-bold text-white hover:bg-lavender-deep/85 disabled:cursor-not-allowed disabled:opacity-40"
-          >
-            Ask <span aria-hidden>→</span>
+          <button type="submit" disabled={disabled || tooShort} className="sm-primary">
+            Ask
+            <UiIcon name="send" size={15} />
           </button>
         )}
       </div>
-      <div id={hintId} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-1 text-xs text-muted">
-        <span>
+      <div id={hintId} className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 border-t border-line bg-[#fbfcfe] px-4 py-2.5 text-xs text-muted">
+        <span className="order-3 w-full text-[11px] leading-relaxed sm:order-none sm:w-auto">
           {noDocs && !apiError ? (
             <>
-              <Link href="/documents" className="text-lavender underline">
-                Upload a document
-              </Link>{" "}
+              <Link href="/documents" className="font-bold text-lavender hover:underline">Upload a document</Link>{" "}
               to start asking.
             </>
           ) : (
-            "SourceMind can make mistakes. Always verify important details using the sources."
+            "Check citations before relying on an answer."
           )}
         </span>
-        {canSearchByMeaning && (
-          <fieldset className="flex items-center gap-1">
-            <legend className="sr-only">Search method</legend>
-            <span aria-hidden>Search by</span>
-            {METHODS.map((m) => (
-              <label key={m.value} title={m.hint} className="flex min-h-8 cursor-pointer items-center gap-1.5 rounded px-2">
-                <input
-                  type="radio"
-                  name="retrieval"
-                  value={m.value}
-                  checked={retrieval === m.value}
-                  onChange={() => setRetrieval(m.value)}
-                  className="size-4 accent-lavender"
-                />
-                <span>{m.label}</span>
-              </label>
-            ))}
-          </fieldset>
-        )}
-        {canGenerate && (
-          <label className="flex cursor-pointer items-center gap-2">
-            <input type="checkbox" checked={generate} onChange={(e) => setGenerate(e.target.checked)} className="size-4 accent-lavender" />
-            <span>Generate an answer (sends the question and excerpts to the model provider)</span>
-          </label>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          {canSearchByMeaning && (
+            <fieldset className="flex items-center gap-2.5">
+              <legend className="sr-only">Search method</legend>
+              <span aria-hidden="true" className="text-[11px] text-muted">Search by</span>
+              {METHODS.map((m) => (
+                <label key={m.value} title={m.hint} className="flex min-h-7 cursor-pointer items-center gap-1.5">
+                  <input
+                    type="radio"
+                    name="retrieval"
+                    value={m.value}
+                    checked={retrieval === m.value}
+                    onChange={() => setRetrieval(m.value)}
+                    className="size-3.5 accent-lavender"
+                  />
+                  <span>{m.label}</span>
+                </label>
+              ))}
+            </fieldset>
+          )}
+          {canGenerate && (
+            <label className="flex cursor-pointer items-center gap-1.5">
+              <input type="checkbox" checked={generate} onChange={(e) => setGenerate(e.target.checked)} className="size-3.5 accent-lavender" />
+              <span>Generate an answer (sends the question and excerpts to the model provider)</span>
+            </label>
+          )}
+        </div>
       </div>
-      <p role="status" aria-live="polite" className="sr-only">
-        {pending ? "Searching your documents" : ""}
-      </p>
+      <p role="status" aria-live="polite" className="sr-only">{pending ? "Searching your documents" : ""}</p>
     </form>
   );
 }
