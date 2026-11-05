@@ -34,7 +34,7 @@ export default function AskPage() {
             Find what matters, ask follow-up questions, and check the original passages.
           </p>
         </div>
-        <div className="flex items-center gap-3 rounded-lg border border-line bg-white px-3 py-2 text-xs text-muted">
+        <div className="flex items-center gap-3 rounded-lg border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2 text-xs text-muted">
           <span className="flex items-center gap-1.5">
             <UiIcon name="file" size={15} />
             {plural(documents.length, "document")}
@@ -62,7 +62,7 @@ export default function AskPage() {
               ) : (
                 <div className="sm-panel px-5 py-5">
                   <div className="flex items-center gap-3">
-                    <span className="flex size-9 items-center justify-center rounded-lg bg-[#eef0ff] text-lavender">
+                    <span className="flex size-9 items-center justify-center rounded-lg bg-[#eef0ff] dark:bg-[#33284e] text-lavender">
                       <UiIcon name="check" size={19} />
                     </span>
                     <div>
