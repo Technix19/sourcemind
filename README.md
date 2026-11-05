@@ -14,7 +14,17 @@ Evidence-first AI document research assistant, built incrementally as a learning
 | M6 Auth, persistence, vectors | 6a done (schema + Row Level Security). 6b done (sign-in, per-user storage). 6c done and verified (34 real-project tests plus a real-browser run): original files in a private bucket, 60-second signed links, **Open page** on citations, resumable deletion; apply the storage migration first (`docs/m6c-apply.md`). 6d implemented offline (local embeddings, `pgvector` search that runs as the caller, a Keyword / Meaning control); **apply migration 3 before uploads work** (`docs/m6d-apply.md`). See `docs/m6-plan.md` |
 | M7 Evaluation and deployment | 7a built the corpus, 45 labeled questions (one author) and a reproducible harness. 7b done: held-out test split scored once (`data/evaluation/results/REPORT.md`), failure analysis, and an Evaluation page in the app. Keyword vs meaning Recall@3 on 15 answerable questions: 0.60 vs 0.87, but the 95% intervals overlap, so **no difference is demonstrated**. Product defaults are unchanged. 7c hardening done offline and against the real project: API security headers, docs off outside local, per-user rate limits and a daily generation cap, a nonce-based web Content-Security-Policy, a sweep for abandoned uploads, a data-handling statement, and Claude as the answer provider. Still to do: email confirmation and SMTP are on in the dashboard (not in code); 7d: a deployment plan is written (`docs/m7d-deployment-plan.md`) and nothing is deployed |
 
-Every API route except `/api/v1/health` requires a signed-in user, and documents live in Postgres per user. There is no anonymous or local no-login mode. The app runs locally; it is **not deployed anywhere yet**. See [Limitations](#limitations) and [docs/data-handling.md](docs/data-handling.md) (what is stored, what leaves your machine, retention) before uploading anything.
+Every API route except `/api/v1/health` requires a signed-in user, and documents live in Postgres per user. There is no anonymous or local no-login mode. A hosted demo exists (see [Live demo](#live-demo)); the main path is still running it locally. See [Limitations](#limitations) and [docs/data-handling.md](docs/data-handling.md) (what is stored, what leaves your machine, retention) before uploading anything.
+
+## Live demo
+
+A hosted copy runs at **https://sourcemind-eight.vercel.app** (web on Vercel, API on Render's free plan, data in Supabase). It is a portfolio demo, not a production service:
+
+- **Keyword search only.** The free API host has 512 MB of RAM and meaning search needs about 600 MB, so the Keyword / Meaning control is hidden there. Meaning search works when you run the app yourself.
+- **Slow first request.** The free API host sleeps after 15 idle minutes; the first request after that can take about a minute.
+- **Sign-up is open** (email confirmation required). Do not upload confidential files: see [docs/data-handling.md](docs/data-handling.md) for what is stored and what leaves the server.
+- **Generated answers are optional and capped**: 20 per user and 200 for the whole server per rolling 24 hours, then you still get the retrieved evidence.
+- Sample material to try: `data/sample/adaptive-practice-brief.pdf`.
 
 ## Screenshots
 
@@ -119,4 +129,4 @@ What this project does not do, or has not proven. Nothing here is hidden in the 
 - An upload that genuinely runs longer than the 15-minute cleanup window could be removed while still running.
 - The web Content-Security-Policy was verified in a real browser on the sign-in page; the signed-in pages were not covered by an automated browser run.
 - Accessibility: the original 9 views were scanned with axe-core and reviewed manually; the Evaluation page has component tests but has not had an axe-core scan, and none of this replaces a test with assistive technology.
-- Not deployed: no hosting, uptime, backups policy, monitoring or incident process exists.
+- The hosted demo is a free-tier deployment: no uptime guarantee, monitoring, alerting or backups policy beyond what Supabase's free plan provides (none), and the in-memory rate-limit counters reset whenever the API host restarts or wakes from sleep.

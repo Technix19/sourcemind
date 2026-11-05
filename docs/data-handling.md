@@ -43,13 +43,19 @@ not test deleting a user who still has files. Delete the user's documents in the
 
 ## What leaves your machine, and where it goes
 
+This section describes the **hosted demo** (https://sourcemind-eight.vercel.app). When you run the app yourself, nothing
+below applies except the services you configure.
+
+- **Vercel** serves the web pages and may keep its own request logs. Your browser then talks directly to the API and to Supabase.
+- **Render** runs the API. Uploaded files and questions pass through its memory while they are processed; its disk is
+  ephemeral and the app stores nothing there. Render may keep request logs (**not verified**: retention).
+
 - **Always:** your documents and questions go to your Supabase project (database and storage), hosted by Supabase.
   Sign-in emails (confirmation links) are sent through the SMTP provider you configured (Brevo), which sees the
   recipient address.
-- **Meaning search:** the embedding model runs on the API server itself. No document text goes to a third party for
-  this.
-- **Generated answers (off by default):** when `ANTHROPIC_API_KEY` and `ANTHROPIC_MODEL` are set and a user asks for
-  a generated answer, the question and the retrieved excerpts are sent to Anthropic. The app does not store the
+- **Meaning search:** the embedding model runs on the API server itself, so no document text goes to a third party for
+  this. It is switched off on the free-tier hosted demo (not enough memory), which is keyword-only.
+- **Generated answers (on in the hosted demo, optional per question):** when `ANTHROPIC_API_KEY` and `ANTHROPIC_MODEL` are set and a user ticks "Generate an answer", the question and the retrieved excerpts are sent to Anthropic. The app does not store the
   request or the response. How Anthropic retains API data depends on its terms and your account; check them before
   using confidential material (**not verified** here).
 - Nothing is sent to analytics or advertising services; the app includes none.

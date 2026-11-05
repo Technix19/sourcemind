@@ -28,7 +28,7 @@ export function Sidebar() {
       <p className="mb-2 px-1 text-[11px] font-bold tracking-widest text-muted">YOUR WORKSPACE</p>
       <div className="mb-8 rounded-xl border border-line bg-ink/40 px-3 py-2.5">
         <p className="font-bold">Research workspace</p>
-        <p className="text-xs text-muted">Personal · Local demo</p>
+        <p className="text-xs text-muted">Personal workspace</p>
       </div>
 
       <nav aria-label="Main">

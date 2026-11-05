@@ -1,7 +1,20 @@
 # M7d: Deployment plan
 
-Status: **plan only. Nothing has been created, deployed or made public.** Every step that creates something, spends money
-or exposes the app needs the owner's explicit yes first. Written 2026-11-05.
+Status: **deployed 2026-11-05** (Vercel web + Render free API + the existing Supabase project), after the owner's explicit
+go at each outward-facing step. Web: https://sourcemind-eight.vercel.app. API: https://sourcemind-api-ihqf.onrender.com
+(service `sourcemind-api`, free plan, Oregon, auto-deploy **off**; the repository was made public so Render and Vercel can
+read it; the full history was scanned for secrets first and none were found).
+
+**Verified on the live site:** health (`production`, docs 404, protected routes 401, CORS allows only the Vercel origin);
+a 12-check API smoke test with a real test account (sign-in, upload 3 s, keyword question with page citation, one
+Claude-generated answer, signed citation link, delete); and a headless-browser run of the hosted site (sign-in, upload,
+ask, Evaluation page) with **zero Content-Security-Policy or CORS violations**.
+
+**Not verified / still open:** Render's health-check path is unset (the creation tool cannot set it; set it to
+`/api/v1/health` in the dashboard); the Supabase Site URL / Redirect URLs, the sign-up CAPTCHA, the Anthropic
+monthly spend limit and the cleanup of leftover throwaway test users are owner dashboard steps I cannot see;
+upload time for a large (150-page) PDF on the free 0.1-CPU instance has not been measured; Vercel's Hobby plan is for
+non-commercial use only.
 
 ## 0. Decisions (owner, 2026-11-05)
 
