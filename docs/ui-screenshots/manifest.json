@@ -62,9 +62,9 @@
   },
   {
    "folder": "02-components",
-   "file": "source-health.png",
-   "title": "Source health panel",
-   "note": "Counts, last question, and the two reassurance notes (see the stale-text note in INDEX.md)"
+   "file": "sources-panel-empty.png",
+   "title": "Sources panel: empty",
+   "note": "Right-hand panel before any document is uploaded"
   },
   {
    "folder": "02-components",
@@ -128,6 +128,18 @@
   },
   {
    "folder": "02-components",
+   "file": "sources-panel-with-document.png",
+   "title": "Sources panel: one document",
+   "note": "Lists each indexed file with its pages and passages"
+  },
+  {
+   "folder": "02-components",
+   "file": "quick-start-with-documents.png",
+   "title": "Starter chips",
+   "note": "Same chips once a document exists"
+  },
+  {
+   "folder": "02-components",
    "file": "question-form-ready.png",
    "title": "Question form: filled",
    "note": "Starter question inserted; Search-by choice and Generate option shown"
@@ -167,12 +179,6 @@
    "file": "evidence-card.png",
    "title": "Evidence card",
    "note": "One passage: citation number, file, page, rank, score, excerpt, Open page"
-  },
-  {
-   "folder": "02-components",
-   "file": "source-health-after-question.png",
-   "title": "Source health after a question",
-   "note": "Counts and the last question filled in"
   },
   {
    "folder": "01-pages",
@@ -371,6 +377,42 @@
    "file": "evaluation-top.png",
    "title": "Evaluation (tablet)",
    "note": "Caveats first; tables scroll sideways inside their own box"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "topbar-dark.png",
+   "title": "Top bar in dark theme",
+   "note": "Theme switcher now shows the sun icon"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "ask-start.png",
+   "title": "Ask questions: ready (dark)",
+   "note": "/ with one document indexed"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "ask-answer.png",
+   "title": "Answer (dark)",
+   "note": "Evidence-only answer"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "documents.png",
+   "title": "Documents (dark)",
+   "note": "/documents with one file"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "evaluation-top.png",
+   "title": "Evaluation (dark)",
+   "note": "Caveats and ranking table"
+  },
+  {
+   "folder": "06-dark-theme",
+   "file": "mobile-ask.png",
+   "title": "Ask questions (phone, dark)",
+   "note": "390 x 844"
   }
  ],
  "failed": []

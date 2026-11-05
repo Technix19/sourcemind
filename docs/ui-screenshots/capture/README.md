@@ -21,5 +21,6 @@ Optional: `WEB_URL`, `API_URL`, `CHROMIUM_PATH` environment variables.
 ## What it needs and does
 - The first argument is `apps/api/.env`; it reads the two test-account lines (`SUPABASE_TEST_USER_A_EMAIL` / `_PASSWORD`, see `docs/m7c-test-accounts.md`). It never prints or stores them.
 - It signs in as that account, uploads the sample PDF, asks four questions (one with a real generated answer, which costs a fraction of a cent if `ANTHROPIC_API_KEY` is set), and **deletes the test document at the end**. It also empties that account's documents at the start.
-- The signed-in email is masked in every image and the dev-only Next.js indicator is removed.
+- The signed-in email is masked in every image (any text or label containing the test account's address is replaced) and the dev-only Next.js indicator is removed.
+- Light theme is captured everywhere (the browser is pinned to light so results are repeatable); a smaller dark-theme set is captured by clicking the theme switch.
 - It deletes nothing except those test documents. **Delete the output folder's old images yourself** if you want a clean slate; the script overwrites files with the same names.

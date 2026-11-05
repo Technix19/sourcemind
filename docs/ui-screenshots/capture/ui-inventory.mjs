@@ -38,12 +38,17 @@ async function cleanAccount() {
 // Hide the dev-only Next.js indicator and mask the signed-in email, so no image shows either.
 async function prepare(page) {
   // Wait for the health check to settle, so images show the loaded state, not the brief 'Checking…' state.
-  await page.waitForFunction(() => !document.body.innerText.includes("Checking…"), null, { timeout: 20000 }).catch(() => {});
+  await page.waitForFunction(() => !/\bConnecting\b/.test(document.body.innerText), null, { timeout: 20000 }).catch(() => {});
   await sleep(150);
-  await page.evaluate(() => {
+  await page.evaluate((email) => {
     document.querySelectorAll("nextjs-portal").forEach((n) => n.remove());
-    document.querySelectorAll('[title*="@"]').forEach((el) => { el.textContent = "reviewer@example.com"; el.removeAttribute("title"); });
-  });
+    const fake = "reviewer@example.com";
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) if (n.nodeValue.includes(email)) n.nodeValue = n.nodeValue.split(email).join(fake);
+    document.querySelectorAll("[title],[aria-label]").forEach((el) => {
+      for (const a of ["title", "aria-label"]) if ((el.getAttribute(a) || "").includes(email)) el.setAttribute(a, el.getAttribute(a).split(email).join(fake));
+    });
+  }, env.SUPABASE_TEST_USER_A_EMAIL);
 }
 
 function entry(folder, name, title, note) { manifest.push({ folder, file: `${name}.png`, title, note }); }
@@ -84,7 +89,7 @@ console.log("cleaned", await cleanAccount(), "leftover documents from the test a
 
 // ===== Logged-out screens (fresh context, no session) =====
 {
-  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: "light" });
   const page = await ctx.newPage();
   await page.goto(`${WEB}/login`, { waitUntil: "networkidle" });
   await shotPage(page, "01-pages", "01-login-sign-in", "Sign in", "/login, default mode");
@@ -101,7 +106,7 @@ console.log("cleaned", await cleanAccount(), "leftover documents from the test a
   await shotPage(page, "03-states", "login-wrong-password", "Sign-in error", "Wrong email or password (a made-up address is shown, not a real one)");
   await ctx.close();
 
-  const mctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  const mctx = await browser.newContext({ viewport: { width: 390, height: 844 }, colorScheme: "light" });
   const mpage = await mctx.newPage();
   await mpage.goto(`${WEB}/login`, { waitUntil: "networkidle" });
   await shotPage(mpage, "04-mobile-390", "login", "Sign in (phone)", "390 x 844");
@@ -109,22 +114,22 @@ console.log("cleaned", await cleanAccount(), "leftover documents from the test a
 }
 
 // ===== Signed-in screens =====
-const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, colorScheme: "light" });
 const page = await ctx.newPage();
 await page.goto(`${WEB}/login`, { waitUntil: "networkidle" });
 await page.getByLabel("Email").fill(env.SUPABASE_TEST_USER_A_EMAIL);
 await page.getByLabel("Password").fill(env.SUPABASE_TEST_USER_A_PASSWORD);
 await page.getByRole("button", { name: "Sign in" }).click();
 await page.waitForURL(`${WEB}/`, { timeout: 60000 });
-await page.getByText("Drop documents here").waitFor({ timeout: 30000 });
+await page.getByRole("heading", { name: "Ask your documents" }).waitFor({ timeout: 30000 });
 
 // -- empty library
 await shotPage(page, "01-pages", "03-ask-start-no-documents", "Ask questions: first run", "/ with an empty library: hero, upload zone, starter questions, evidence panel and source health");
 await shotEl(page, page.locator('aside:has(nav[aria-label="Main"])'), "02-components", "sidebar", "Sidebar", "Brand, workspace, navigation, signed-in status, sign out (email masked)");
 await shotEl(page, page.locator("header").first(), "02-components", "topbar", "Top bar", "Breadcrumb, answer-mode status, sign out, compact nav on small screens");
 await shotEl(page, page.locator("div.border-dashed").first(), "02-components", "upload-zone", "Upload zone", "Drop area with browse link, accepted types and size limit");
-await shotEl(page, page.getByText("GET STARTED WITH A QUESTION").locator(".."), "02-components", "quick-start", "Starter questions", "Three prompts that fill the question box");
-await shotEl(page, page.getByRole("complementary", { name: "Source health" }), "02-components", "source-health", "Source health panel", "Counts, last question, and the two reassurance notes (see the stale-text note in INDEX.md)");
+await shotEl(page, page.getByText("Try asking").locator(".."), "02-components", "quick-start", "Starter questions", "Three prompts that fill the question box");
+await shotEl(page, page.getByRole("region", { name: "Your sources" }), "02-components", "sources-panel-empty", "Sources panel: empty", "Right-hand panel before any document is uploaded");
 await shotEl(page, page.locator("form").filter({ has: page.locator("#question") }), "02-components", "question-form-no-documents", "Question form: no documents", "Disabled input with a link to upload");
 
 // keyboard focus: skip link and the first tab stop
@@ -152,7 +157,7 @@ await page.waitForFunction(() => !document.body.innerText.includes("Uploading an
 await sleep(1500);
 await shotPage(page, "01-pages", "05-documents-with-document", "Documents: one file", "/documents after uploading the sample PDF");
 await shotEl(page, page.locator("li").filter({ hasText: "adaptive-practice-brief.pdf" }), "02-components", "document-list-item", "Document row", "Type badge, name, size, pages, passages, status, Open, Remove");
-await shotEl(page, page.locator("main > div > div").first(), "02-components", "documents-header", "Documents header", "Title, counts, upload button");
+await shotEl(page, page.locator("h1.sm-page-title").locator("xpath=../.."), "02-components", "documents-header", "Documents header", "Title, counts, upload button");
 await shotEl(page, page.getByPlaceholder("Search documents by name…"), "02-components", "documents-search", "Documents search box", "Filter by file name");
 await page.getByRole("button", { name: /^Remove/ }).first().click();
 await sleep(300);
@@ -161,8 +166,10 @@ await page.getByRole("button", { name: "Cancel" }).first().click();
 
 // -- ask page with a document
 await page.goto(`${WEB}/`, { waitUntil: "networkidle" });
-await page.getByText("GET STARTED WITH A QUESTION").waitFor({ timeout: 30000 });
+await page.getByText("Try asking").waitFor({ timeout: 30000 });
 await shotPage(page, "01-pages", "06-ask-start-with-document", "Ask questions: ready", "/ with one document indexed");
+await shotEl(page, page.getByRole("region", { name: "Your sources" }), "02-components", "sources-panel-with-document", "Sources panel: one document", "Lists each indexed file with its pages and passages");
+await shotEl(page, page.getByText("Try asking").locator(".."), "02-components", "quick-start-with-documents", "Starter chips", "Same chips once a document exists");
 await page.getByRole("button", { name: /Identify limitations/ }).click();
 await sleep(300);
 await shotEl(page, page.locator("form").filter({ has: page.locator("#question") }), "02-components", "question-form-ready", "Question form: filled", "Starter question inserted; Search-by choice and Generate option shown");
@@ -173,14 +180,13 @@ await page.route("**/api/v1/queries", async (route) => { await sleep(2500); awai
 await page.getByRole("button", { name: /^Ask/ }).click();
 await sleep(900);
 await shotPage(page, "03-states", "ask-pending", "Searching…", "Shown while the API is working (the delay was added for this capture)");
-await page.getByText("Keyword search").first().waitFor({ timeout: 30000 });
+await page.getByText(/Keyword search|Meaning search/).first().waitFor({ timeout: 30000 });
 await page.unroute("**/api/v1/queries");
 await sleep(800);
 await shotPage(page, "01-pages", "07-ask-answer-keyword", "Answer: keyword search", "Evidence-only answer with the supporting passages in the right rail");
 await shotEl(page, page.locator("div.space-y-6 > div").first(), "02-components", "conversation-turn", "Conversation turn", "The question bubble and SourceMind's reply card with its badge");
 await shotEl(page, page.getByRole("region", { name: "Supporting source passages" }), "02-components", "evidence-panel", "Evidence panel", "Ranked passages with page numbers and match scores");
 await shotEl(page, page.locator('[aria-label^="Source 1:"]'), "02-components", "evidence-card", "Evidence card", "One passage: citation number, file, page, rank, score, excerpt, Open page");
-await shotEl(page, page.getByRole("complementary", { name: "Source health" }), "02-components", "source-health-after-question", "Source health after a question", "Counts and the last question filled in");
 
 // meaning search
 await newConversation(page);
@@ -240,11 +246,11 @@ for (let i = 0; i < (await tables.count()); i++) {
 for (const [label, folder, size] of [["phone", "04-mobile-390", { width: 390, height: 844 }], ["tablet", "05-tablet-820", { width: 820, height: 1180 }]]) {
   await page.setViewportSize(size);
   await page.goto(`${WEB}/`, { waitUntil: "networkidle" });
-  await page.getByText("GET STARTED WITH A QUESTION").waitFor({ timeout: 30000 });
+  await page.getByText("Try asking").waitFor({ timeout: 30000 });
   await shotPage(page, folder, "ask-start", `Ask questions: ready (${label})`, `${size.width} x ${size.height}`);
   await shotEl(page, page.locator('nav[aria-label="Main (compact)"]'), folder, "compact-navigation", `Compact navigation (${label})`, "Navigation moves from the sidebar into the top bar below the large breakpoint");
   await ask(page, "What are the limitations of the study?");
-  await page.getByText("Keyword search").first().waitFor({ timeout: 60000 });
+  await page.getByText(/Keyword search|Meaning search/).first().waitFor({ timeout: 60000 });
   await sleep(700);
   await shotPage(page, folder, "ask-answer", `Answer (${label})`, "Evidence moves into a drawer on small screens");
   const sources = page.getByRole("button", { name: /^Sources \(/ }).first();
@@ -262,13 +268,33 @@ for (const [label, folder, size] of [["phone", "04-mobile-390", { width: 390, he
   await shotPage(page, folder, "evaluation-top", `Evaluation (${label})`, "Caveats first; tables scroll sideways inside their own box");
 }
 
+// ===== Dark theme (the redesign added a switcher; the default follows the system, captured above in light) =====
+await page.setViewportSize({ width: 1440, height: 900 });
+await page.goto(`${WEB}/`, { waitUntil: "networkidle" });
+await page.getByRole("button", { name: "Switch to dark mode" }).first().click();
+await sleep(500);
+await shotEl(page, page.locator("header").first(), "06-dark-theme", "topbar-dark", "Top bar in dark theme", "Theme switcher now shows the sun icon");
+await shotPage(page, "06-dark-theme", "ask-start", "Ask questions: ready (dark)", "/ with one document indexed");
+await ask(page, "What are the limitations of the study?");
+await page.getByText(/Keyword search|Meaning search/).first().waitFor({ timeout: 60000 });
+await sleep(700);
+await shotPage(page, "06-dark-theme", "ask-answer", "Answer (dark)", "Evidence-only answer");
+await page.goto(`${WEB}/documents`, { waitUntil: "networkidle" });
+await shotPage(page, "06-dark-theme", "documents", "Documents (dark)", "/documents with one file");
+await page.goto(`${WEB}/evaluation`, { waitUntil: "networkidle" });
+await page.getByText("Read this first").first().waitFor({ timeout: 60000 });
+await shotPage(page, "06-dark-theme", "evaluation-top", "Evaluation (dark)", "Caveats and ranking table");
+await page.setViewportSize({ width: 390, height: 844 });
+await page.goto(`${WEB}/`, { waitUntil: "networkidle" });
+await shotPage(page, "06-dark-theme", "mobile-ask", "Ask questions (phone, dark)", "390 x 844");
+
 await browser.close();
 console.log("cleaned up", await cleanAccount(), "test document(s) from the test account");
 
 // ---------------------------------------------------------------- index
 const groups = {
   "01-pages": "Full pages (desktop, 1440 x 900)", "02-components": "Individual components and sections",
-  "03-states": "Loading, error, focus and interaction states", "04-mobile-390": "Phone layout (390 x 844)", "05-tablet-820": "Tablet layout (820 x 1180)",
+  "03-states": "Loading, error, focus and interaction states", "04-mobile-390": "Phone layout (390 x 844)", "05-tablet-820": "Tablet layout (820 x 1180)", "06-dark-theme": "Dark theme",
 };
 let md = `# SourceMind UI inventory\n\nCaptured ${new Date().toISOString().slice(0, 10)} from the local app (all features on: keyword and meaning search, generated answers) with the synthetic sample document \`data/sample/adaptive-practice-brief.pdf\`. The signed-in email is masked as \`reviewer@example.com\`. The dev-only Next.js indicator is removed from every image. Regenerate with `capture/ui-inventory.mjs` (see `capture/README.md`). Problems noticed while capturing are in [OBSERVATIONS.md](OBSERVATIONS.md).\n\n`;
 for (const [folder, heading] of Object.entries(groups)) {
