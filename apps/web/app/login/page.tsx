@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
@@ -116,6 +117,9 @@ export default function LoginPage() {
         </section>
         <p className="mt-6 text-center text-xs text-muted">
           Evidence-first research, built around your own documents.
+        </p>
+        <p className="mt-3 text-center text-xs">
+          <Link href="/" className="rounded font-semibold text-lavender hover:underline">Back to homepage</Link>
         </p>
       </div>
     </main>

@@ -8,7 +8,7 @@ vi.mock("@/lib/supabase", () => ({ getAccessToken: async () => "test-token", sup
 
 import { ChatProvider } from "@/components/chat/ChatProvider";
 import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
-import AskPage from "./page";
+import AskPage from "./workspace/page";
 
 const json = (status: number, body: unknown) =>
   new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
