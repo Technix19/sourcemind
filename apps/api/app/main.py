@@ -161,13 +161,25 @@ async def upload_document(file: UploadFile = File(...), repo: Repository = Depen
     }
 
 
+async def _housekeeping(repo: Repository) -> None:
+    """Finish work that an earlier crash left half-done. Runs as the signed-in user (so it can only
+    touch their own rows) when they list their documents; there is no background worker. Each task is
+    independent: one failing never blocks the other or the listing."""
+    stale = get_settings().stale_upload_seconds
+    tasks = (
+        ("interrupted deletions", repo.finish_pending_deletions),
+        ("abandoned uploads", lambda: repo.remove_abandoned_uploads(stale)),
+    )
+    for label, task in tasks:
+        try:
+            await run_in_threadpool(task)
+        except Exception as exc:
+            logger.warning("could not clean up %s: %s", label, type(exc).__name__)
+
+
 @app.get("/api/v1/documents")
 async def list_documents(repo: Repository = Depends(get_repository)) -> dict:
-    # Finish any deletion that an earlier crash interrupted (runs as the user; no background worker).
-    try:
-        await run_in_threadpool(repo.finish_pending_deletions)
-    except Exception as exc:
-        logger.warning("could not finish pending deletions: %s", type(exc).__name__)
+    await _housekeeping(repo)
     return {"documents": [doc.summary() for doc in await storage_call(repo.list_documents)]}
 
 

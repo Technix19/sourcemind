@@ -76,14 +76,34 @@ def sign_up() -> User:
     return User(id=body["user"]["id"], token=body["access_token"])
 
 
+def sign_in(email: str, password: str) -> User:
+    """Sign in to a pre-made, already-confirmed test account (see docs/m7c-test-accounts.md)."""
+    response = httpx.post(
+        f"{URL}/auth/v1/token", params={"grant_type": "password"}, headers={"apikey": KEY},
+        json={"email": email, "password": password}, timeout=20,
+    )
+    body = response.json()
+    if response.status_code >= 400 or "access_token" not in body:
+        pytest.fail(f"Test account sign-in failed (status {response.status_code}). Check SUPABASE_TEST_USER_* in apps/api/.env "
+                    "and that the address was confirmed.")
+    return User(id=body["user"]["id"], token=body["access_token"])
+
+
+def _test_user(which: str) -> User:
+    """Fixed accounts when configured (needed once 'Confirm email' is on: throwaway sign-ups would get no
+    session and would send real emails to made-up addresses). Otherwise a fresh throwaway account."""
+    email, password = os.getenv(f"SUPABASE_TEST_USER_{which}_EMAIL", ""), os.getenv(f"SUPABASE_TEST_USER_{which}_PASSWORD", "")
+    return sign_in(email, password) if email and password else sign_up()
+
+
 @pytest.fixture(scope="module")
 def user_a() -> User:
-    return sign_up()
+    return _test_user("A")
 
 
 @pytest.fixture(scope="module")
 def user_b() -> User:
-    return sign_up()
+    return _test_user("B")
 
 
 DOC = {"name": "notes.pdf", "size_bytes": 1000, "page_count": 2}

@@ -206,3 +206,48 @@ def test_a_document_stored_before_file_storage_existed_reports_no_file(user_a):
     assert [d for d in listed if d["id"] == doc_id][0]["has_file"] is False
     res = client.get(f"/api/v1/documents/{doc_id}/view", headers=bearer(user_a))
     assert res.status_code == 404 and "Upload it again" in res.json()["detail"]
+
+
+# ------------------------------------------------------------------ abandoned uploads
+
+def _crashed_upload(user, name="crashed.pdf"):
+    """What a server crash mid-upload leaves behind: a row in `indexing`, its file and its chunks."""
+    from app.ingestion import PageChunk
+    repo = repo_for(user)
+    doc = repo.create_document(name, len(PDF), 1)
+    repo.put_file(doc.id, PDF, "application/pdf")
+    repo.add_chunks(doc.id, [PageChunk(page_number=1, chunk_index=0, start=0, end=17, text="half indexed text")])
+    return doc
+
+
+def test_an_abandoned_upload_is_removed_with_its_file_and_chunks_but_a_fresh_one_is_not(user_a):
+    doc = _crashed_upload(user_a)
+    assert repo_for(user_a).remove_abandoned_uploads(900) == 0              # only seconds old: may still be running
+    assert rest("GET", f"documents?id=eq.{doc.id}", user_a).json()[0]["status"] == "indexing"
+
+    time.sleep(2.2)                                                         # the cutoff has one-second resolution
+    assert repo_for(user_a).remove_abandoned_uploads(1) == 1
+    assert rest("GET", f"documents?id=eq.{doc.id}", user_a).json() == []
+    assert rest("GET", f"chunks?document_id=eq.{doc.id}", user_a).json() == []
+    assert repo_for(user_a).signed_url(doc.id) is None
+
+
+def test_the_sweep_never_touches_another_users_stuck_upload_or_a_ready_document(user_a, user_b):
+    mine, theirs = _crashed_upload(user_a), _crashed_upload(user_b)
+    ready = upload(user_a)
+    time.sleep(2.2)
+    assert repo_for(user_a).remove_abandoned_uploads(1) == 1                # only mine
+    assert rest("GET", f"documents?id=eq.{mine.id}", user_a).json() == []
+    assert rest("GET", f"documents?id=eq.{theirs.id}", user_b).json()[0]["status"] == "indexing"
+    assert rest("GET", f"documents?id=eq.{ready['id']}", user_a).json()[0]["status"] == "ready"
+
+
+def test_opening_the_library_cleans_up_an_abandoned_upload(user_a, monkeypatch):
+    import dataclasses
+    real = main.get_settings
+    monkeypatch.setattr(main, "get_settings", lambda: dataclasses.replace(real(), stale_upload_seconds=1))
+    doc = _crashed_upload(user_a)
+    time.sleep(2.2)
+    listed = client.get("/api/v1/documents", headers=bearer(user_a))
+    assert listed.status_code == 200 and listed.json()["documents"] == []
+    assert rest("GET", f"documents?id=eq.{doc.id}", user_a).json() == []

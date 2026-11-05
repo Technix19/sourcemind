@@ -120,3 +120,41 @@ def test_sanitize_filename_directly():
     assert len(sanitize_filename("x" * 500 + ".txt")) <= 130
     with pytest.raises(IngestionError):
         sanitize_filename(None)
+
+
+# ---- abandoned uploads are cleaned up when the owner lists their documents --------------------
+
+def test_listing_removes_the_callers_abandoned_uploads_only(fake_backend, monkeypatch):
+    from conftest import AUTH_A, USER_A, USER_B
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    now = [1000.0]
+    fake_backend.clock = lambda: now[0]
+    a_repo, b_repo = fake_backend.repo_for(USER_A), fake_backend.repo_for(USER_B)
+    stuck_a, stuck_b = a_repo.create_document("a.pdf", 1, 1), b_repo.create_document("b.pdf", 1, 1)
+    now[0] += 16 * 60                                          # 16 minutes later (the cutoff is 15)
+    fresh_a = a_repo.create_document("fresh.pdf", 1, 1)         # just started
+
+    listing = TestClient(app, headers=AUTH_A).get("/api/v1/documents").json()["documents"]
+    assert {d["id"] for d in listing} == {fresh_a.id}           # stuck one gone, fresh one kept
+    assert b_repo.get_document(stuck_b.id) is not None          # another user's stuck upload is theirs to clean
+    assert stuck_a.id not in {d["id"] for d in listing}
+
+
+def test_a_failing_cleanup_never_breaks_listing(fake_backend, monkeypatch):
+    from conftest import AUTH_A, USER_A
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    repo = fake_backend.repo_for(USER_A)
+    doc = repo.create_document("keep.pdf", 1, 1)
+    repo.mark_ready(doc.id)
+
+    def broken(self, older_than_seconds):
+        raise RuntimeError("storage exploded with secret detail")
+
+    monkeypatch.setattr(type(repo), "remove_abandoned_uploads", broken)
+    res = TestClient(app, headers=AUTH_A).get("/api/v1/documents")
+    assert res.status_code == 200 and [d["id"] for d in res.json()["documents"]] == [doc.id]
+    assert "secret detail" not in res.text

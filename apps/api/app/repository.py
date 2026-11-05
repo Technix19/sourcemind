@@ -12,6 +12,7 @@ import logging
 import threading
 import uuid
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import Protocol
 
 import httpx
@@ -84,6 +85,7 @@ class Repository(Protocol):
     def put_file(self, document_id: str, data: bytes, content_type: str) -> None: ...
     def signed_url(self, document_id: str, expires_in: int = SIGNED_URL_SECONDS) -> str | None: ...
     def finish_pending_deletions(self) -> int: ...
+    def remove_abandoned_uploads(self, older_than_seconds: int) -> int: ...
     def mark_ready(self, document_id: str, embedding_model: str | None = None) -> None: ...
     def list_documents(self) -> list[Document]: ...
     def get_document(self, document_id: str) -> Document | None: ...
@@ -288,6 +290,14 @@ class SupabaseRepository:
             if self.delete_document(row["id"]):
                 done += 1
         return done
+
+    def remove_abandoned_uploads(self, older_than_seconds: int) -> int:
+        """Remove the caller's uploads stuck in `indexing` (the server died mid-upload). Uses the same
+        ordered delete as a user-initiated removal, so it is safe to retry. Only the caller's own rows
+        are visible (Row Level Security), and uploads younger than the cutoff are left alone."""
+        cutoff = (datetime.now(timezone.utc) - timedelta(seconds=older_than_seconds)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        stale = self._read_all("documents", {"select": "id", "status": "eq.indexing", "created_at": f"lt.{cutoff}"})
+        return sum(1 for row in stale if self.delete_document(row["id"]))
 
     # -- retrieval input ----------------------------------------------------
     def search_chunks(self, document_ids: list[str] | None) -> list[SearchChunk] | None:

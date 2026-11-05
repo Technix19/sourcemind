@@ -38,6 +38,7 @@ class Settings:
     rate_other_per_minute: int = 120
     daily_generations: int = 20
     answer_effort: str = "low"
+    stale_upload_seconds: int = 900
 
 
 def _base_url(raw: str) -> str:
@@ -96,4 +97,6 @@ def get_settings() -> Settings:
         rate_other_per_minute=_positive("RATE_OTHER_PER_MINUTE", 120),
         daily_generations=_positive("DAILY_GENERATIONS", 20),
         answer_effort=_effort(),
+        # An upload still `indexing` after this long was abandoned (a normal one takes seconds to a minute).
+        stale_upload_seconds=_positive("STALE_UPLOAD_MINUTES", 15) * 60,
     )

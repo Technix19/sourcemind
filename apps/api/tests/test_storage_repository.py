@@ -22,10 +22,10 @@ class FakeSupabase:
         self.fail: set[str] = set()
         self.requests: list[httpx.Request] = []
 
-    def add_document(self, doc_id=DOC, status="ready", stored=True, chunks=3):
+    def add_document(self, doc_id=DOC, status="ready", stored=True, chunks=3, created_at="2026-01-01T00:00:00Z"):
         key = f"{UID}/{doc_id}"
         self.docs[doc_id] = {"id": doc_id, "status": status, "storage_key": key if stored else None, "name": "a.pdf",
-                             "size_bytes": 5, "page_count": 2}
+                             "size_bytes": 5, "page_count": 2, "created_at": created_at}
         self.chunks[doc_id] = chunks
         if stored:
             self.objects[key] = b"%PDF-data"
@@ -41,6 +41,10 @@ class FakeSupabase:
         if "status" in q:
             op, _, value = q["status"].partition(".")
             rows = [r for r in rows if (r["status"] == value) == (op == "eq")]
+        if "created_at" in q:
+            op, _, value = q["created_at"].partition(".")
+            assert op == "lt" and value.endswith("Z"), q["created_at"]   # a plain UTC timestamp, safe in a URL
+            rows = [r for r in rows if r["created_at"] < value]
         return rows
 
     def __call__(self, request: httpx.Request) -> httpx.Response:
@@ -262,3 +266,46 @@ def test_the_summary_says_whether_a_file_exists_but_never_where(server):
     summary = Document(DOC, "a", 1, 1, "ready", 1, True).summary()
     assert summary["has_file"] is True and not any("key" in k or "path" in k for k in summary)
     assert valid_id(DOC) == DOC
+
+
+# ------------------------------------------------------------------ abandoned uploads
+
+def _now_z(seconds_ago):
+    from datetime import datetime, timedelta, timezone
+    return (datetime.now(timezone.utc) - timedelta(seconds=seconds_ago)).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def test_an_upload_stuck_in_indexing_past_the_cutoff_is_fully_removed(server):
+    server.add_document(status="indexing", created_at=_now_z(3600))
+    assert repo(server).remove_abandoned_uploads(900) == 1
+    assert server.docs == {} and server.objects == {} and server.chunks[DOC] == 0
+
+
+def test_a_recent_upload_is_left_alone_because_it_may_still_be_running(server):
+    server.add_document(status="indexing", created_at=_now_z(60))
+    assert repo(server).remove_abandoned_uploads(900) == 0
+    assert DOC in server.docs and f"{UID}/{DOC}" in server.objects
+
+
+def test_only_indexing_documents_are_swept_never_ready_ones_however_old(server):
+    other = "33333333-3333-3333-3333-333333333333"
+    server.add_document(DOC, status="indexing", created_at=_now_z(7200))
+    server.add_document(other, status="ready", created_at=_now_z(99999))
+    assert repo(server).remove_abandoned_uploads(900) == 1
+    assert set(server.docs) == {other} and f"{UID}/{other}" in server.objects
+
+
+def test_a_failed_removal_is_not_counted_and_can_be_retried(server):
+    server.add_document(status="indexing", created_at=_now_z(3600))
+    server.fail.add("chunks")
+    with pytest.raises(RepositoryError):
+        repo(server).remove_abandoned_uploads(900)
+    server.fail.clear()
+    assert repo(server).finish_pending_deletions() == 1        # it was already marked deleting, so the normal sweep finishes it
+    assert server.docs == {}
+
+
+def test_the_cutoff_is_sent_as_a_plain_utc_timestamp(server):
+    repo(server).remove_abandoned_uploads(900)
+    query = [r for r in server.requests if r.method == "GET"][0].url.params
+    assert query["status"] == "eq.indexing" and query["created_at"].startswith("lt.") and query["created_at"].endswith("Z")

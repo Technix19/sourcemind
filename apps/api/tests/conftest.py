@@ -9,6 +9,7 @@ import dataclasses
 import hashlib
 import math
 import re
+import time
 import uuid
 
 import pymupdf
@@ -88,6 +89,8 @@ class InMemoryBackend:
         self.chunk_ids: dict[tuple[str, str], list[str]] = {}       # (user id, document id) -> chunk ids
         self.vectors: dict[tuple[str, str], tuple[str, list[float], str]] = {}   # (user, chunk id) -> (doc, vector, model)
         self.indexed_with: dict[tuple[str, str], str] = {}          # (user, document id) -> embedding model
+        self.created: dict[tuple[str, str], float] = {}            # (user, document id) -> creation time
+        self.clock = time.time                                      # tests replace this to move time
         self.embedder = FakeEmbedder()
         self.current_model: str | None = FAKE_MODEL                 # None = meaning search switched off
 
@@ -116,6 +119,7 @@ class InMemoryRepository:
         doc = Document(str(uuid.uuid4()), name, size_bytes, page_count, "indexing", 0, True)
         self._docs[doc.id] = doc
         self._chunks[doc.id] = []
+        self._b.created[(self._uid, doc.id)] = self._b.clock()
         return doc
 
     def put_file(self, document_id, data, content_type) -> None:
@@ -129,6 +133,12 @@ class InMemoryRepository:
 
     def finish_pending_deletions(self) -> int:
         return 0
+
+    def remove_abandoned_uploads(self, older_than_seconds) -> int:
+        now = self._b.clock()
+        stale = [d.id for d in self._docs.values()
+                 if d.status == "indexing" and now - self._b.created.get((self._uid, d.id), now) > older_than_seconds]
+        return sum(1 for doc_id in stale if self.delete_document(doc_id))
 
     def add_chunks(self, document_id, chunks) -> list[str]:
         self._chunks[document_id].extend(chunks)
