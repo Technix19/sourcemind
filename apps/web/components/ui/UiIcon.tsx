@@ -3,7 +3,7 @@ import type { ReactNode, SVGProps } from "react";
 export type IconName =
   | "message" | "file" | "chart" | "chevron" | "search" | "upload"
   | "arrow" | "plus" | "folder" | "logout" | "layers" | "check"
-  | "info" | "external" | "trash" | "menu" | "x" | "send" | "refresh";
+  | "info" | "external" | "trash" | "menu" | "x" | "send" | "refresh" | "sun" | "moon";
 
 const paths: Record<IconName, ReactNode> = {
   message: <><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5 8 8 0 0 1-3.4-.7L4 20l1.6-4.7A7.5 7.5 0 1 1 20 11.5Z" /></>,
@@ -25,6 +25,8 @@ const paths: Record<IconName, ReactNode> = {
   x: <path d="M5 5l14 14M19 5 5 19"/>,
   send: <><path d="m3 11 18-8-8 18-2.5-7.5L3 11Z"/><path d="m10.5 13.5 5-5"/></>,
   refresh: <><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.5 9A7 7 0 0 1 18 6l2 6M4 12l2 6A7 7 0 0 0 18.5 15"/></>,
+  sun: <><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></>,
+  moon: <path d="M20.5 14.1A8.7 8.7 0 0 1 9.9 3.5a8.7 8.7 0 1 0 10.6 10.6Z"/>,
 };
 
 export function UiIcon({ name, size = 18, ...props }: SVGProps<SVGSVGElement> & { name: IconName; size?: number }) {
