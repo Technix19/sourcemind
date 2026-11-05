@@ -197,3 +197,38 @@ def test_the_allowance_returns_after_a_day(monkeypatch):
     assert generate()["answer_mode"] == "sources_only"
     clock.now += DAY_SECONDS + 1
     assert generate()["answer_mode"] == "generated"
+
+
+# ---- server-wide ceiling ------------------------------------------------------------------
+
+def test_a_server_wide_ceiling_stops_generation_for_everyone(monkeypatch):
+    monkeypatch.setenv("DAILY_GENERATIONS", "10")
+    monkeypatch.setenv("GLOBAL_DAILY_GENERATIONS", "3")
+    llm = FakeLLM()
+    install(monkeypatch, llm)
+    bob.post("/api/v1/documents", files={"file": ("a.txt", TEXT, "text/plain")})
+    modes = [generate()["answer_mode"], generate(bob)["answer_mode"], generate()["answer_mode"],   # 3 allowed in total
+             generate(bob)["answer_mode"], generate()["answer_mode"]]
+    assert modes == ["generated", "generated", "generated", "sources_only", "sources_only"]
+    assert llm.calls == 3
+    assert generate(bob)["evidence"]                                  # still useful: evidence is returned
+
+
+def test_a_user_over_their_own_cap_does_not_use_up_shared_slots(monkeypatch):
+    monkeypatch.setenv("DAILY_GENERATIONS", "1")
+    monkeypatch.setenv("GLOBAL_DAILY_GENERATIONS", "2")
+    llm = FakeLLM()
+    install(monkeypatch, llm)
+    bob.post("/api/v1/documents", files={"file": ("a.txt", TEXT, "text/plain")})
+    assert generate()["answer_mode"] == "generated"                   # alice: 1 of her 1, 1 of 2 shared
+    for _ in range(5):
+        assert generate()["answer_mode"] == "sources_only"            # over her cap: must not touch the shared count
+    assert generate(bob)["answer_mode"] == "generated"                # the second shared slot is still there
+
+
+def test_the_global_ceiling_has_a_safe_default_and_rejects_bad_values(monkeypatch):
+    monkeypatch.delenv("GLOBAL_DAILY_GENERATIONS", raising=False)
+    assert get_settings().global_daily_generations == 200
+    for bad in ("0", "-1", "x"):
+        monkeypatch.setenv("GLOBAL_DAILY_GENERATIONS", bad)
+        assert get_settings().global_daily_generations == 200

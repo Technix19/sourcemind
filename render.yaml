@@ -1,0 +1,39 @@
+# Render Blueprint for the SourceMind API (free plan, keyword search only).
+#
+# Why keyword only: the free instance has 512 MB of RAM, and meaning search peaks near 600 MB when measured
+# locally, so EMBEDDINGS_ENABLED is false here. The web app hides the Keyword / Meaning control when the API
+# reports meaning search is off. Free services also spin down after 15 minutes idle (the next request takes
+# about a minute), keep an ephemeral disk, and run one instance only, which suits the in-memory rate limits.
+#
+# No secret values live in this file. Variables marked `sync: false` are typed into the Render dashboard.
+services:
+  - type: web
+    name: sourcemind-api
+    runtime: python
+    plan: free
+    region: oregon
+    branch: master
+    rootDir: apps/api
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+    autoDeployTrigger: off        # deploy on purpose, not on every push
+    envVars:
+      - key: PYTHON_VERSION       # the version the tests were run with
+        value: 3.10.5
+      - key: APP_ENV              # anything but "local" turns the interactive API docs off
+        value: production
+      - key: EMBEDDINGS_ENABLED   # too big for 512 MB; see above
+        value: "false"
+      - key: FRONTEND_ORIGIN      # the exact Vercel URL, for example https://your-app.vercel.app
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY    # the publishable key only. NEVER the service-role / secret key
+        sync: false
+      - key: ANTHROPIC_API_KEY    # secret; omit to turn generated answers off
+        sync: false
+      - key: ANTHROPIC_MODEL
+        sync: false
+      - key: GLOBAL_DAILY_GENERATIONS   # server-wide ceiling on model calls per rolling 24 hours
+        value: "200"

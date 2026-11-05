@@ -70,9 +70,18 @@ class RateLimiter:
 limiter = RateLimiter()
 
 
+GLOBAL_KEY = "*"  # one shared counter for every user
+
+
 def generation_allowed(user_id: str) -> bool:
-    """Spend one of the user's daily model calls. False when today's allowance is used up."""
-    return limiter.hit("generation", user_id, get_settings().daily_generations, DAY_SECONDS) is None
+    """Spend one daily model call, for this user and for the whole server. False when either allowance
+    is used up. The user's own cap is checked first, so a user who is over it cannot burn shared slots.
+    Without the server-wide ceiling, many accounts could each use their own allowance and the total
+    spend would have no bound at all."""
+    settings = get_settings()
+    if limiter.hit("generation", user_id, settings.daily_generations, DAY_SECONDS) is not None:
+        return False
+    return limiter.hit("generation-global", GLOBAL_KEY, settings.global_daily_generations, DAY_SECONDS) is None
 
 
 def _bucket_for(method: str, path: str) -> tuple[str, int, int]:
