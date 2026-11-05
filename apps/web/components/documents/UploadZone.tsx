@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { useDocuments } from "./DocumentsProvider";
 import { MAX_DOCUMENTS } from "@/lib/limits";
+import { UiIcon } from "@/components/ui/UiIcon";
 
 /** Drag-and-drop / browse upload area. States: idle, dragging, uploading, success, failed. */
 export function UploadZone() {
@@ -15,45 +16,41 @@ export function UploadZone() {
   const handle = (list: FileList | null) => {
     const files = Array.from(list ?? []);
     if (files.length) void uploadFiles(files);
-    if (input.current) input.current.value = ""; // allow re-selecting the same file
+    if (input.current) input.current.value = "";
   };
 
   return (
-    <div className="rounded-2xl border border-line bg-panel p-3">
+    <div className="sm-panel p-3">
       <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          setDragging(true);
-        }}
+        onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => {
           e.preventDefault();
           setDragging(false);
           handle(e.dataTransfer.files);
         }}
-        className={`flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-10 text-center transition-colors ${
-          dragging ? "border-lavender bg-lavender/10" : "border-lavender-deep/50 bg-ink/40"
-        }`}
+        className={
+          "flex flex-col items-center rounded-lg border border-dashed px-5 py-9 text-center transition-colors " +
+          (dragging ? "border-lavender bg-[#eef0ff]" : "border-[#cbd4e4] bg-[#fcfdff]")
+        }
       >
-        <span aria-hidden className="text-3xl font-light text-lavender">
-          +
+        <span aria-hidden="true" className="mb-4 flex size-11 items-center justify-center rounded-lg border border-line bg-white text-lavender">
+          <UiIcon name="upload" size={21} />
         </span>
-        <p className="text-lg font-bold">Drop documents here</p>
-        <p className="text-sm text-muted">
-          or{" "}
+        <p className="text-[15px] font-bold">Drop documents here</p>
+        <p className="mt-2 text-[13px] text-muted">
+          Or{" "}
           <button
             type="button"
             onClick={() => input.current?.click()}
             disabled={full}
-            className="rounded text-lavender underline underline-offset-2 hover:text-text disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded font-bold text-lavender hover:underline disabled:cursor-not-allowed disabled:opacity-50"
           >
             browse your files
           </button>{" "}
           to upload
         </p>
-        <p className="mt-1 rounded-full bg-lavender/15 px-3 py-1 text-xs font-bold tracking-wide text-lavender">
-          PDF · TXT · MD &nbsp;|&nbsp; 12 MB max
-        </p>
+        <p className="mt-3 text-xs text-muted">PDF, TXT, or Markdown · Up to 12 MB per file</p>
         <input
           ref={input}
           type="file"
@@ -64,15 +61,9 @@ export function UploadZone() {
           onChange={(e) => handle(e.target.files)}
         />
       </div>
-
-      {full && <p className="mt-3 px-1 text-sm text-amber">Library is full ({MAX_DOCUMENTS} documents). Remove one to add another.</p>}
-      {busy && <p className="mt-3 px-1 text-sm text-muted">Uploading and indexing…</p>}
-      {/* Polite live region so screen readers hear upload results. */}
-      <p
-        role="status"
-        aria-live="polite"
-        className={`mt-3 px-1 text-sm ${message ? (message.kind === "success" ? "text-mint" : "text-danger") : "sr-only"}`}
-      >
+      {full && <p className="mt-3 px-2 text-xs text-amber">Library is full ({MAX_DOCUMENTS} documents). Remove one to add another.</p>}
+      {busy && <p className="mt-3 px-2 text-xs text-muted">Uploading and indexing…</p>}
+      <p role="status" aria-live="polite" className={message ? "mt-3 px-2 text-xs " + (message.kind === "success" ? "text-mint" : "text-danger") : "sr-only"}>
         {message?.text}
       </p>
     </div>
