@@ -131,7 +131,7 @@ describe("Ask page", () => {
     await screen.findByText("Evidence only");
     await user().click(screen.getByRole("button", { name: /new conversation/i }));
     expect(screen.queryByText("Evidence only")).toBeNull();
-    expect(screen.getByText(/Answers worth/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Ask your documents" })).toBeInTheDocument();
   });
   describe("on a narrow screen", () => {
     const askAndWait = async () => {
