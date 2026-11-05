@@ -55,21 +55,21 @@ export function TurnView({ turn }: { turn: Turn }) {
   const active = activeTurn?.id === turn.id;
   return (
     <div className="space-y-3">
-      <div className="ml-auto w-fit max-w-[90%] break-words rounded-2xl bg-surface px-5 py-3 font-bold">{turn.question}</div>
+      <div className="ml-auto w-fit max-w-[90%] break-words rounded-xl bg-[#eef0ff] px-4 py-3 text-[14px] font-semibold text-[#303b6b]">{turn.question}</div>
       <div
         aria-busy={turn.status === "pending"}
-        className={`rounded-2xl border bg-panel p-5 ${active ? "border-lavender/50" : "border-line"}`}
+        className={`sm-panel px-5 py-5 sm:px-6 ${active ? "border-[#c5caff]" : ""}`}
       >
-        <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-line pb-3">
           <span aria-hidden className="size-3 rounded-full bg-lavender" />
-          <p className="font-bold">SourceMind</p>
+          <p className="text-[13px] font-bold">SourceMind</p>
           {turn.response && (
-            <span className="text-xs text-muted sm:flex-1">
+            <span className="text-[11px] text-muted sm:flex-1">
               {turn.response.retrieval === "embedding" ? "Meaning search" : "Keyword search"}
             </span>
           )}
           {!turn.response && <span className="sm:flex-1" />}
-          {badge && <span className={`rounded-full px-3 py-1 text-xs font-bold whitespace-nowrap ${badge.className}`}>{badge.label}</span>}
+          {badge && <span className={`rounded-md px-2.5 py-1 text-[11px] font-bold whitespace-nowrap ${badge.className}`}>{badge.label}</span>}
           {!active && turn.response && turn.response.evidence.length > 0 && (
             <button type="button" onClick={() => selectTurn(turn.id)} className="hidden rounded text-sm font-bold text-lavender hover:text-text xl:inline">
               Show evidence
