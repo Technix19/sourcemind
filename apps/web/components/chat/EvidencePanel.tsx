@@ -49,13 +49,13 @@ function EvidenceCard({ turnId, item, selected, retrieval }: { turnId: number; i
       data-cid={item.citation_id}
       tabIndex={-1}
       aria-label={`Source ${item.citation_id}: ${item.filename}, page ${item.page_number}`}
-      className={`rounded-xl border bg-surface p-4 transition-colors ${selected ? "border-lavender ring-1 ring-lavender" : "border-line"}`}
+      className={`rounded-lg border px-3 py-3.5 transition-colors ${selected ? "border-[#a5b4fc] bg-[#f5f6ff] ring-1 ring-[#c7d2fe]" : "border-line bg-white hover:border-[#c8d2e2]"}`}
     >
       <div className="flex items-center gap-2">
-        <span className="rounded-lg bg-lavender/20 px-2 py-0.5 text-sm font-bold text-lavender-soft">[{item.citation_id}]</span>
-        <p className="min-w-0 flex-1 truncate font-bold">{item.filename}</p>
+        <span className="flex size-6 shrink-0 items-center justify-center rounded-md bg-[#eef0ff] text-[11px] font-bold text-lavender">[{item.citation_id}]</span>
+        <p className="min-w-0 flex-1 truncate text-[12px] font-bold">{item.filename}</p>
       </div>
-      <p className="mt-1 text-xs text-mint">
+      <p className="mt-2 text-[11px] text-muted">
         Page {item.page_number} · Rank {item.citation_id} ·{" "}
         {retrieval === "embedding" ? (
           <span title="Cosine similarity between the meaning of your question and this passage. Not a probability that it answers the question, and not comparable with keyword scores.">
@@ -67,14 +67,14 @@ function EvidenceCard({ turnId, item, selected, retrieval }: { turnId: number; i
           </span>
         )}
       </p>
-      <blockquote className={`mt-3 break-words text-sm leading-relaxed text-text/90 ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
-      <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-1">
+      <blockquote className={`mt-3 break-words text-[12px] leading-[1.8] text-[#455267] ${expanded ? "" : "line-clamp-5"}`}>“{item.excerpt}”</blockquote>
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line pt-2">
         {long && (
           <button
             type="button"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            className="min-h-9 rounded text-sm font-bold text-lavender hover:text-text"
+            className="min-h-9 rounded text-[12px] font-bold text-lavender hover:underline"
           >
             {expanded ? "Show less" : "Show more"}
           </button>
@@ -102,9 +102,9 @@ export function EvidencePanel({ variant = "rail" }: { variant?: PanelVariant }) 
   const evidence = activeTurn.response?.evidence ?? [];
 
   return (
-    <section aria-label="Supporting source passages" className={variant === "rail" ? "rounded-2xl border border-line bg-panel p-5" : "p-1"}>
-      <p className="text-xs font-bold tracking-wider text-lavender">EVIDENCE ({evidence.length})</p>
-      <p className="mt-1 mb-4 font-bold">Supporting source passages</p>
+    <section aria-label="Supporting source passages" className={variant === "rail" ? "sm-panel p-4" : "p-1"}>
+      <div className="mb-4 flex items-center justify-between"><h2 className="text-[14px] font-bold">Evidence &amp; sources</h2><span className="rounded-md bg-ink px-2 py-1 text-[11px] font-semibold text-muted">{evidence.length}</span></div>
+      <p className="mb-4 text-[12px] leading-relaxed text-muted">Supporting source passages for this question.</p>
       {activeTurn.status === "pending" && <p className="text-sm text-muted">Searching your documents…</p>}
       {activeTurn.status === "done" && evidence.length === 0 && (
         <p className="text-sm text-muted">No passages were similar enough to this question to show.</p>
@@ -112,7 +112,7 @@ export function EvidencePanel({ variant = "rail" }: { variant?: PanelVariant }) 
       {(activeTurn.status === "error" || activeTurn.status === "stopped") && (
         <p className="text-sm text-muted">No evidence for this question.</p>
       )}
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {evidence.map((item) => (
           <EvidenceCard
             key={item.chunk_id}
@@ -124,7 +124,7 @@ export function EvidencePanel({ variant = "rail" }: { variant?: PanelVariant }) 
         ))}
       </div>
       {evidence.length > 0 && (
-        <p className="mt-4 text-xs text-muted">
+        <p className="mt-4 text-[11px] leading-relaxed text-muted">
           {plural(evidence.length, "passage")} retrieved by {activeTurn.response?.retrieval === "embedding" ? "meaning search" : "keyword matching"}. Read the passages before relying on any answer.
         </p>
       )}
