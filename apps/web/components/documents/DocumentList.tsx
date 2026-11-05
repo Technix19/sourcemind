@@ -58,7 +58,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
             type="button"
             onClick={() => void openFile()}
             disabled={opening}
-            aria-label={\`Open \${doc.name} in a new tab\`}
+            aria-label={`Open ${doc.name} in a new tab`}
             className="min-h-9 rounded-md px-2.5 text-[12px] font-bold text-lavender hover:bg-indigo-50 disabled:opacity-60"
           >
             {opening ? "Opening…" : "Open"}
@@ -67,7 +67,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
           <span className="text-[11px] text-muted" title="Uploaded before original files were stored. Upload it again to enable opening.">File not stored</span>
         )}
         {confirming ? (
-          <span className="flex flex-wrap gap-1" role="group" aria-label={\`Confirm removing \${doc.name}\`}>
+          <span className="flex flex-wrap gap-1" role="group" aria-label={`Confirm removing ${doc.name}`}>
             <button
               type="button"
               disabled={removing}
@@ -85,7 +85,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
           <button
             type="button"
             onClick={() => setConfirming(true)}
-            aria-label={\`Remove \${doc.name}\`}
+            aria-label={`Remove ${doc.name}`}
             className="min-h-9 rounded-md px-2.5 text-[12px] text-muted hover:bg-red-50 hover:text-danger"
           >
             Remove
