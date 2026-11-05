@@ -94,7 +94,7 @@ describe("Ask page", () => {
     await user().click(screen.getByRole("button", { name: /show source 2/i }));
     const card = screen.getByRole("article", { name: /source 2/i });
     await waitFor(() => expect(card).toHaveFocus());
-    expect(card.className).toContain("border-lavender");
+    expect(card.className).toContain("ring-1");
   });
 
   it("reports insufficient evidence instead of inventing an answer", async () => {
