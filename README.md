@@ -28,11 +28,15 @@ A hosted copy runs at **https://sourcemind-eight.vercel.app** (web on Vercel, AP
 
 ## Screenshots
 
-Taken from the running app with a synthetic sample document (`data/sample/`). Retrieval-only mode, no model key. The answer and drawer shots predate sign-in; the layout is unchanged apart from a sign-out control.
+Captured from the hosted demo on 2026-11-05 with the synthetic sample document in `data/sample/` (retrieval-only answer, keyword search). The signed-in email is masked in the images. The sign-in screenshot predates the hosted demo; its layout is unchanged.
 
-| Sign in | Desktop, answer with evidence | Phone, sources drawer |
+| Sign in | Desktop, answer with evidence | Desktop, evaluation results |
 |---|---|---|
-| ![Sign in](docs/screenshots/login.png) | ![Desktop answer with evidence](docs/screenshots/desktop-answer.png) | ![Phone sources drawer](docs/screenshots/mobile-sources-drawer.png) |
+| ![Sign in](docs/screenshots/login.png) | ![Desktop answer with evidence](docs/screenshots/hosted-desktop-answer.png) | ![Desktop evaluation page](docs/screenshots/hosted-evaluation.png) |
+
+| Phone, evaluation results |
+|---|
+| ![Phone evaluation page](docs/screenshots/hosted-mobile-evaluation.png) |
 
 ## Run the API (local)
 
