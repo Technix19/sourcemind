@@ -27,10 +27,10 @@ export default function EvaluationPage() {
   if (state.status === "ready") return <EvaluationReport results={state.results} />;
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <h1 className="text-3xl font-black sm:text-4xl">Retrieval evaluation</h1>
-      <p className="mt-1 text-muted">Compare keyword search and meaning search on a labeled question set.</p>
-      <div role={state.status === "error" ? "alert" : "status"} className="mt-8 rounded-2xl border border-dashed border-line bg-panel px-8 py-12 text-center">
+    <div className="mx-auto max-w-[1300px]">
+      <h1 className="sm-page-title">Retrieval evaluation</h1>
+      <p className="mt-2 text-sm text-muted">Compare keyword search and meaning search on a labeled question set.</p>
+      <div role={state.status === "error" ? "alert" : "status"} className="sm-panel mt-7 px-8 py-12 text-center">
         {state.status === "loading" && <p className="text-muted">Loading results…</p>}
         {state.status === "missing" && (
           <>
