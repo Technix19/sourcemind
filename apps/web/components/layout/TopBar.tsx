@@ -23,12 +23,12 @@ export function TopBar() {
   const mode = !loaded ? "Connecting" : apiError ? "API offline" : health?.generation_available ? "AI answers available" : "Retrieval mode";
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-white/95 px-5 backdrop-blur-sm sm:px-8">
+    <header className="sticky top-0 z-20 border-b border-line bg-white/95 dark:bg-[#171827]/95 px-5 backdrop-blur-sm sm:px-8">
       <div className="flex min-h-[66px] items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5 text-sm">
           <span className="lg:hidden"><BrandLogo compact /></span>
           <Link href="/" className="hidden font-medium text-muted hover:text-text lg:inline">Workspace</Link>
-          <UiIcon name="arrow" size={13} className="hidden shrink-0 text-[#94a3b8] lg:inline" />
+          <UiIcon name="arrow" size={13} className="hidden shrink-0 text-[#94a3b8] dark:text-[#a9aac4] lg:inline" />
           <span className="hidden truncate font-bold text-text lg:inline">{current.crumb}</span>
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -60,7 +60,7 @@ export function TopBar() {
             aria-current={current.href === item.href ? "page" : undefined}
             className={
               "flex min-h-9 shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold " +
-              (current.href === item.href ? "bg-[#eef0ff] text-[#3730a3]" : "text-muted hover:bg-ink")
+              (current.href === item.href ? "bg-[#eef0ff] dark:bg-[#33284e] text-[#3730a3] dark:text-[#d1bcff]" : "text-muted hover:bg-ink")
             }
           >
             <UiIcon name={navIcons[item.href]} size={15} />

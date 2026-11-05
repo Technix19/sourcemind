@@ -7,7 +7,7 @@ import { openDocumentPage, openErrorMessage } from "@/lib/openDocument";
 import { UiIcon } from "@/components/ui/UiIcon";
 import type { DocumentSummary } from "@/lib/types";
 
-const BADGE: Record<string, string> = { PDF: "bg-red-50 text-red-700", MD: "bg-blue-50 text-blue-700", TXT: "bg-teal-50 text-teal-700" };
+const BADGE: Record<string, string> = { PDF: "bg-red-50 dark:bg-[#402533] text-red-700 dark:text-[#ffb4c2]", MD: "bg-blue-50 dark:bg-[#222f46] text-blue-700 dark:text-[#a9c0ff]", TXT: "bg-teal-50 dark:bg-[#1c3836] text-teal-700 dark:text-[#90edd2]" };
 
 function Row({ doc }: { doc: DocumentSummary }) {
   const { removeDocument } = useDocuments();
@@ -33,7 +33,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
   return (
     <li className="grid grid-cols-1 gap-3 border-b border-line px-4 py-4 last:border-0 lg:grid-cols-[minmax(180px,2fr)_75px_72px_82px_minmax(125px,1fr)_minmax(160px,1.1fr)] lg:items-center lg:gap-4">
       <div className="flex min-w-0 items-center gap-3">
-        <span className={"grid size-10 shrink-0 place-items-center rounded-lg text-[10px] font-black " + (BADGE[kind] ?? "bg-indigo-50 text-lavender")}>
+        <span className={"grid size-10 shrink-0 place-items-center rounded-lg text-[10px] font-black " + (BADGE[kind] ?? "bg-indigo-50 dark:bg-[#352a4b] text-lavender")}>
           {kind}
         </span>
         <div className="min-w-0 flex-1">
@@ -45,7 +45,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
       <p className="hidden text-xs text-muted lg:block sm-metric">{doc.page_count}</p>
       <p className="hidden text-xs text-muted lg:block sm-metric">{doc.chunk_count}</p>
       <div className="flex flex-wrap items-center gap-2">
-        <span className={"rounded-md px-2 py-1 text-[11px] font-bold " + (doc.status === "ready" ? "bg-emerald-50 text-emerald-800" : "bg-amber-50 text-amber")}>
+        <span className={"rounded-md px-2 py-1 text-[11px] font-bold " + (doc.status === "ready" ? "bg-emerald-50 dark:bg-[#1e3c34] text-emerald-800 dark:text-[#76e9be]" : "bg-amber-50 dark:bg-[#3a3021] text-amber")}>
           {doc.status === "ready" ? "Ready" : doc.status}
         </span>
         {!doc.semantic && (
@@ -59,7 +59,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
             onClick={() => void openFile()}
             disabled={opening}
             aria-label={`Open ${doc.name} in a new tab`}
-            className="min-h-9 rounded-md px-2.5 text-[12px] font-bold text-lavender hover:bg-indigo-50 disabled:opacity-60"
+            className="min-h-9 rounded-md px-2.5 text-[12px] font-bold text-lavender hover:bg-indigo-50 dark:hover:bg-[#352a4b] disabled:opacity-60"
           >
             {opening ? "Opening…" : "Open"}
           </button>
@@ -75,7 +75,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
                 setRemoving(true);
                 await removeDocument(doc.id);
               }}
-              className="min-h-9 rounded-md bg-red-50 px-2.5 text-[12px] font-bold text-danger hover:bg-red-100 disabled:opacity-50"
+              className="min-h-9 rounded-md bg-red-50 dark:bg-[#402533] px-2.5 text-[12px] font-bold text-danger hover:bg-red-100 dark:hover:bg-[#4c2b39] disabled:opacity-50"
             >
               {removing ? "Removing…" : "Confirm"}
             </button>
@@ -86,7 +86,7 @@ function Row({ doc }: { doc: DocumentSummary }) {
             type="button"
             onClick={() => setConfirming(true)}
             aria-label={`Remove ${doc.name}`}
-            className="min-h-9 rounded-md px-2.5 text-[12px] text-muted hover:bg-red-50 hover:text-danger"
+            className="min-h-9 rounded-md px-2.5 text-[12px] text-muted hover:bg-red-50 dark:hover:bg-[#4c2b39] hover:text-danger"
           >
             Remove
           </button>
@@ -127,7 +127,7 @@ export function DocumentList({ filter = "" }: { filter?: string }) {
   if (!documents.length) {
     return (
       <div className="flex flex-col items-center px-6 py-14 text-center">
-        <span className="mb-4 grid size-12 place-items-center rounded-xl bg-ink text-[#8692a7]">
+        <span className="mb-4 grid size-12 place-items-center rounded-xl bg-ink text-[#8692a7] dark:text-[#abaac6]">
           <UiIcon name="file" size={25} />
         </span>
         <p className="text-sm font-bold">No documents yet</p>
@@ -139,7 +139,7 @@ export function DocumentList({ filter = "" }: { filter?: string }) {
 
   return (
     <div>
-      <div className="hidden grid-cols-[minmax(180px,2fr)_75px_72px_82px_minmax(125px,1fr)_minmax(160px,1.1fr)] gap-4 border-b border-line bg-[#fafbfe] px-4 py-3 text-[11px] font-bold text-muted lg:grid">
+      <div className="hidden grid-cols-[minmax(180px,2fr)_75px_72px_82px_minmax(125px,1fr)_minmax(160px,1.1fr)] gap-4 border-b border-line bg-[#fafbfe] dark:bg-[#1c1c2e] px-4 py-3 text-[11px] font-bold text-muted lg:grid">
         <span>Document</span>
         <span>Size</span>
         <span>Pages</span>

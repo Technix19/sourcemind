@@ -2,7 +2,7 @@ import { CATEGORY_LABELS, TYPE_LABELS, fmtStat } from "@/lib/evaluation";
 import type { EvaluationResults, OperatingPoint } from "@/lib/types";
 import { ResultBar } from "./ResultBar";
 
-const th = "bg-[#fafbfe] px-4 py-3 text-left text-[11px] font-bold text-muted";
+const th = "bg-[#fafbfe] dark:bg-[#1c1c2e] px-4 py-3 text-left text-[11px] font-bold text-muted";
 const td = "px-4 py-3.5 align-top text-[12px]";
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -16,7 +16,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Table({ caption, children }: { caption: string; children: React.ReactNode }) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-line bg-white shadow-[0_1px_2px_rgba(15,23,42,0.025)]">
+    <div className="overflow-x-auto rounded-xl border border-line bg-white dark:bg-[#1a1b2b] shadow-[0_1px_2px_rgba(15,23,42,0.025)]">
       <table className="w-full min-w-[40rem] border-collapse text-[12px]">
         <caption className="sr-only">{caption}</caption>
         {children}
@@ -52,10 +52,10 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
       <h1 className="sm-page-title">Retrieval evaluation</h1>
       <p className="mt-2 text-sm text-muted">How reliably each search method finds the right page, measured on a held-out question set.</p>
       <div className="mt-5 flex flex-wrap gap-2 text-[12px]">
-        <span className="rounded-md border border-line bg-white px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.total}</strong> questions</span>
-        <span className="rounded-md border border-line bg-white px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.answerable}</strong> answerable</span>
-        <span className="rounded-md border border-line bg-white px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.unanswerable}</strong> unanswerable</span>
-        <span className="rounded-md border border-line bg-white px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.chunks.toLocaleString()}</strong> chunks</span>
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.total}</strong> questions</span>
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.answerable}</strong> answerable</span>
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.questions.unanswerable}</strong> unanswerable</span>
+        <span className="rounded-md border border-line bg-white dark:bg-[#1a1b2b] px-3 py-2 text-muted"><strong className="sm-metric text-text">{run.chunks.toLocaleString()}</strong> chunks</span>
       </div>
       <p className="mt-3 text-[11px] leading-relaxed text-muted">
         Held-out <strong className="text-text">{run.split}</strong> split · scored once on {run.date} at commit <code>{commit}</code>
@@ -63,21 +63,21 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
         {run.questions.unanswerable} unanswerable) · {run.chunks.toLocaleString()} chunks of {run.chunk_size} characters
       </p>
 
-      <aside aria-labelledby="read-first" className="mt-5 rounded-xl border border-[#eadcc2] bg-[#fffdf8] px-4 py-4">
+      <aside aria-labelledby="read-first" className="mt-5 rounded-xl border border-[#eadcc2] dark:border-[#685339] bg-[#fffdf8] dark:bg-[#30271e] px-4 py-4">
         <div className="flex flex-wrap items-start gap-x-4 gap-y-1">
-          <h2 id="read-first" className="shrink-0 text-[13px] font-bold text-[#78510f]">Read this first</h2>
-          <p className="flex-1 text-[12px] leading-relaxed text-[#78510f]">
+          <h2 id="read-first" className="shrink-0 text-[13px] font-bold text-[#78510f] dark:text-[#f5d29a]">Read this first</h2>
+          <p className="flex-1 text-[12px] leading-relaxed text-[#78510f] dark:text-[#f5d29a]">
             A small held-out test set. Results measure retrieval, not the correctness of generated answers.
           </p>
         </div>
         <details className="mt-2 text-[12px]">
-          <summary className="w-fit cursor-pointer rounded font-bold text-[#78510f] hover:underline">Methodology and limitations</summary>
-          <ul className="mt-3 list-disc space-y-1.5 pl-5 leading-relaxed text-[#78510f]">
+          <summary className="w-fit cursor-pointer rounded font-bold text-[#78510f] dark:text-[#f5d29a] hover:underline">Methodology and limitations</summary>
+          <ul className="mt-3 list-disc space-y-1.5 pl-5 leading-relaxed text-[#78510f] dark:text-[#f5d29a]">
             {results.caveats.map((c) => <li key={c}>{c}</li>)}
           </ul>
-          <p className="mt-3 leading-relaxed text-[#78510f]">Values are means with 95% bootstrap intervals. If two intervals overlap, no difference is demonstrated.</p>
+          <p className="mt-3 leading-relaxed text-[#78510f] dark:text-[#f5d29a]">Values are means with 95% bootstrap intervals. If two intervals overlap, no difference is demonstrated.</p>
         </details>
-        <p className="mt-2 text-[11px] text-[#8d743c]">Values are means with 95% bootstrap intervals; interpret comparisons cautiously.</p>
+        <p className="mt-2 text-[11px] text-[#8d743c] dark:text-[#d6b883]">Values are means with 95% bootstrap intervals; interpret comparisons cautiously.</p>
       </aside>
 
       <Section title="Ranking quality">
@@ -94,7 +94,7 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
           </thead>
           <tbody>
             {entries.map(([key, m]) => (
-              <tr key={key} className="border-t border-line hover:bg-[#fafbff]">
+              <tr key={key} className="border-t border-line hover:bg-[#fafbff] dark:hover:bg-[#29273c]">
                 <th scope="row" className={`${td} font-bold`}>{m.label}</th>
                 <td className={td}><ResultBar stat={m.ranking["recall@1"]} /></td>
                 <td className={td}><ResultBar stat={m.ranking["recall@3"]} /></td>
@@ -117,7 +117,7 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
           </thead>
           <tbody>
             {types.map((t) => (
-              <tr key={t} className="border-t border-line hover:bg-[#fafbff]">
+              <tr key={t} className="border-t border-line hover:bg-[#fafbff] dark:hover:bg-[#29273c]">
                 <th scope="row" className={`${td} font-bold`}>
                   {TYPE_LABELS[t] ?? t} <span className="font-normal text-muted">(n={entries[0][1].ranking_by_type[t]?.n})</span>
                 </th>
@@ -157,7 +157,7 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
       </Section>
 
       <Section title="Recommendation">
-        <p className="rounded-xl border border-[#dadff9] bg-[#f3f5ff] px-5 py-4 text-[13px] leading-relaxed text-[#293566]">{results.recommendation.text}</p>
+        <p className="rounded-xl border border-[#dadff9] dark:border-[#66518f] bg-[#f3f5ff] dark:bg-[#292641] px-5 py-4 text-[13px] leading-relaxed text-[#293566] dark:text-[#e0d4ff]">{results.recommendation.text}</p>
       </Section>
 
       <Section title="Speed">
@@ -195,7 +195,7 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
         <p className="mb-4 text-sm text-muted">{results.analysis.note}</p>
         <div className="grid gap-3 lg:grid-cols-2">
           {results.analysis.patterns.map((p) => (
-            <article key={p.title} className="rounded-xl border border-line bg-white p-5">
+            <article key={p.title} className="rounded-xl border border-line bg-white dark:bg-[#1a1b2b] p-5">
               <h3 className="font-bold">{p.title}</h3>
               <p className="mt-2 text-sm text-muted">{p.evidence}</p>
             </article>
@@ -205,7 +205,7 @@ export function EvaluationReport({ results }: { results: EvaluationResults }) {
         <h3 className="mt-8 mb-2 font-bold">Limitations of the labels</h3>
         <ul className="space-y-3">
           {results.analysis.label_limitations.map((l) => (
-            <li key={l.id} className="rounded-lg border border-line bg-white p-4 text-[13px]">
+            <li key={l.id} className="rounded-lg border border-line bg-white dark:bg-[#1a1b2b] p-4 text-[13px]">
               <strong>{l.id}</strong>: {l.explanation}
             </li>
           ))}
