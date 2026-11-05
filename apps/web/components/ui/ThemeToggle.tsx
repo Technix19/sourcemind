@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { UiIcon } from "@/components/ui/UiIcon";
 
 type Theme = "light" | "dark";
@@ -56,6 +56,10 @@ function setTheme(next: Theme) {
 export function ThemeToggle({ className = "" }: { className?: string }) {
   const theme = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   const isDark = theme === "dark";
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
 
   return (
     <button
