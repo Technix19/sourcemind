@@ -27,7 +27,7 @@ vi.mock("@/lib/supabase", () => ({
   },
 }));
 
-const nav = vi.hoisted(() => ({ pathname: "/", replace: vi.fn() }));
+const nav = vi.hoisted(() => ({ pathname: "/workspace", replace: vi.fn() }));
 vi.mock("next/navigation", () => ({
   usePathname: () => nav.pathname,
   useRouter: () => ({ replace: nav.replace }),
@@ -56,7 +56,7 @@ function App({ children = <p>PRIVATE CONTENT</p> }: { children?: React.ReactNode
 }
 
 beforeEach(() => {
-  nav.pathname = "/";
+  nav.pathname = "/workspace";
   fake.listener = null;
   Object.values(nav).forEach((v) => typeof v === "function" && (v as ReturnType<typeof vi.fn>).mockClear?.());
   fake.signInWithPassword.mockReset();
@@ -65,6 +65,15 @@ beforeEach(() => {
 });
 
 describe("AppGate", () => {
+  it("allows the public landing page without requiring a session", async () => {
+    nav.pathname = "/";
+    render(<App><p>PUBLIC LANDING</p></App>);
+    expect(screen.getByText("PUBLIC LANDING")).toBeInTheDocument();
+    await emit("INITIAL_SESSION", null);
+    expect(screen.getByText("PUBLIC LANDING")).toBeInTheDocument();
+    expect(nav.replace).not.toHaveBeenCalled();
+  });
+
   it("shows nothing private while the session is still loading", () => {
     render(<App />);
     expect(screen.queryByText("PRIVATE CONTENT")).toBeNull();
@@ -89,7 +98,7 @@ describe("AppGate", () => {
     nav.pathname = "/login";
     render(<App><p>LOGIN FORM</p></App>);
     await emit("INITIAL_SESSION", session("u1"));
-    await waitFor(() => expect(nav.replace).toHaveBeenCalledWith("/"));
+    await waitFor(() => expect(nav.replace).toHaveBeenCalledWith("/workspace"));
     expect(screen.queryByText("LOGIN FORM")).toBeNull();
   });
 

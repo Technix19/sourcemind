@@ -10,7 +10,7 @@ import { UiIcon, type IconName } from "@/components/ui/UiIcon";
 import { NAV } from "./nav";
 
 const navIcons: Record<string, IconName> = {
-  "/": "message",
+  "/workspace": "message",
   "/documents": "file",
   "/evaluation": "chart",
 };
@@ -19,7 +19,7 @@ export function TopBar() {
   const pathname = usePathname();
   const { health, apiError, loaded } = useDocuments();
   const { signOut } = useAuth();
-  const current = NAV.find((n) => (n.href === "/" ? pathname === "/" : pathname.startsWith(n.href))) ?? NAV[0];
+  const current = NAV.find((n) => (n.href === "/workspace" ? pathname === "/workspace" : pathname.startsWith(n.href))) ?? NAV[0];
   const mode = !loaded ? "Connecting" : apiError ? "API offline" : health?.generation_available ? "AI answers available" : "Retrieval mode";
 
   return (
@@ -27,7 +27,7 @@ export function TopBar() {
       <div className="flex min-h-[66px] items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5 text-sm">
           <span className="lg:hidden"><BrandLogo compact /></span>
-          <Link href="/" className="hidden font-medium text-muted hover:text-text lg:inline">Workspace</Link>
+          <Link href="/workspace" className="hidden font-medium text-muted hover:text-text lg:inline">Workspace</Link>
           <UiIcon name="arrow" size={13} className="hidden shrink-0 text-[#94a3b8] dark:text-[#a9aac4] lg:inline" />
           <span className="hidden truncate font-bold text-text lg:inline">{current.crumb}</span>
         </div>
@@ -37,7 +37,7 @@ export function TopBar() {
             <span aria-hidden className={"size-[7px] rounded-full " + (apiError ? "bg-danger" : loaded ? "bg-emerald-600" : "bg-amber")} />
             <span className="sr-only sm:not-sr-only">{mode}</span>
           </span>
-          {pathname === "/" && (
+          {pathname === "/workspace" && (
             <Link href="/documents" className="sm-secondary hidden sm:inline-flex">
               <UiIcon name="upload" size={16} />
               Documents

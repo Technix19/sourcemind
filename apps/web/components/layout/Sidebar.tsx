@@ -9,7 +9,7 @@ import { UiIcon, type IconName } from "@/components/ui/UiIcon";
 import { NAV } from "./nav";
 
 const icons: Record<string, IconName> = {
-  "/": "message",
+  "/workspace": "message",
   "/documents": "file",
   "/evaluation": "chart",
 };
@@ -23,7 +23,7 @@ export function Sidebar() {
 
   return (
     <aside className="sticky top-0 hidden h-screen w-[232px] shrink-0 flex-col overflow-y-auto border-r border-line bg-white dark:bg-[#1a1b2b] px-3.5 py-5 lg:flex">
-      <Link href="/" className="mb-9 inline-flex min-h-11 items-center rounded-lg px-2">
+      <Link href="/workspace" className="mb-9 inline-flex min-h-11 items-center rounded-lg px-2">
         <BrandLogo compact />
       </Link>
 
@@ -42,7 +42,7 @@ export function Sidebar() {
         <p className="sm-muted-label mb-2 px-2">Navigate</p>
         <ul className="space-y-0.5">
           {NAV.map((item) => {
-            const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            const active = item.href === "/workspace" ? pathname === "/workspace" : pathname.startsWith(item.href);
             return (
               <li key={item.href}>
                 <Link

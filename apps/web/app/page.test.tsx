@@ -12,7 +12,7 @@ import { ChatProvider } from "@/components/chat/ChatProvider";
 import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
 import type { DocumentSummary, QueryResponse } from "@/lib/types";
 import { setWideScreen } from "../vitest.viewport";
-import AskPage from "./page";
+import AskPage from "./workspace/page";
 
 const DOC: DocumentSummary = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true };
 

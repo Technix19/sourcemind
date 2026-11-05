@@ -26,12 +26,16 @@ export function AppGate({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const onLogin = pathname === "/login";
+  const onPublicLanding = pathname === "/";
 
   useEffect(() => {
+    if (onPublicLanding) return;
     if (state.status === "signedOut" && !onLogin) router.replace("/login");
-    if (state.status === "signedIn" && onLogin) router.replace("/");
-  }, [state.status, onLogin, router]);
+    if (state.status === "signedIn" && onLogin) router.replace("/workspace");
+  }, [state.status, onLogin, onPublicLanding, router]);
 
+  // The marketing page is public regardless of session or Supabase configuration.
+  if (onPublicLanding) return <>{children}</>;
   if (!configured) return <>{onLogin ? children : <Splash text="Redirecting…" />}</>;
   if (state.status === "loading") return <Splash />;
   if (state.status === "signedOut") return onLogin ? <>{children}</> : <Splash text="Redirecting to sign in…" />;

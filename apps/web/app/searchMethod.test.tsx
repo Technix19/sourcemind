@@ -11,7 +11,7 @@ import * as api from "@/lib/api";
 import { ChatProvider } from "@/components/chat/ChatProvider";
 import { DocumentsProvider } from "@/components/documents/DocumentsProvider";
 import type { QueryResponse, Retrieval } from "@/lib/types";
-import AskPage from "./page";
+import AskPage from "./workspace/page";
 
 const DOC = { id: "d1", name: "paper.pdf", size_bytes: 1000, page_count: 2, chunk_count: 2, status: "ready", has_file: true, semantic: true };
 const evidence = { citation_id: "1", chunk_id: "c1", document_id: "d1", filename: "paper.pdf", page_number: 1, excerpt: "Excerpt", score: 0.69 };
